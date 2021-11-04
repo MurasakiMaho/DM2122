@@ -19,8 +19,6 @@ void Scene3::Init()
 	translateY = 0;
 	scaleAll = 1;
 
-
-
 	// Init VBO here
 
 	// Set BG colour to dark blue
@@ -41,9 +39,9 @@ void Scene3::Init()
 	// An array of 3 vectors which represents 3 vertices
 	static const GLfloat vertex_buffer_data[] =
 	{
-		-2, -2, 0,
-		2, -2, 0,
-		0, 0, 0
+		-2, 0, 0,
+		2, 0, 0,
+		0, -2, 0
 	};
 
 	// Transfer vertices to OpenGL
@@ -68,9 +66,9 @@ void Scene3::Init()
 
 		static const GLfloat vertex_buffer_data_2[] =
 		{
-			2, -2, 0,
-			2, 2, 0,
-			0,0, 0
+			-2, 0, 0,
+			2, 0, 0,
+			0, 2, 0
 		};
 
 		// Transfer vertices to OpenGL
@@ -81,57 +79,61 @@ void Scene3::Init()
 		static const GLfloat color_buffer_data_2[] =
 		{
 			0.1176,0.5647,1,
-		0.1176,0.5647,1,
-		0.0980, 0.0980, 0.4784
+			0.1176,0.5647,1,
+			//0.0980, 0.0980, 0.4784
+			//0.1804,0.1333,0.5412
+			//0.1333,0.0824,0.3412
+			//0.0471,0.0313,0.1686
+			1,1,1
 		};
 
 		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_2]);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(color_buffer_data_2), color_buffer_data_2, GL_STATIC_DRAW);
 
-		// 3rd 
+		//// 3rd 
 
-		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_3]);
+		//glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_3]);
 
-		static const GLfloat vertex_buffer_data_3[] =
-		{
-			2, 2, 0,
-			-2, 2, 0,
-			0, 0, 0
-		};
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_buffer_data), vertex_buffer_data_3, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_3]);
+		//static const GLfloat vertex_buffer_data_3[] =
+		//{
+		//	2, 2, 0,
+		//	-2, 2, 0,
+		//	0, 0, 0
+		//};
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_buffer_data), vertex_buffer_data_3, GL_STATIC_DRAW);
+		//glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_3]);
 
-		static const GLfloat color_buffer_data_3[] =
-		{
-			//0.1176,0.5647,1,
+		//static const GLfloat color_buffer_data_3[] =
+		//{
+		//	0.1176,0.5647,1,
 		//0.1176,0.5647,1,
-			0.2941,0,0.5098,
-		0.2941,0,0.5098,
-		0.0980, 0.0980, 0.4784
-		};
-		glBufferData(GL_ARRAY_BUFFER, sizeof(color_buffer_data), color_buffer_data_3, GL_STATIC_DRAW);
+		//	//0.2941,0,0.5098,
+		////0.2941,0,0.5098,
+		//0.0980, 0.0980, 0.4784
+		//};
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(color_buffer_data), color_buffer_data_3, GL_STATIC_DRAW);
 
-		// 4th right road
-		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_4]);
+		//// 4th right road
+		//glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_4]);
 
-		static const GLfloat vertex_buffer_data_4[] =
-		{
-			-2, 2, 0,
-			-2, -2, 0,
-			0,0, 0
-		};
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_buffer_data), vertex_buffer_data_4, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_4]);
+		//static const GLfloat vertex_buffer_data_4[] =
+		//{
+		//	-2, 2, 0,
+		//	-2, -2, 0,
+		//	0,0, 0
+		//};
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_buffer_data), vertex_buffer_data_4, GL_STATIC_DRAW);
+		//glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_4]);
 
-		static const GLfloat color_buffer_data_4[] =
-		{
-			//0.1176,0.5647,1,
-			0.2941,0,0.5098,
-			0.2941,0,0.5098,
+		//static const GLfloat color_buffer_data_4[] =
+		//{
+		//	0.1176,0.5647,1,
+		//	//0.2941,0,0.5098,
+		//	//0.2941,0,0.5098,
 		//0.1176,0.5647,1,
-		0.0980, 0.0980, 0.4784
-		};
-		glBufferData(GL_ARRAY_BUFFER, sizeof(color_buffer_data), color_buffer_data_4, GL_STATIC_DRAW);
+		//0.0980, 0.0980, 0.4784
+		//};
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(color_buffer_data), color_buffer_data_4, GL_STATIC_DRAW);
 
 	}
 
@@ -382,6 +384,118 @@ void Scene3::Init()
 
 		glBufferData(GL_ARRAY_BUFFER, sizeof(color_buffer_data_14), color_buffer_data_14, GL_STATIC_DRAW);
 	}
+	//deer
+	for (int i = 0; i < 1; i++)
+	{
+		//15
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_15]);
+
+		// An array of 3 vectors which represents 3 vertices
+		static const GLfloat vertex_buffer_data_15[] =
+		{
+			-0.1, 0, 0,
+			0.1, 0, 0,
+			0, -0.4, 0
+
+		};
+
+		// Transfer vertices to OpenGL
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_buffer_data_15), vertex_buffer_data_15, GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_15]);
+
+		// An array of 3 vectors which represents the colours of the 3 vertices
+		static const GLfloat color_buffer_data_15[] =
+		{
+			0.5451,0.2701,0.0745,
+			0.5451,0.2701,0.0745,
+			0.6274,0.3215,0.1764
+
+		};
+
+		glBufferData(GL_ARRAY_BUFFER, sizeof(color_buffer_data_15), color_buffer_data_15, GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_16]);
+
+		//16
+		// An array of 3 vectors which represents 3 vertices
+		static const GLfloat vertex_buffer_data_16[] =
+		{
+			-0.025, -0.3, 0,
+			0.025, -0.3, 0,
+			0, -0.4, 0
+
+		};
+
+		// Transfer vertices to OpenGL
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_buffer_data_16), vertex_buffer_data_16, GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_16]);
+
+		// An array of 3 vectors which represents the colours of the 3 vertices
+		static const GLfloat color_buffer_data_16[] =
+		{
+			/*0.6274,0.3215,0.1764,
+			0.6274,0.3215,0.1764,
+			0.5451,0.2701,0.0745*/
+			0,0,0,0,0,0,0,0,0
+		};
+
+		glBufferData(GL_ARRAY_BUFFER, sizeof(color_buffer_data_16), color_buffer_data_16, GL_STATIC_DRAW);
+
+		//17
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_17]);
+
+		// An array of 3 vectors which represents 3 vertices
+		static const GLfloat vertex_buffer_data_17[] =
+		{
+
+			-0.1, 0, 0,
+			-0.05, 0, 0,
+			-0.075, 0.1, 0
+		};
+
+		// Transfer vertices to OpenGL
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_buffer_data_17), vertex_buffer_data_17, GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_17]);
+
+		// An array of 3 vectors which represents the colours of the 3 vertices
+		static const GLfloat color_buffer_data_17[] =
+		{
+			0.8039,0.5215,0.2470,
+			0.8039,0.5215,0.2470,
+			0.8235,0.4117,0.1176
+		};
+
+		glBufferData(GL_ARRAY_BUFFER, sizeof(color_buffer_data_17), color_buffer_data_17, GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_18]);
+
+		//18
+		// An array of 3 vectors which represents 3 vertices
+		static const GLfloat vertex_buffer_data_18[] =
+		{
+			0.2, 0, 0,
+			-0.2, 0, 0,
+			0, 0.7, 0
+		};
+
+		// Transfer vertices to OpenGL
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_buffer_data_18), vertex_buffer_data_18, GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_18]);
+
+		// An array of 3 vectors which represents the colours of the 3 vertices
+		static const GLfloat color_buffer_data_18[] =
+		{
+			0.8235,0.4117,0.1176,
+			0.8235,0.4117,0.1176,
+			0.8039,0.5215,0.2470
+		};
+
+		glBufferData(GL_ARRAY_BUFFER, sizeof(color_buffer_data_18), color_buffer_data_18, GL_STATIC_DRAW);
+	}
 
 
 
@@ -409,6 +523,16 @@ void Scene3::Update(double dt)
 	translateY += (float)(5 * dt);
 
 	scaleAll += (float)(2 * dt);
+
+	//translateLeftTreeX -= (float)(20 * dt);
+	//translateLeftTreeY -= (float)(20 * dt);
+	//treeScale += (float)(10 * dt);
+	//if (translateLeftTreeY < -20)
+	//{
+	//	translateLeftTreeX = -3;
+	//	translateLeftTreeY = 2;
+	//	treeScale = 5;
+	//}
 }
 
 void Scene3::Render()
@@ -459,7 +583,7 @@ void Scene3::Render()
 			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 			glDrawArrays(GL_TRIANGLES, 0, 3);	// Starting from vertex 0; 3 vertices = 1 triangle
 
-			glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_3]);
+			/*glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_3]);
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 			glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_3]);
 			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -469,7 +593,7 @@ void Scene3::Render()
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 			glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_4]);
 			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
-			glDrawArrays(GL_TRIANGLES, 0, 3);
+			glDrawArrays(GL_TRIANGLES, 0, 3);*/
 	}
 	//road 
 	for (int i = 0; i < 1;i++)
@@ -539,7 +663,7 @@ void Scene3::Render()
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 	}
-	//tree
+	//tree 1
 	for (int i = 0; i < 1; i++)
 	{
 		translate.SetToIdentity();
@@ -547,9 +671,9 @@ void Scene3::Render()
 		scale.SetToIdentity();
 		model.SetToIdentity();
 
-		scale.SetToScale(10, 10, 10);
-		rotate.SetToRotation(rotateAngle, 0, 0, 1);
-		translate.SetToTranslation(0, 5, 0);
+		scale.SetToScale(5, 5, 5);
+		rotate.SetToRotation(0, 0, 0, 1);
+		translate.SetToTranslation(-3,2, 0);
 		model = translate * rotate * scale;
 		MVP = projection * view * model;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
@@ -578,8 +702,318 @@ void Scene3::Render()
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 	}
+	//tree 2
+	for (int i = 0; i < 1; i++)
+	{
+		translate.SetToIdentity();
+		rotate.SetToIdentity();
+		scale.SetToIdentity();
+		model.SetToIdentity();
 
-	
+		scale.SetToScale(7, 7, 7);
+		rotate.SetToRotation(0, 0, 0, 1);
+		translate.SetToTranslation(-6, 0, 0);
+		model = translate * rotate * scale;
+		MVP = projection * view * model;
+		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_11]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_11]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_12]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_12]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_13]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_13]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_14]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_14]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+	}
+	//tree 3
+	for (int i = 0; i < 1; i++)
+	{
+		translate.SetToIdentity();
+		rotate.SetToIdentity();
+		scale.SetToIdentity();
+		model.SetToIdentity();
+
+		scale.SetToScale(10, 10, 10);
+		rotate.SetToRotation(0, 0, 0, 1);
+		translate.SetToTranslation(-10, -3, 0);
+		model = translate * rotate * scale;
+		MVP = projection * view * model;
+		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_11]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_11]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_12]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_12]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_13]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_13]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_14]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_14]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+	}
+	//tree 4
+	for (int i = 0; i < 1; i++)
+	{
+		translate.SetToIdentity();
+		rotate.SetToIdentity();
+		scale.SetToIdentity();
+		model.SetToIdentity();
+
+		scale.SetToScale(15, 15, 15);
+		rotate.SetToRotation(0, 0, 0, 1);
+		translate.SetToTranslation(-17, -8, 0);
+		model = translate * rotate * scale;
+		MVP = projection * view * model;
+		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_11]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_11]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_12]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_12]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_13]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_13]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_14]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_14]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+	}
+	//tree 5
+	for (int i = 0; i < 1; i++)
+	{
+		translate.SetToIdentity();
+		rotate.SetToIdentity();
+		scale.SetToIdentity();
+		model.SetToIdentity();
+
+		scale.SetToScale(5, 5, 5);
+		rotate.SetToRotation(0, 0, 0, 1);
+		translate.SetToTranslation(3, 2, 0);
+		model = translate * rotate * scale;
+		MVP = projection * view * model;
+		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_11]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_11]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_12]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_12]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_13]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_13]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_14]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_14]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+	}
+	//tree 2
+	for (int i = 0; i < 1; i++)
+	{
+		translate.SetToIdentity();
+		rotate.SetToIdentity();
+		scale.SetToIdentity();
+		model.SetToIdentity();
+
+		scale.SetToScale(7, 7, 7);
+		rotate.SetToRotation(0, 0, 0, 1);
+		translate.SetToTranslation(6, 0, 0);
+		model = translate * rotate * scale;
+		MVP = projection * view * model;
+		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_11]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_11]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_12]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_12]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_13]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_13]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_14]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_14]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+	}
+	//tree 3
+	for (int i = 0; i < 1; i++)
+	{
+		translate.SetToIdentity();
+		rotate.SetToIdentity();
+		scale.SetToIdentity();
+		model.SetToIdentity();
+
+		scale.SetToScale(10, 10, 10);
+		rotate.SetToRotation(0, 0, 0, 1);
+		translate.SetToTranslation(10, -3, 0);
+		model = translate * rotate * scale;
+		MVP = projection * view * model;
+		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_11]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_11]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_12]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_12]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_13]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_13]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_14]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_14]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+	}
+	//tree 4
+	for (int i = 0; i < 1; i++)
+	{
+		translate.SetToIdentity();
+		rotate.SetToIdentity();
+		scale.SetToIdentity();
+		model.SetToIdentity();
+
+		scale.SetToScale(15, 15, 15);
+		rotate.SetToRotation(0, 0, 0, 1);
+		translate.SetToTranslation(17, -8, 0);
+		model = translate * rotate * scale;
+		MVP = projection * view * model;
+		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_11]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_11]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_12]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_12]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_13]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_13]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_14]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_14]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+	}
+	//fox
+	for (int i = 0; i < 1; i++)
+	{
+		translate.SetToIdentity();
+		rotate.SetToIdentity();
+		scale.SetToIdentity();
+		model.SetToIdentity();
+
+		scale.SetToScale(20, 20, 20);
+		rotate.SetToRotation(0, 0, 0, 1);
+		translate.SetToTranslation(0, 0, 0);
+		model = translate * rotate * scale;
+		MVP = projection * view * model;
+		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_15]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_15]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_16]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_16]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_17]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_17]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		/*glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer[GEO_TRIANGLE_18]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, m_colorBuffer[GEO_TRIANGLE_18]);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);*/
+	}
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
