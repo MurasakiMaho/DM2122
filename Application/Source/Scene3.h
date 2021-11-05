@@ -35,6 +35,14 @@ public:
 		GEO_TRIANGLE_16,
 		GEO_TRIANGLE_17,
 		GEO_TRIANGLE_18,
+		GEO_TRIANGLE_19,
+		GEO_TRIANGLE_20,
+		GEO_TRIANGLE_21,
+		GEO_TRIANGLE_22,
+		GEO_TRIANGLE_23,
+		GEO_TRIANGLE_24,
+		GEO_TRIANGLE_25,
+		GEO_TRIANGLE_26,
 		NUM_GEOMETRY,
 	};
 
@@ -54,8 +62,7 @@ private:
 	float translateX;
 	float translateY;
 	float scaleAll;
-	float translateDeerY;
-	float deerScale;
+	float translateFoxY;
 
 };
 
