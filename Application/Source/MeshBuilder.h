@@ -13,8 +13,8 @@ class MeshBuilder
 {
 public:
 	static Mesh* GenerateAxes(const std::string &meshName, float lengthX, float lengthY, float lengthZ);
-	static Mesh* GenerateQuad(const std::string &meshName, float lengthX, float lengthY);
-	static Mesh* GenerateCube(const std::string &meshName, float lengthX, float lengthY, float lengthZ);
+	static Mesh* GenerateQuad(const std::string &meshName, Color color, float lengthX, float lengthY);
+	static Mesh* GenerateCube(const std::string &meshName, Color color, float lengthX, float lengthY, float lengthZ);
 };
 
 #endif

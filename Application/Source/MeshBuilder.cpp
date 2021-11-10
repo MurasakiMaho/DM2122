@@ -24,12 +24,12 @@ Mesh* MeshBuilder::GenerateAxes(const std::string &meshName, float lengthX, floa
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<unsigned> index_buffer_data;
 
-	v.pos.Set(-10, 0.f, 0.f);	v.color.Set(1, 0, 0);	vertex_buffer_data.push_back(v);
-	v.pos.Set(10, 0.f, 0.f);	v.color.Set(1, 0, 0);	vertex_buffer_data.push_back(v);
-	v.pos.Set(0.f, -10, 0.f);	v.color.Set(0, 1, 0);	vertex_buffer_data.push_back(v);
-	v.pos.Set(0.f, 10, 0.f);	v.color.Set(0, 1, 0);	vertex_buffer_data.push_back(v);
-	v.pos.Set(0.f, 0.f, -10);	v.color.Set(0, 0, 1);	vertex_buffer_data.push_back(v);
-	v.pos.Set(0.f, 0.f, 10);	v.color.Set(0, 0, 1);	vertex_buffer_data.push_back(v);
+	v.pos.Set(-10 * lengthX, 0.f, 0.f);	v.color.Set(1, 0, 0);	vertex_buffer_data.push_back(v);
+	v.pos.Set(10 * lengthX, 0.f, 0.f);	v.color.Set(1, 0, 0);	vertex_buffer_data.push_back(v);
+	v.pos.Set(0.f, -10 * lengthY, 0.f);	v.color.Set(0, 1, 0);	vertex_buffer_data.push_back(v);
+	v.pos.Set(0.f, 10 * lengthY, 0.f);	v.color.Set(0, 1, 0);	vertex_buffer_data.push_back(v);
+	v.pos.Set(0.f, 0.f, -10 * lengthZ);	v.color.Set(0, 0, 1);	vertex_buffer_data.push_back(v);
+	v.pos.Set(0.f, 0.f, 10 * lengthZ);	v.color.Set(0, 0, 1);	vertex_buffer_data.push_back(v);
 
 	for (int i = 0; i < 6; i++)
 		index_buffer_data.push_back(i);
@@ -59,18 +59,18 @@ Then generate the VBO/IBO and store them in Mesh object
 \return Pointer to mesh storing VBO/IBO of quad
 */
 /******************************************************************************/
-Mesh* MeshBuilder::GenerateQuad(const std::string &meshName, float lengthX, float lengthY)
+Mesh* MeshBuilder::GenerateQuad(const std::string &meshName, Color color, float lengthX, float lengthY)
 {
 	Vertex v;
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<unsigned> index_buffer_data;
 
-	v.pos.Set(0.5f, 0.5f, 0.f);		v.color.Set(1, 1, 1);	vertex_buffer_data.push_back(v);
-	v.pos.Set(-0.5f, 0.5f, 0.f);	v.color.Set(1, 1, 0);	vertex_buffer_data.push_back(v);
-	v.pos.Set(-0.5f, -0.5f, 0.f);	v.color.Set(1, 0, 0);	vertex_buffer_data.push_back(v);
-	v.pos.Set(0.5f, 0.5f, 0.f);		v.color.Set(1, 1, 1);	vertex_buffer_data.push_back(v);
-	v.pos.Set(-0.5f, -0.5f, 0.f);	v.color.Set(1, 0, 0);	vertex_buffer_data.push_back(v);
-	v.pos.Set(0.5f, -0.5f, 0.f);	v.color.Set(1, 1, 0);	vertex_buffer_data.push_back(v);
+	v.pos.Set(0.5f * lengthX, 0.5f * lengthY, 0.f);		v.color = color;	vertex_buffer_data.push_back(v);
+	v.pos.Set(-0.5f * lengthX, 0.5f * lengthY, 0.f);	v.color = color;	vertex_buffer_data.push_back(v);
+	v.pos.Set(-0.5f * lengthX, -0.5f * lengthY, 0.f);	v.color = color;	vertex_buffer_data.push_back(v);
+	v.pos.Set(0.5f * lengthX, 0.5f * lengthY, 0.f);		v.color = color;	vertex_buffer_data.push_back(v);
+	v.pos.Set(-0.5f * lengthX, -0.5f * lengthY, 0.f);	v.color = color;	vertex_buffer_data.push_back(v);
+	v.pos.Set(0.5f * lengthX, -0.5f * lengthY, 0.f);	v.color = color;	vertex_buffer_data.push_back(v);
 
 	for (int i = 0; i < 6; i++)
 		index_buffer_data.push_back(i);
@@ -101,18 +101,18 @@ Then generate the VBO/IBO and store them in Mesh object
 \return Pointer to mesh storing VBO/IBO of cube
 */
 /******************************************************************************/
-Mesh* MeshBuilder::GenerateCube(const std::string &meshName, float lengthX, float lengthY, float lengthZ)
+Mesh* MeshBuilder::GenerateCube(const std::string &meshName, Color color, float lengthX, float lengthY, float lengthZ)
 {
 	Vertex v;
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<unsigned> index_buffer_data;
 
-	v.pos.Set(0.5f, 0.5f, 0.5f);		v.color.Set(1, 0, 0);	vertex_buffer_data.push_back(v);
-	v.pos.Set(-0.5f, 0.5f, 0.5f);	v.color.Set(1, 0, 0);	vertex_buffer_data.push_back(v);
-	v.pos.Set(-0.5f, -0.5f, 0.5f);	v.color.Set(1, 0, 0);	vertex_buffer_data.push_back(v);
-	v.pos.Set(0.5f, 0.5f, 0.5f);		v.color.Set(1, 0, 0);	vertex_buffer_data.push_back(v);
-	v.pos.Set(-0.5f, -0.5f, 0.5f);	v.color.Set(1, 0, 0);	vertex_buffer_data.push_back(v);
-	v.pos.Set(0.5f, -0.5f, 0.5f);	v.color.Set(1, 0, 0);	vertex_buffer_data.push_back(v);
+	v.pos.Set(0.5f * lengthX, 0.5f * lengthY, 0.5f * lengthZ);		v.color = color;	vertex_buffer_data.push_back(v);
+	v.pos.Set(-0.5f * lengthX, 0.5f * lengthY, 0.5f * lengthZ);	v.color = color;	vertex_buffer_data.push_back(v);
+	v.pos.Set(-0.5f * lengthX, -0.5f * lengthY, 0.5f * lengthZ);	v.color = color;	vertex_buffer_data.push_back(v);
+	v.pos.Set(0.5f * lengthX, 0.5f * lengthY, 0.5f * lengthZ);		v.color = color;	vertex_buffer_data.push_back(v);
+	v.pos.Set(-0.5f * lengthX, -0.5f * lengthY, 0.5f * lengthZ);	v.color = color;	vertex_buffer_data.push_back(v);
+	v.pos.Set(0.5f * lengthX, -0.5f * lengthY, 0.5f * lengthZ);	v.color = color;	vertex_buffer_data.push_back(v);
 
 	v.pos.Set(0.5f, 0.5f, -0.5f);		v.color.Set(1, 0, 0);	vertex_buffer_data.push_back(v);
 	v.pos.Set(0.5f, 0.5f, 0.5f);	v.color.Set(1, 0, 0);	vertex_buffer_data.push_back(v);
