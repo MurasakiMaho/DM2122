@@ -44,7 +44,11 @@ void Scene5::Init()
 	rotateAngle = 0;
 
 	//Initialize camera settings
-	camera.Init(Vector3(4, 3, 3), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.Init(Vector3(40, 30, 30), Vector3(0, 0, 0), Vector3(0, 1, 0));
+
+	Mtx44 projection;
+	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
+	projectionStack.LoadMatrix(projection);
 
 	// Init VBO
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
@@ -54,6 +58,9 @@ void Scene5::Init()
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 0), 1.f);
 	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 0, 0), 1.f);
+	meshList[GEO_CIRCLE] = MeshBuilder::GenerateCircle("circle", Color(0, 1, 1), 20, 1.f);
+	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(0, 1, 1), 20, 1.f);
+	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(0, 1, 1), 10, 20);
 }
 
 void Scene5::Update(double dt)
@@ -78,42 +85,87 @@ void Scene5::Render()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//Temp variables
-	Mtx44 translate, rotate, scale;
 	Mtx44 MVP;
 
-	//These will be replaced by matrix stack soon
-	Mtx44 model;
-	Mtx44 view;
-	Mtx44 projection;
-
-	//Set all matrices to identity
-	translate.SetToIdentity();
-	rotate.SetToIdentity();
-	scale.SetToIdentity();
-	model.SetToIdentity();
-
-	//Set view matrix using camera settings
-	view.SetToLookAt(
+	viewStack.LoadIdentity();
+	viewStack.LookAt(
 		camera.position.x, camera.position.y, camera.position.z,
 		camera.target.x, camera.target.y, camera.target.z,
-		camera.up.x, camera.up.y, camera.up.z
-					);
+		camera.up.x, camera.up.y, camera.up.z);
+	modelStack.LoadIdentity();
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
 
-	//Set projection matrix to perspective mode
-	projection.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 1000.0f); //FOV, Aspect Ratio, Near plane, Far plane
-
-	model.SetToIdentity();
-	MVP = projection * view * model;
 	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 	meshList[GEO_AXES]->Render();
 
-	translate.SetToIdentity();
-	rotate.SetToRotation(rotateAngle, 0, 0, 1);
-	scale.SetToIdentity();
-	model = translate * rotate * scale;
-	MVP = projection * view * model;
-	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-	meshList[GEO_CUBE]->Render();
+	//1 sun
+	modelStack.PushMatrix();
+	{
+		modelStack.LoadIdentity();
+		modelStack.Translate(3, 2, 0);
+		modelStack.Rotate(0, 0, 0, 1);
+		modelStack.Scale(2, 2, 2);
+		MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+		meshList[GEO_SPHERE]->Render();
+
+
+		//2 planet
+		{
+			modelStack.PushMatrix();
+			modelStack.Rotate(-rotateAngle, 0, 0, 1);
+			modelStack.Translate(3, 0, 0);
+			modelStack.Scale(0.5, 0.5, 0.5);
+			MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+			glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+			meshList[GEO_SPHERE]->Render();
+
+			//3 moon
+			modelStack.PushMatrix();
+			{
+				modelStack.Rotate(4 * rotateAngle, 0, 0, 1);
+				modelStack.Translate(2, 0, 0);
+				modelStack.Scale(0.5, 0.5, 0.5);
+				MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+				glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+				meshList[GEO_SPHERE]->Render();
+			}
+			modelStack.PopMatrix();
+			//3
+		}
+		modelStack.PopMatrix();
+		//2
+
+		//2 second planet
+		modelStack.PushMatrix();
+		{
+			modelStack.Rotate(-rotateAngle + 15, 0, 0, 1);
+			modelStack.Translate(-5, 0, 0);
+			modelStack.Scale(0.75, 0.75, 0.75);
+			MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+			glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+			meshList[GEO_SPHERE]->Render();
+
+			//3 ring
+			modelStack.PushMatrix();
+			{
+				modelStack.Rotate(rotateAngle, 90, 0, 0);
+				modelStack.Translate(0, 0, 0);
+				modelStack.Scale(1.5, 1.5, 1.5);
+				MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+				glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+				meshList[GEO_CIRCLE]->Render();
+			}
+			modelStack.PopMatrix();
+			//3
+		}
+		modelStack.PopMatrix();
+		//2
+	}
+
+	modelStack.PopMatrix();
+	//1
+
 }
 
 void Scene5::Exit()

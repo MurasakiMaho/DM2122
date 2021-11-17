@@ -177,3 +177,124 @@ Mesh* MeshBuilder::GenerateCube(const std::string &meshName, Color color, float 
 
 	return mesh;
 }
+
+Mesh* MeshBuilder::GenerateCircle(const std::string& meshName, Color color, unsigned numSlices, float radius)
+{
+	Vertex v;
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+
+	float radianPerSlice = Math::TWO_PI / numSlices;
+
+	for (unsigned slice = 0; slice < numSlices + 1; ++slice)
+	{
+		float theta = slice * radianPerSlice;
+		float x = radius * cosf(theta);
+		float y = 0;
+		float z = radius * sinf(theta);
+
+		v.pos.Set(x, y, z);		v.color = color;	vertex_buffer_data.push_back(v);
+		v.pos.Set(0, 0, 0);		v.color = color;	vertex_buffer_data.push_back(v);
+	}
+	for (unsigned slice = 0; slice < numSlices + 1; ++slice)
+	{
+		index_buffer_data.push_back(slice * 2 + 0);
+		index_buffer_data.push_back(slice * 2 + 1);
+	}
+
+	Mesh* mesh = new Mesh(meshName);
+
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
+
+	mesh->indexSize = index_buffer_data.size();
+	mesh->mode = Mesh::DRAW_TRIANGLE_STRIP;
+
+	return mesh;
+}
+
+//undone
+Mesh* MeshBuilder::GenerateRing(const std::string& meshName, Color color, unsigned numSlices, float radius)
+{
+	Vertex v;
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+
+	float radianPerSlice = Math::TWO_PI / numSlices;
+
+	v.pos.Set(0.f, 0.f, 0.f);		v.color = color;	vertex_buffer_data.push_back(v);
+	for (unsigned slice = 0; slice < numSlices + 1; ++slice)
+	{
+		float theta = slice * radianPerSlice; // every iteration +
+		float x = radius * cosf(theta);
+		float y = 0;
+		float z = radius * sinf(theta);
+
+		v.pos.Set(x, y, z);	v.color = color;	vertex_buffer_data.push_back(v);
+	}
+	for (unsigned slice = 0; slice < numSlices + 1; ++slice)
+	{
+		index_buffer_data.push_back(slice + 1);
+		index_buffer_data.push_back(0);
+	}
+
+	Mesh* mesh = new Mesh(meshName);
+
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
+
+	mesh->indexSize = index_buffer_data.size();
+	mesh->mode = Mesh::DRAW_TRIANGLE_STRIP;
+
+	return mesh;
+}
+
+Mesh* MeshBuilder::GenerateSphere(const std::string& meshName, Color color, unsigned numStacks, unsigned numSlices, float radius)
+{
+	Vertex v;
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+
+	float degreePerStack = 180.f / numStacks;
+	float degreePerSlice = 360.f / numSlices;
+
+	for (unsigned stack = 0; stack < numStacks + 1; ++stack)
+	{
+		float phi = -90.f + stack * degreePerStack;
+		for (unsigned slice = 0; slice < numSlices + 1; ++slice)
+		{
+			float theta = slice * degreePerSlice;
+			float x = radius * cosf(Math::DegreeToRadian(phi)) * cosf(Math::DegreeToRadian(theta));
+			float y = radius * sinf(Math::DegreeToRadian(phi));
+			float z = radius * cosf(Math::DegreeToRadian(phi)) * sinf(Math::DegreeToRadian(theta));
+
+			v.pos.Set(x, y, z);		v.color = color;	vertex_buffer_data.push_back(v);
+		}
+	}
+	for (unsigned stack = 0; stack < numStacks; ++stack)
+	{
+		for (unsigned slice = 0; slice < numSlices + 1; ++slice)
+		{
+			index_buffer_data.push_back(stack * (numSlices + 1) + slice);
+			index_buffer_data.push_back((stack + 1) * (numSlices + 1) + slice);
+		}
+	}
+
+	Mesh* mesh = new Mesh(meshName);
+
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
+
+	mesh->indexSize = index_buffer_data.size();
+	mesh->mode = Mesh::DRAW_TRIANGLE_STRIP;
+
+	return mesh;
+}
+
+

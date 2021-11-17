@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Camera.h"
 #include "Mesh.h"
+#include "MatrixStack.h"
 
 class Scene5 : public Scene
 {
@@ -12,6 +13,9 @@ class Scene5 : public Scene
 		GEO_AXES,
 		GEO_QUAD,
 		GEO_CUBE,
+		GEO_CIRCLE,
+		GEO_RING,
+		GEO_SPHERE,
 		NUM_GEOMETRY,
 	};
 	enum UNIFORM_TYPE
@@ -19,6 +23,9 @@ class Scene5 : public Scene
 		U_MVP = 0,
 		U_TOTAL,
 	};
+
+	MS modelStack, viewStack, projectionStack;
+
 public:
 	Scene5();
 	~Scene5();
