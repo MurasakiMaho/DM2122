@@ -58,12 +58,13 @@ To be called every frame. Camera will get user inputs and update its position an
 /******************************************************************************/
 void Camera::Update(double dt)
 {
+	static const float CAMERA_SPEED = 10.f;
+	if(Application::IsKeyPressed('W'))
+		this->position.y += CAMERA_SPEED * static_cast<float>(dt); //move camera up
 	if (Application::IsKeyPressed('A'))
-		this->position.x -= 10.f * dt; //move camera left
-	if (Application::IsKeyPressed('D'))
-		this->position.x += 10.f * dt; //move camera right
-	if (Application::IsKeyPressed('W'))
-		this->position.y += 10.f * dt; //move camera up
+		this->position.x -= CAMERA_SPEED * static_cast<float>(dt); //move camera left
 	if (Application::IsKeyPressed('S'))
-		this->position.y -= 10.f * dt; //move camera down
+		this->position.y -= CAMERA_SPEED * static_cast<float>(dt); //move camera down
+	if (Application::IsKeyPressed('D'))
+		this->position.x += CAMERA_SPEED * static_cast<float>(dt); //move camera right
 }

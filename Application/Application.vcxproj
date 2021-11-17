@@ -157,6 +157,7 @@
     <ClCompile Include="Source\Scene2.cpp" />
     <ClCompile Include="Source\Scene3.cpp" />
     <ClCompile Include="Source\Scene4.cpp" />
+    <ClCompile Include="Source\Scene5.cpp" />
     <ClCompile Include="Source\shader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +171,7 @@
     <ClInclude Include="Source\Scene2.h" />
     <ClInclude Include="Source\Scene3.h" />
     <ClInclude Include="Source\Scene4.h" />
+    <ClInclude Include="Source\Scene5.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\Vertex.h" />
   </ItemGroup>

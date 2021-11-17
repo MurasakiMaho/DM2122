@@ -2,7 +2,6 @@
 #define MESH_H
 
 #include <string>
-#include "Vertex.h"
 
 /******************************************************************************/
 /*!
@@ -27,7 +26,6 @@ public:
 	const std::string name;
 	DRAW_MODE mode;
 	unsigned vertexBuffer;
-	unsigned colorBuffer;
 	unsigned indexBuffer;
 	unsigned indexSize;
 };

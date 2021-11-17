@@ -1,11 +1,11 @@
-#ifndef SCENE_4_H
-#define SCENE_4_H
+#ifndef SCENE_5_H
+#define SCENE_5_H
 
 #include "Scene.h"
 #include "Camera.h"
 #include "Mesh.h"
 
-class Scene4 : public Scene
+class Scene5 : public Scene
 {
 	enum GEOMETRY_TYPE
 	{
@@ -20,8 +20,8 @@ class Scene4 : public Scene
 		U_TOTAL,
 	};
 public:
-	Scene4();
-	~Scene4();
+	Scene5();
+	~Scene5();
 
 	virtual void Init();
 	virtual void Update(double dt);

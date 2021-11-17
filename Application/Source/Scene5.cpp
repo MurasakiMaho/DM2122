@@ -1,4 +1,4 @@
-#include "Scene4.h"
+#include "Scene5.h"
 #include "GL\glew.h"
 
 #include "shader.hpp"
@@ -7,15 +7,15 @@
 #include "Application.h"
 #include "MeshBuilder.h"
 
-Scene4::Scene4()
+Scene5::Scene5()
 {
 }
 
-Scene4::~Scene4()
+Scene5::~Scene5()
 {
 }
 
-void Scene4::Init()
+void Scene5::Init()
 {	
 	// Set background color to dark blue
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
@@ -56,7 +56,7 @@ void Scene4::Init()
 	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 0, 0), 1.f);
 }
 
-void Scene4::Update(double dt)
+void Scene5::Update(double dt)
 {
 	if(Application::IsKeyPressed('1')) //enable back face culling
 		glEnable(GL_CULL_FACE);
@@ -72,7 +72,7 @@ void Scene4::Update(double dt)
 	camera.Update(dt);
 }
 
-void Scene4::Render()
+void Scene5::Render()
 {
 	// Render VBO here
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -116,7 +116,7 @@ void Scene4::Render()
 	meshList[GEO_CUBE]->Render();
 }
 
-void Scene4::Exit()
+void Scene5::Exit()
 {
 	// Cleanup VBO here
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
