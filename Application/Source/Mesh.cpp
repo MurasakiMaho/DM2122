@@ -17,6 +17,7 @@ Mesh::Mesh(const std::string &meshName)
 {
 	glGenBuffers(1, &vertexBuffer);
 	glGenBuffers(1, &indexBuffer);
+
 }
 
 /******************************************************************************/
@@ -41,10 +42,12 @@ void Mesh::Render()
 {
 	glEnableVertexAttribArray(0); // 1st attribute buffer : positions
 	glEnableVertexAttribArray(1); // 2nd attribute buffer : colors
+	glEnableVertexAttribArray(2); // 3rd attribute : normals
 
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(Position));
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Position) + sizeof(Color)));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 	if (mode == DRAW_TRIANGLE_STRIP)
 		glDrawElements(GL_TRIANGLE_STRIP, indexSize, GL_UNSIGNED_INT, 0);
@@ -55,4 +58,5 @@ void Mesh::Render()
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(2);
 }
