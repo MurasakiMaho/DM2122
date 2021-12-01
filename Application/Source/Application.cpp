@@ -17,6 +17,7 @@
 #include "Scene4.h"
 #include "Scene5.h"
 #include "SceneLight.h"
+#include "SceneLight2.h"
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
@@ -114,7 +115,7 @@ void Application::Run()
 {
 	//Main Loop
 	//Scene *scene = new Scene1();
-	Scene *scene = new SceneLight();
+	Scene *scene = new SceneLight2();
 	scene->Init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame

@@ -5,12 +5,6 @@
 #include "Vertex.h"
 #include <myMath.h>
 
-/******************************************************************************/
-/*!
-		Class MeshBuilder:
-\brief	Provides methods to generate mesh of different shapes
-*/
-/******************************************************************************/
 class MeshBuilder
 {
 public:
@@ -19,7 +13,11 @@ public:
 	static Mesh* GenerateCube(const std::string &meshName, Color color, float length = 1.f);
 	static Mesh* GenerateCircle(const std::string& meshName, Color color,unsigned numSlices = 36, float radius = 1.f);
 	static Mesh* GenerateRing(const std::string& meshName, Color color, unsigned numSlices = 36, float radius = 1.f);
+	static Mesh* GenerateCylinder(const std::string& meshName, Color color, unsigned numSlices = 36, float radius = 1.f, float height = 1.f);
+	static Mesh* GenerateCone(const std::string& meshName, Color color, unsigned numSlices, float radius, float height);
 	static Mesh* GenerateSphere(const std::string& meshName, Color color, unsigned numStacks = 10, unsigned numSlices = 36, float radius = 1.f);
+	static Mesh* GenerateHemisphere(const std::string& meshName, Color color, unsigned numStacks, unsigned numSlices, float radius);
+	static Mesh* GenerateTorus2(const std::string& meshName, Color color, unsigned numStack, unsigned numSlice, float outerR, float innerR);
 };
 
 #endif
