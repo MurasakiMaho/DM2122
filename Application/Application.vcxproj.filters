@@ -57,7 +57,7 @@
     <ClCompile Include="Source\Camera2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SceneLight2.cpp">
+    <ClCompile Include="Source\Assignment1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -119,7 +119,7 @@
     <ClInclude Include="Source\Utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SceneLight2.h">
+    <ClInclude Include="Source\Assignment1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

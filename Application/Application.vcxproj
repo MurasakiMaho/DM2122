@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClCompile Include="..\Common\Source\Mtx44.cpp" />
     <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\Assignment1.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Camera2.cpp" />
     <ClCompile Include="Source\main.cpp" />
@@ -160,13 +161,13 @@
     <ClCompile Include="Source\Scene3.cpp" />
     <ClCompile Include="Source\Scene4.cpp" />
     <ClCompile Include="Source\Scene5.cpp" />
-    <ClCompile Include="Source\SceneLight2.cpp" />
     <ClCompile Include="Source\shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common\Source\Mtx44.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Source\Application.h" />
+    <ClInclude Include="Source\Assignment1.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Camera2.h" />
     <ClInclude Include="Source\Light.h" />
@@ -180,7 +181,6 @@
     <ClInclude Include="Source\Scene3.h" />
     <ClInclude Include="Source\Scene4.h" />
     <ClInclude Include="Source\Scene5.h" />
-    <ClInclude Include="Source\SceneLight2.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />

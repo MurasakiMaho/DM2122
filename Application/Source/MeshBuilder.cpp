@@ -152,8 +152,8 @@ Mesh* MeshBuilder::GenerateCircle(const std::string& meshName, Color color, unsi
 		float y = 0;
 		float z = radius * sinf(theta);
 
-		v.pos.Set(x, y, z);		v.color = color;	vertex_buffer_data.push_back(v);
-		v.pos.Set(0, 0, 0);		v.color = color;	vertex_buffer_data.push_back(v);
+		v.pos.Set(x, y, z);		v.color = color;	v.normal.Set(0, 0, 1);	vertex_buffer_data.push_back(v);
+		v.pos.Set(0, 0, 0);		v.color = color;	v.normal.Set(0, 0, 1);	vertex_buffer_data.push_back(v);
 	}
 	for (unsigned slice = 0; slice < numSlices + 1; ++slice)
 	{
@@ -390,14 +390,34 @@ Mesh* MeshBuilder::GenerateHemisphere(const std::string& meshName, Color color, 
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<GLuint> index_buffer_data;
 
-
-	float degreePerStack = 180.f / numStacks;
+	float degreePerStack = 90.f / numStacks;
 	float degreePerSlice = 360.f / numSlices;
 
+
+	//bottom
+	unsigned startIndex;
+	startIndex = vertex_buffer_data.size();
+	for (unsigned slice = 0; slice < numSlices + 1; ++slice)
+	{
+		float theta = slice * degreePerSlice;
+		float x = radius * cosf(Math::DegreeToRadian(theta));
+		float z = radius * sinf(Math::DegreeToRadian(theta));
+
+		v.pos.Set(x, 0, z);		v.color = color;	v.normal.Set(0, -1, 0);	vertex_buffer_data.push_back(v);
+		v.pos.Set(0, 0, 0);		v.color = color;	v.normal.Set(0, -1, 0); vertex_buffer_data.push_back(v);
+	}
+	for (unsigned slice = 0; slice < numSlices + 1; ++slice)
+	{
+		index_buffer_data.push_back(startIndex + slice * 2 + 1);
+		index_buffer_data.push_back(startIndex + slice * 2 + 0);
+	}
+
+	//Curve
+	startIndex = vertex_buffer_data.size();
 	for (unsigned stack = 0; stack < numStacks + 1; ++stack)
 	{
-		float phi = -90.f + stack * degreePerStack;
-		for (unsigned slice = 0; slice < numSlices/2 + 1; ++slice)
+		float phi = 0.f + stack * degreePerStack;
+		for (unsigned slice = 0; slice < numSlices + 1; ++slice)
 		{
 			float theta = slice * degreePerSlice;
 			float x = radius * cosf(Math::DegreeToRadian(phi)) * cosf(Math::DegreeToRadian(theta));
@@ -409,10 +429,10 @@ Mesh* MeshBuilder::GenerateHemisphere(const std::string& meshName, Color color, 
 	}
 	for (unsigned stack = 0; stack < numStacks; ++stack)
 	{
-		for (unsigned slice = 0; slice < numSlices/2 + 1; ++slice)
+		for (unsigned slice = 0; slice < numSlices + 1; ++slice)
 		{
-			index_buffer_data.push_back(stack * (numSlices/2 + 1) + slice);
-			index_buffer_data.push_back((stack + 1) * (numSlices/2 + 1) + slice);
+			index_buffer_data.push_back(startIndex + stack * (numSlices + 1) + slice);
+			index_buffer_data.push_back(startIndex + (stack + 1) * (numSlices + 1) + slice);
 		}
 	}
 
