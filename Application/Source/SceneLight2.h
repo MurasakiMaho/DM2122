@@ -22,6 +22,7 @@ class SceneLight2 : public Scene
 		GEO_SPHERE,
 		GEO_HEMISPHERE,
 		GEO_TORUS,
+		GEO_QUARTERTORUS,
 		GEO_LIGHTBALL,
 		NUM_GEOMETRY,
 	};

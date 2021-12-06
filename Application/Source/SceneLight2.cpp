@@ -140,6 +140,12 @@ void SceneLight2::Init()
 	meshList[GEO_TORUS]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_TORUS]->material.kShininess = 1.f;
 
+	meshList[GEO_QUARTERTORUS] = MeshBuilder::GenerateQuarterTorus2("quartertorus", Color(1, 0, 0), 20, 20, 10, 5);
+	meshList[GEO_QUARTERTORUS]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_QUARTERTORUS]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_QUARTERTORUS]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_QUARTERTORUS]->material.kShininess = 1.f;
+
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 1), 10, 20);
 
 	
@@ -239,7 +245,7 @@ void SceneLight2::Render()
 		modelStack.Translate(0, 5, 0);
 		modelStack.Rotate(0, 0, 0, 1);
 		modelStack.Scale(1, 1, 1);
-		RenderMesh(meshList[GEO_TORUS], true);
+		RenderMesh(meshList[GEO_QUARTERTORUS], true);
 	}
 	modelStack.PopMatrix();
 	//1
