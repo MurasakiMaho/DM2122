@@ -359,7 +359,7 @@ Mesh* MeshBuilder::GenerateSphere(const std::string& meshName, Color color, unsi
 			float y = radius * sinf(Math::DegreeToRadian(phi));
 			float z = radius * cosf(Math::DegreeToRadian(phi)) * sinf(Math::DegreeToRadian(theta));
 
-			v.pos.Set(x, y, z);		v.color = color; v.normal.Set(1, 1, 1);	vertex_buffer_data.push_back(v);
+			v.pos.Set(x, y, z);		v.color = color; v.normal.Set(x, y, z);	vertex_buffer_data.push_back(v);
 		}
 	}
 	for (unsigned stack = 0; stack < numStacks; ++stack)

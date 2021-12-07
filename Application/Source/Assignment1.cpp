@@ -122,17 +122,23 @@ void Assignment1::Init()
 	meshList[GEO_CYLINDER]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_CYLINDER]->material.kShininess = 1.f;
 
-	meshList[GEO_BLUE_CYLINDER] = MeshBuilder::GenerateCylinder("blueCylinder", Color(0.22353, 0.49412, 0.82745), 36, 10, 20);
+	meshList[GEO_BLUE_CYLINDER] = MeshBuilder::GenerateCylinder("blueCylinder", Color(0.22353, 0.49412, 0.82745), 36, 10, 50);
 	meshList[GEO_BLUE_CYLINDER]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_BLUE_CYLINDER]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_BLUE_CYLINDER]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_BLUE_CYLINDER]->material.kShininess = 1.f;
 
-	meshList[GEO_CONE] = MeshBuilder::GenerateCone("cone", Color(1, 0, 0), 36, 10, 10);
+	meshList[GEO_CONE] = MeshBuilder::GenerateCone("cone", Color(1, 0, 0), 36, 10, 20);
 	meshList[GEO_CONE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_CONE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_CONE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_CONE]->material.kShininess = 1.f;
+
+	meshList[GEO_BLUE_CONE] = MeshBuilder::GenerateCone("blueCone", Color(0.22353, 0.49412, 0.82745), 36, 3.5, 4);
+	meshList[GEO_BLUE_CONE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_BLUE_CONE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_BLUE_CONE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_BLUE_CONE]->material.kShininess = 1.f;
 
 	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(1, 0, 0), 10, 20);
 	meshList[GEO_SPHERE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
@@ -281,33 +287,35 @@ void Assignment1::Render()
 	//Body
 	modelStack.PushMatrix();
 	{
-		modelStack.Translate(0, 5, 0);
+		modelStack.Translate(0, 5.5, 0);
 		modelStack.Rotate(0, 0, 0, 1);
-		modelStack.Scale(0.4, 0.25, 0.25);
-		RenderMesh(meshList[GEO_BLUE_CYLINDER], true);
-	}
-	modelStack.PopMatrix();
-	//Body
+		modelStack.Scale(4, 3.5, 3);
+		RenderMesh(meshList[GEO_BLUE_SPHERE], true);
+	
 	
 	//RightLeg
 	modelStack.PushMatrix();
 	{
-		modelStack.LoadIdentity();
-		modelStack.Translate(2, 1.3, 0);
-		modelStack.Rotate(0, 0, 0, 1);
-		modelStack.Scale(0.125, 0.125, 0.125);
-		RenderMesh(meshList[GEO_BLUE_CYLINDER], true);
+		modelStack.Translate(0.4, -1, 0);
+		modelStack.Rotate(180, 0, 0, 1);
+		modelStack.Scale(0.1375,0.28571, 0.2);
+		RenderMesh(meshList[GEO_BLUE_CONE], true);
 
 		//RightFoot
 		modelStack.PushMatrix();
 		{
-			modelStack.Translate(0, -10.1, 1.5);
-			modelStack.Rotate(0, 0, 0, 1);
-			modelStack.Scale(2.75, 2.5, 3);
+			modelStack.Translate(0, 1.5, 0);
+			modelStack.Rotate(180, 0, 0, 1);
+			modelStack.Scale(0.5, 0.25, 0.5);
+			RenderMesh(meshList[GEO_WHITE_HEMISPHERE], true);
+
+			modelStack.Translate(0, -0.15, 0);
+			modelStack.Rotate(180, 0, 0, 1);
+			modelStack.Scale(1, 0.45, 1);
 			RenderMesh(meshList[GEO_WHITE_HEMISPHERE], true);
 		}
 		modelStack.PopMatrix();
-		//LeftFoot
+		//RightFoot
 	}
 	modelStack.PopMatrix();
 	//RightLeg
@@ -316,18 +324,22 @@ void Assignment1::Render()
 	//LeftLeg
 	modelStack.PushMatrix();
 	{
-		modelStack.LoadIdentity();
-		modelStack.Translate(-2, 1.3, 0);
-		modelStack.Rotate(0, 0, 0, 1);
-		modelStack.Scale(0.125, 0.125, 0.125);
-		RenderMesh(meshList[GEO_BLUE_CYLINDER], true);
+		modelStack.Translate(-0.4, -1, 0);
+		modelStack.Rotate(180, 0, 0, 1);
+		modelStack.Scale(0.1375, 0.28571, 0.2);
+		RenderMesh(meshList[GEO_BLUE_CONE], true);
 
 		//LeftFoot
 		modelStack.PushMatrix();
 		{
-			modelStack.Translate(0, -10.1, 1.5);
-			modelStack.Rotate(0, 0, 0, 1);
-			modelStack.Scale(2.75, 2.5, 3);
+			modelStack.Translate(0, 1.5, 0);
+			modelStack.Rotate(180, 0, 0, 1);
+			modelStack.Scale(0.5, 0.25, 0.5);
+			RenderMesh(meshList[GEO_WHITE_HEMISPHERE], true);
+
+			modelStack.Translate(0, -0.15, 0);
+			modelStack.Rotate(180, 0, 0, 1);
+			modelStack.Scale(1, 0.45, 1);
 			RenderMesh(meshList[GEO_WHITE_HEMISPHERE], true);
 		}
 		modelStack.PopMatrix();
@@ -359,6 +371,10 @@ void Assignment1::Render()
 	//}
 	//modelStack.PopMatrix();
 	////1
+
+	}
+	modelStack.PopMatrix();
+	//Body
 
 	
 }

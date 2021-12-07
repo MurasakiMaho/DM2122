@@ -21,6 +21,7 @@ class Assignment1 : public Scene
 		GEO_CYLINDER,
 		GEO_BLUE_CYLINDER,
 		GEO_CONE,
+		GEO_BLUE_CONE,
 		GEO_SPHERE,
 		GEO_BLUE_SPHERE,
 		GEO_GOLD_SPHERE,
