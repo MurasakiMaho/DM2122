@@ -272,7 +272,7 @@ void Assignment1::Update(double dt)
 		light[0].position.y += (float)(LSPEED * dt);
 
 	//Lantern light update
-	//[1].position.Set(0, 20, 0);
+	light[1].position.Set(lanternX, lanternY, lanternZ);
 
 	//Blinking
 	if (eyeLidAngle < -120)
@@ -285,6 +285,8 @@ void Assignment1::Update(double dt)
 	}
 
 	//To do: walking, swaying lantern
+	// when walking, nose changes angles
+	// swaying stays constant
 	//Give lantern light
 	if (dt < 5)
 	{
