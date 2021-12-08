@@ -14,25 +14,19 @@ class Assignment1 : public Scene
 	{
 		GEO_AXES,
 		GEO_QUAD,
-		GEO_CUBE,
-		GEO_CIRCLE,
-		GEO_WHITE_CIRCLE,
-		GEO_RING,
-		GEO_CYLINDER,
-		GEO_BLUE_CYLINDER,
-		GEO_CONE,
+		GEO_RED_CUBE,
+		GEO_YELLOW_CUBE,
+		GEO_RED_CYLINDER,
 		GEO_YELLOW_CONE,
+		GEO_RED_PYRAMID,
 		GEO_SPHERE,
-		GEO_BLUE_SPHERE,
-		GEO_GOLD_SPHERE,
 		GEO_YELLOW_SPHERE,
 		GEO_HEMISPHERE,
 		GEO_WHITE_HEMISPHERE,
 		GEO_BLUE_HEMISPHERE,
 		GEO_BLACK_HEMISPHERE,
 		GEO_RED_TORUS,
-		GEO_WHITE_TORUS,
-		GEO_QUARTERTORUS,
+		GEO_L_CONNECTOR_TORUS,
 		GEO_LIGHTBALL,
 		NUM_GEOMETRY,
 	};
@@ -59,6 +53,18 @@ class Assignment1 : public Scene
 		U_LIGHT0_COSINNER,
 		U_LIGHT0_EXPONENT,
 
+		U_LIGHT1_POSITION,
+		U_LIGHT1_COLOR,
+		U_LIGHT1_POWER,
+		U_LIGHT1_KC,
+		U_LIGHT1_KL,
+		U_LIGHT1_KQ,
+		U_LIGHT1_TYPE,
+		U_LIGHT1_SPOTDIRECTION,
+		U_LIGHT1_COSCUTOFF,
+		U_LIGHT1_COSINNER,
+		U_LIGHT1_EXPONENT,
+
 		U_NUMLIGHTS,
 		U_TOTAL,
 	};
@@ -83,8 +89,14 @@ private:
 	void RenderMesh(Mesh* mesh, bool enableLight);
 
 	float rotateAngle;
+	float bodyX,bodyY,bodyZ;
+	float noseAngle;
+	float lLegAngle, rLegAngle, lFootAngle, rFootAngle;
+	float lArmAngle, rArmAngle;
+	float eyeLidAngle;
 
-	Light light[1];
+	Light light[2];
+	float lanternX, lanternY, lanternZ;
 
 	Camera2 camera;
 };

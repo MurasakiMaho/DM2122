@@ -318,8 +318,24 @@ Mesh* MeshBuilder::GenerateCone(const std::string& meshName, Color color, unsign
 		float x = cosf(theta);
 		float z = sinf(theta);
 	
-		v.pos.Set(radius * x, -height * 0.5f, radius * z);		v.color = color;	v.normal.Set(height * x, radius, height * z);	vertex_buffer_data.push_back(v);
-		v.pos.Set(0, height * 0.5f, 0);		v.color = color;	v.normal.Set(height * x, radius, height * z);	vertex_buffer_data.push_back(v);
+		v.pos.Set(radius * x, -height * 0.5f, radius * z);
+		v.color = color;	
+		if (numSlices != 4)
+			v.normal.Set(height * x, radius, height * z);
+		else
+			v.normal.Set(0, 1, 0);
+
+		vertex_buffer_data.push_back(v);
+
+		v.pos.Set(0, height * 0.5f, 0);
+		v.color = color;	
+
+		if (numSlices != 4)
+			v.normal.Set(height * x, radius, height * z);
+		else
+			v.normal.Set(0, 1, 0);
+
+		vertex_buffer_data.push_back(v);
 	}
 	for (unsigned slice = 0; slice < numSlices + 1; ++slice)
 	{
