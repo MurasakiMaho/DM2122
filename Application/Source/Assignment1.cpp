@@ -965,7 +965,10 @@ void Assignment1::Render()
 		modelStack.Scale(20, 20, 20);
 		RenderMesh(meshList[GEO_RED_PYRAMID], true);
 
-		
+		modelStack.Scale(1.5, 1.5, 1.5);
+		modelStack.Translate(1, 0, 1); 
+		RenderMesh(meshList[GEO_RED_PYRAMID], true);
+
 	}
 	modelStack.PopMatrix();
 	//Background
