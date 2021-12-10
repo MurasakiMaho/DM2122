@@ -127,7 +127,7 @@ void Assignment1::Init()
 	
 
 	//Initialize camera settings
-	camera.Init(Vector3(30, 30, 30), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.Init(Vector3(40, 40, 40), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -242,6 +242,7 @@ void Assignment1::Init()
 	eyeLidAngle = -120;
 	blinkTemp = 0;
 	blinkTemp1 = 0;
+	eyebrowY = 1.2;
 
 	bodyX = 0;
 	bodyY= 6.25;
@@ -304,6 +305,44 @@ void Assignment1::Update(double dt)
 	if (Application::IsKeyPressed('P'))
 		light[0].position.y += (float)(LSPEED * dt);
 
+	//Reset model & animation
+	if (Application::IsKeyPressed('V'))
+	{
+		walking = false;
+		walkTemp = 0;
+
+		swayTemp = 0;
+		lanternAngle = 0;
+
+		blinking = true;
+		eyeLidAngle = -120;
+		blinkTemp = 0;
+		blinkTemp1 = 0;
+		eyebrowY = 1.2;
+
+		bodyX = 0;
+		bodyY = 6.25;
+		bodyZ = 0;
+
+		noseAngle = 100;
+		noseAngleX = 0;
+
+		lLegAngle = 0;
+		rLegAngle = -5;
+
+		lArmAngle = 30;
+		rArmAngle = 30;
+
+		timer = 0;
+		timerTemp = 0;
+
+		direction = "";
+
+		lanternX = 0;
+		lanternY = 7.5;
+		lanternZ = 6.8;
+	}
+
 	//Lantern light update
 	light[1].position.Set(lanternX, lanternY, lanternZ);
 
@@ -318,6 +357,7 @@ void Assignment1::Update(double dt)
 		else if (blinkTemp == 0)
 		{
 			eyeLidAngle -= 2;
+			eyebrowY += 0.00125;
 			if (eyeLidAngle < -120)
 			{
 				blinkTemp = 1;
@@ -327,6 +367,7 @@ void Assignment1::Update(double dt)
 		else if (blinkTemp == 1)
 		{
 			eyeLidAngle += 2;
+			eyebrowY -= 0.00125;
 			if (eyeLidAngle >= 10)
 			{
 				blinkTemp = 0;
@@ -435,8 +476,7 @@ void Assignment1::Update(double dt)
 	}
 	else if (timerTemp == 4)
 	{
-		timerTemp = 0;
-		timer = 0;
+
 	}
 
 	if (int(timer) % 5 == 0)
@@ -834,40 +874,70 @@ void Assignment1::Render()
 		modelStack.PopMatrix();
 		//Legs
 		
-		//Smile
+		//Face
 		modelStack.PushMatrix();
 		{
-			
-			modelStack.Translate(0, 0.4, 0.83);
-			modelStack.Rotate(0, 1, 0, 0);
-			modelStack.Scale(0.5, 0.025, 0.04);
-			
-			RenderMesh(meshList[GEO_BLACK_CUBE], true);
+			//Mouth
+			modelStack.PushMatrix();
+			{
+
+				modelStack.Translate(0, 0.4, 0.83);
+				modelStack.Rotate(0, 1, 0, 0);
+				modelStack.Scale(0.5, 0.025, 0.04);
+
+				RenderMesh(meshList[GEO_BLACK_CUBE], true);
+			}
+			modelStack.PopMatrix();
+			modelStack.PushMatrix();
+			{
+
+				modelStack.Translate(0.33, 0.4, 0.75);
+				modelStack.Rotate(25, 0, 1, 0);
+				modelStack.Rotate(25, 1, 0, 0);
+				modelStack.Scale(0.25, 0.025, 0.05);
+
+				RenderMesh(meshList[GEO_BLACK_CUBE], true);
+			}
+			modelStack.PopMatrix();
+			modelStack.PushMatrix();
+			{
+
+				modelStack.Translate(-0.33, 0.4, 0.75);
+				modelStack.Rotate(25, 0, -1, 0);
+				modelStack.Rotate(25, 1, 0, 0);
+				modelStack.Scale(0.25, 0.025, 0.05);
+
+				RenderMesh(meshList[GEO_BLACK_CUBE], true);
+			}
+			modelStack.PopMatrix();
+			//Mouth
+
+			//EyeBrows
+			modelStack.PushMatrix();
+			{
+
+				modelStack.Translate(0.33, eyebrowY, 0.1);
+				modelStack.Rotate(40, 0, 1, 0);
+				modelStack.Scale(0.25, 0.0125, 0.025);
+
+				RenderMesh(meshList[GEO_BLACK_CUBE], true);
+			}
+			modelStack.PopMatrix();
+			modelStack.PushMatrix();
+			{
+
+				modelStack.Translate(-0.33, eyebrowY, 0.1);
+				modelStack.Rotate(40, 0, -1, 0);
+				modelStack.Scale(0.25, 0.0125, 0.025);
+
+				RenderMesh(meshList[GEO_BLACK_CUBE], true);
+			}
+			modelStack.PopMatrix();
+			//EyeBrows
 		}
 		modelStack.PopMatrix();
-		modelStack.PushMatrix();
-		{
+		//Face
 
-			modelStack.Translate(0.33, 0.4, 0.75);
-			modelStack.Rotate(25, 0, 1, 0);
-			modelStack.Rotate(25, 1, 0, 0);
-			modelStack.Scale(0.25, 0.025, 0.05);
-
-			RenderMesh(meshList[GEO_BLACK_CUBE], true);
-		}
-		modelStack.PopMatrix();
-		modelStack.PushMatrix();
-		{
-
-			modelStack.Translate(-0.33, 0.4, 0.75);
-			modelStack.Rotate(25, 0, -1, 0);
-			modelStack.Rotate(25, 1, 0, 0);
-			modelStack.Scale(0.25, 0.025, 0.05);
-
-			RenderMesh(meshList[GEO_BLACK_CUBE], true);
-		}
-		modelStack.PopMatrix();
-		//Smile
 	}
 	modelStack.PopMatrix();
 	//Body
@@ -887,10 +957,15 @@ void Assignment1::Render()
 	//Background
 	modelStack.PushMatrix();
 	{
-		/*modelStack.Translate(0, 0, 0);
-		modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Scale(100, 100, 100);
-		RenderMesh(meshList[GEO_QUAD], true);*/
+		modelStack.LoadIdentity();
+
+		modelStack.Translate(-15, 5, -15);
+		modelStack.Rotate(45, 0, 1, 0);
+		
+		modelStack.Scale(20, 20, 20);
+		RenderMesh(meshList[GEO_RED_PYRAMID], true);
+
+		
 	}
 	modelStack.PopMatrix();
 	//Background

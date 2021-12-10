@@ -101,6 +101,7 @@ private:
 	float eyeLidAngle;
 	int blinkTemp;
 	int blinkTemp1;
+	float eyebrowY;
 
 	bool walking;
 	int walkTemp;
