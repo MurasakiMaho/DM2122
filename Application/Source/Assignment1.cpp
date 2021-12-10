@@ -8,6 +8,7 @@
 #include "MeshBuilder.h"
 #include "Utility.h"
 
+
 Assignment1::Assignment1()
 {
 }
@@ -74,7 +75,7 @@ void Assignment1::Init()
 	light[0].type = Light::LIGHT_POINT;
 	light[0].position.Set(0, 20, 0);
 	light[0].color.Set(1, 1, 1);
-	light[0].power = 1;
+	light[0].power = 0.5;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
@@ -95,18 +96,18 @@ void Assignment1::Init()
 	glUniform1i(m_parameters[U_NUMLIGHTS], 1);
 
 	lanternX = 0;
-	lanternY = 5;
-	lanternZ = 5;
+	lanternY = 7.5;
+	lanternZ = 6.8;
 
 	light[1].type = Light::LIGHT_POINT;
 	light[1].position.Set(lanternX, lanternY, lanternZ);
-	light[1].color.Set(1, 1, 1);
+	light[1].color.Set(1, 0.77647, 0.36078);
 	light[1].power = 1;
 	light[1].kC = 1.f;
 	light[1].kL = 0.01f;
 	light[1].kQ = 0.001f;
-	light[1].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[1].cosInner = cos(Math::DegreeToRadian(30));
+	light[1].cosCutoff = cos(Math::DegreeToRadian(30));
+	light[1].cosInner = cos(Math::DegreeToRadian(15));
 	light[1].exponent = 3.f;
 	light[1].spotDirection.Set(0.f, 1.f, 0.f);
 
@@ -165,7 +166,7 @@ void Assignment1::Init()
 
 	meshList[GEO_YELLOW_CONE] = MeshBuilder::GenerateCone("yellowCone", Color(0.92157, 0.80783, 0.52157), 36, 1, 1);
 	meshList[GEO_YELLOW_CONE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_YELLOW_CONE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_YELLOW_CONE]->material.kDiffuse.Set(1.f, 1.f, 1.f);
 	meshList[GEO_YELLOW_CONE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_YELLOW_CONE]->material.kShininess = 1.f;
 
@@ -177,26 +178,26 @@ void Assignment1::Init()
 
 	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("LEGsphere", Color(0.35294, 0.54117, 0.48627), 10, 36, 1);
 	meshList[GEO_SPHERE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_SPHERE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_SPHERE]->material.kDiffuse.Set(1.f, 1.f, 1.f);
 	meshList[GEO_SPHERE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_SPHERE]->material.kShininess = 1.f;
 
 	meshList[GEO_YELLOW_SPHERE] = MeshBuilder::GenerateSphere("yellowSphere", Color(0.92157, 0.80783, 0.52157), 10, 36, 1);
 	meshList[GEO_YELLOW_SPHERE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_YELLOW_SPHERE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_YELLOW_SPHERE]->material.kDiffuse.Set(1.f, 1.f, 1.f);
 	meshList[GEO_YELLOW_SPHERE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_YELLOW_SPHERE]->material.kShininess = 1.f;
 
 	meshList[GEO_HEMISPHERE] = MeshBuilder::GenerateHemisphere("yellowHemisphere", Color(0.92157, 0.80783, 0.52157), 10, 20, 1);
 	meshList[GEO_HEMISPHERE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_HEMISPHERE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_HEMISPHERE]->material.kDiffuse.Set(1.f, 1.f, 1.f);
 	meshList[GEO_HEMISPHERE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_HEMISPHERE]->material.kShininess = 1.f;
 
 	meshList[GEO_WHITE_HEMISPHERE] = MeshBuilder::GenerateHemisphere("whiteHemisphere", Color(1, 1, 1), 10, 20, 1);
 	meshList[GEO_WHITE_HEMISPHERE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_WHITE_HEMISPHERE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_WHITE_HEMISPHERE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_WHITE_HEMISPHERE]->material.kSpecular.Set(1.f, 1.f, 1.f);
 	meshList[GEO_WHITE_HEMISPHERE]->material.kShininess = 1.f;
 
 	meshList[GEO_BLUE_HEMISPHERE] = MeshBuilder::GenerateHemisphere("blueHemisphere", Color(0.44314, 0.74902, 0.67843), 10, 20, 1);
@@ -217,6 +218,12 @@ void Assignment1::Init()
 	meshList[GEO_RED_TORUS]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_RED_TORUS]->material.kShininess = 1.f;
 
+	meshList[GEO_BLACK_CUBE] = MeshBuilder::GenerateCube("BlackCube", Color(0, 0, 0), 1);
+	meshList[GEO_BLACK_CUBE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_BLACK_CUBE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_BLACK_CUBE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_BLACK_CUBE]->material.kShininess = 0.f;
+
 	meshList[GEO_L_CONNECTOR_TORUS] = MeshBuilder::GenerateTorus2("noseRing", Color(0.55686, 0.49019, 0.42353), 20, 20, 2, 1);
 	meshList[GEO_L_CONNECTOR_TORUS]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_L_CONNECTOR_TORUS]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
@@ -225,10 +232,36 @@ void Assignment1::Init()
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 1), 10, 20);
 
-	eyeLidAngle = 30;
+	walking = false;
+	walkTemp = 0;
+
+	swayTemp = 0;
+	lanternAngle = 0;
+
+	blinking = true;
+	eyeLidAngle = -120;
+	blinkTemp = 0;
+	blinkTemp1 = 0;
+
 	bodyX = 0;
 	bodyY= 6.25;
 	bodyZ = 0;
+
+	noseAngle = 100;
+	noseAngleX = 0;
+
+	lLegAngle = 0;
+
+	rLegAngle = -5;
+
+
+	lArmAngle = 30;
+	rArmAngle = 30;
+
+	timer = 0;
+	timerTemp = 0;
+
+	direction = "";
 }
 
 void Assignment1::Update(double dt)
@@ -275,23 +308,139 @@ void Assignment1::Update(double dt)
 	light[1].position.Set(lanternX, lanternY, lanternZ);
 
 	//Blinking
-	if (eyeLidAngle < -120)
+	if (blinking)
 	{
-		eyeLidAngle = 30;
-	}
-	else if (eyeLidAngle <= 30)
-	{
-		eyeLidAngle -= 2;
+		if (blinkTemp1 == 3)
+		{
+			blinking = false;
+			blinkTemp1 = 0;
+		}
+		else if (blinkTemp == 0)
+		{
+			eyeLidAngle -= 2;
+			if (eyeLidAngle < -120)
+			{
+				blinkTemp = 1;
+				blinkTemp1++;
+			}
+		}
+		else if (blinkTemp == 1)
+		{
+			eyeLidAngle += 2;
+			if (eyeLidAngle >= 10)
+			{
+				blinkTemp = 0;
+				blinkTemp1++;
+			}
+		}
 	}
 
-	//To do: walking, swaying lantern
-	// when walking, nose changes angles
-	// swaying stays constant
-	//Give lantern light
-	if (dt < 5)
+	//Swaying
+	if (swayTemp == 0)
 	{
-
+		lanternAngle += 0.5;
+		lanternX -= 0.015;
+		noseAngleX -= 0.075;
+		if (lanternAngle >= 20)
+		{
+			swayTemp = 1;
+		}
 	}
+	else if(swayTemp == 1)
+	{
+		lanternAngle -= 0.5;
+		lanternX += 0.015;
+		noseAngleX += 0.075;
+		if (lanternAngle <= -20)
+		{
+			swayTemp = 0;
+		}
+	}
+
+	//Walking
+	if (walking)
+	{
+		if (walkTemp == 0)
+		{
+			lLegAngle -= 1;
+			rLegAngle += 1;
+			rArmAngle += 0.5;
+			lArmAngle -= 0.5;
+			noseAngle -= 0.125;
+			if (lLegAngle <= -30)
+			{
+				walkTemp = 1;
+			}
+		}
+		else if (walkTemp == 1)
+		{
+			lLegAngle += 1;
+			rLegAngle -= 1;
+			rArmAngle -= 0.5;
+			lArmAngle += 0.5;
+			noseAngle += 0.125;
+			if (lLegAngle >= 30)
+			{
+				walkTemp = 0;
+			}
+		}
+		if (direction == "forward")
+		{
+			bodyZ += 0.05;
+			lanternZ += 0.05;
+		}
+		else if (direction == "backward")
+		{
+			bodyZ -= 0.05;
+			lanternZ -= 0.05;
+		}
+	}
+
+	timer += 0.016667;
+
+	//Animation
+	if (timerTemp == 0)
+	{
+		if (timer > 5)
+		{
+			walking = true;
+			direction = "forward";
+			timerTemp++;
+		}
+	}
+	else if (timerTemp == 1)
+	{
+		if (timer > 10)
+		{
+			walking = false;
+			timerTemp++;
+		}
+	}
+	else if (timerTemp == 2)
+	{
+		if (timer > 15)
+		{
+			walking = true;
+			direction = "backward";
+			timerTemp++;
+		}
+	}
+	else if (timerTemp == 3)
+	{
+		if (timer > 20)
+		{
+			walking = false;
+			timerTemp++;
+		}
+	}
+	else if (timerTemp == 4)
+	{
+		timerTemp = 0;
+		timer = 0;
+	}
+
+	if (int(timer) % 5 == 0)
+		blinking = true;
 
 	camera.Update(dt);
 }
@@ -340,12 +489,12 @@ void Assignment1::Render()
 	}
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	{
 		modelStack.Translate(light[1].position.x, light[1].position.y, light[1].position.z);
 		RenderMesh(meshList[GEO_LIGHTBALL], false);
 	}
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	//Body
 	modelStack.PushMatrix();
@@ -377,7 +526,8 @@ void Assignment1::Render()
 			{
 				modelStack.Scale(0.28571, 0.16667, 0.28571);
 				modelStack.Translate(0, 4.3, 2.4);
-				modelStack.Rotate(100, 1, 0, 0);
+				modelStack.Rotate(noseAngle, 1, 0, 0);
+				modelStack.Rotate(noseAngleX, 0, 0, 1);
 				modelStack.Scale(1.5, 4, 1.5);
 				RenderMesh(meshList[GEO_YELLOW_SPHERE], true);
 
@@ -393,7 +543,7 @@ void Assignment1::Render()
 					modelStack.PushMatrix();
 					{
 						modelStack.Scale(0.83333, 0.25, 0.83333);
-						modelStack.Rotate(-100, 1, 0, 0);
+						modelStack.Rotate(100, -1, 0, 0);
 						modelStack.Rotate(90, 1, 0, 0);
 						modelStack.Translate(0, 1.1, 0.5);
 						modelStack.Scale(0.15, 0.15, 0.15);
@@ -403,97 +553,104 @@ void Assignment1::Render()
 						modelStack.PushMatrix();
 						{
 							modelStack.Scale(6.66667, 6.66667, 6.66667);
-							modelStack.Rotate(90, 0, 0, 1);
+							modelStack.Rotate(90, 0, 0, -1);
+							modelStack.Rotate(lanternAngle, 1, 0, 0);
 							modelStack.Translate(0, 0, 0.25);
 							modelStack.Scale(0.1, 0.1, 0.1);
 							RenderMesh(meshList[GEO_RED_TORUS], true);
-						}
-						modelStack.PopMatrix();
-						modelStack.PushMatrix();
-						{
-							modelStack.Scale(6.66667, 6.66667, 6.66667);
-							modelStack.Rotate(90, 1, 0, 0);
-							modelStack.Translate(0, 0.5, 0);
-							modelStack.Scale(0.1, 0.1, 0.1);
-							RenderMesh(meshList[GEO_RED_TORUS], true);
-						}
-						modelStack.PopMatrix();
-						modelStack.PushMatrix();
-						{
-							modelStack.Scale(6.66667, 6.66667, 6.66667);
-							modelStack.Rotate(90, -1, 0, 0);
-							modelStack.Rotate(45, 0,1, 0);
-							modelStack.Translate(0, -1.25, 0);
-							modelStack.Scale(1.5, 1.5, 1.5);
-							RenderMesh(meshList[GEO_RED_PYRAMID], true);
-						}
-						modelStack.PopMatrix();
-						modelStack.PushMatrix();
-						{
-							modelStack.Scale(6.66667, 6.66667, 6.66667);
-							modelStack.Rotate(90, -1, 0, 0);
-							modelStack.Rotate(0, 0, 1, 0);
-							modelStack.Translate(0, -2.5, 0);
-							modelStack.Scale(1.5, 1.8, 1.5);
-							RenderMesh(meshList[GEO_YELLOW_CUBE], false);
-						}
-						modelStack.PopMatrix();
+							modelStack.Translate(0, 0, -2.5);
+							modelStack.PushMatrix();
+							{
+								modelStack.Scale(10, 10, 10);
+								modelStack.Rotate(90, 1, 0, 0);
+								modelStack.Translate(0, 0.5, 0);
+								modelStack.Scale(0.1, 0.1, 0.1);
+								RenderMesh(meshList[GEO_RED_TORUS], true);
 
-						//Pillars
-						modelStack.PushMatrix();
-						{
-							modelStack.Scale(6.66667, 6.66667, 6.66667);
-							modelStack.Rotate(90, -1, 0, 0);
-							modelStack.Rotate(0, 0, 1, 0);
-							modelStack.Translate(0.8, -2.7, 0.8);
-							modelStack.Scale(0.025, 0.15, 0.025);
-							RenderMesh(meshList[GEO_RED_CYLINDER], true);
-						}
-						modelStack.PopMatrix();
-						modelStack.PushMatrix();
-						{
-							modelStack.Scale(6.66667, 6.66667, 6.66667);
-							modelStack.Rotate(90, -1, 0, 0);
-							modelStack.Rotate(0, 0, 1, 0);
-							modelStack.Translate(-0.8, -2.7, 0.8);
-							modelStack.Scale(0.025, 0.15, 0.025);
-							RenderMesh(meshList[GEO_RED_CYLINDER], true);
-						}
-						modelStack.PopMatrix();
-						modelStack.PushMatrix();
-						{
-							modelStack.Scale(6.66667, 6.66667, 6.66667);
-							modelStack.Rotate(90, -1, 0, 0);
-							modelStack.Rotate(0, 0, 1, 0);
-							modelStack.Translate(-0.8, -2.7, -0.8);
-							modelStack.Scale(0.025, 0.15, 0.025);
-							RenderMesh(meshList[GEO_RED_CYLINDER], true);
-						}
-						modelStack.PopMatrix();
-						modelStack.PushMatrix();
-						{
-							modelStack.Scale(6.66667, 6.66667, 6.66667);
-							modelStack.Rotate(90, -1, 0, 0);
-							modelStack.Rotate(0, 0, 1, 0);
-							modelStack.Translate(0.8, -2.7, -0.8);
-							modelStack.Scale(0.025, 0.15, 0.025);
-							RenderMesh(meshList[GEO_RED_CYLINDER], true);
-						}
-						modelStack.PopMatrix();
-						//Pillars
+							}
+							modelStack.PopMatrix();
+							modelStack.PushMatrix();
+							{
+								modelStack.Scale(10, 10, 10);
+								modelStack.Rotate(90, -1, 0, 0);
+								modelStack.Rotate(45, 0, 1, 0);
+								modelStack.Translate(0, -1.25, 0);
+								modelStack.Scale(1.5, 1.5, 1.5);
+								RenderMesh(meshList[GEO_RED_PYRAMID], true);
+							}
+							modelStack.PopMatrix();
+							modelStack.PushMatrix();
+							{
+								modelStack.Scale(10, 10, 10);
+								modelStack.Rotate(90, -1, 0, 0);
+								modelStack.Rotate(0, 0, 1, 0);
+								modelStack.Translate(0, -2.5, 0);
+								modelStack.Scale(1.5, 1.8, 1.5);
+								RenderMesh(meshList[GEO_YELLOW_CUBE], false);
+							}
+							modelStack.PopMatrix();
+							//Pillars
+							modelStack.PushMatrix();
+							{
+								modelStack.Scale(10, 10, 10);
+								modelStack.Rotate(90, -1, 0, 0);
+								modelStack.Rotate(0, 0, 1, 0);
+								modelStack.Translate(0.8, -2.7, 0.8);
+								modelStack.Scale(0.025, 0.15, 0.025);
+								RenderMesh(meshList[GEO_RED_CYLINDER], true);
+							}
+							modelStack.PopMatrix();
+							modelStack.PushMatrix();
+							{
+								modelStack.Scale(10, 10, 10);
+								modelStack.Rotate(90, -1, 0, 0);
+								modelStack.Rotate(0, 0, 1, 0);
+								modelStack.Translate(-0.8, -2.7, 0.8);
+								modelStack.Scale(0.025, 0.15, 0.025);
+								RenderMesh(meshList[GEO_RED_CYLINDER], true);
+							}
+							modelStack.PopMatrix();
+							modelStack.PushMatrix();
+							{
+								modelStack.Scale(10, 10, 10);
+								modelStack.Rotate(90, -1, 0, 0);
+								modelStack.Rotate(0, 0, 1, 0);
+								modelStack.Translate(-0.8, -2.7, -0.8);
+								modelStack.Scale(0.025, 0.15, 0.025);
+								RenderMesh(meshList[GEO_RED_CYLINDER], true);
+							}
+							modelStack.PopMatrix();
+							modelStack.PushMatrix();
+							{
+								modelStack.Scale(10, 10, 10);
+								modelStack.Rotate(90, -1, 0, 0);
+								modelStack.Rotate(0, 0, 1, 0);
+								modelStack.Translate(0.8, -2.7, -0.8);
+								modelStack.Scale(0.025, 0.15, 0.025);
+								RenderMesh(meshList[GEO_RED_CYLINDER], true);
+							}
+							modelStack.PopMatrix();
+							//Pillars
 
-						//Bottom
-						modelStack.PushMatrix();
-						{
-							modelStack.Scale(6.66667, 6.66667, 6.66667);
-							modelStack.Rotate(90, -1, 0, 0);
-							modelStack.Rotate(0, 0, 1, 0);
-							modelStack.Translate(0, -3.5, 0);
-							modelStack.Scale(2, 0.35, 2);
-							RenderMesh(meshList[GEO_RED_CUBE], true);
+							//Bottom
+							modelStack.PushMatrix();
+							{
+								modelStack.Scale(10, 10, 10);
+								modelStack.Rotate(90, -1, 0, 0);
+								modelStack.Rotate(0, 0, 1, 0);
+								modelStack.Translate(0, -3.5, 0);
+								modelStack.Scale(2, 0.35, 2);
+								RenderMesh(meshList[GEO_RED_CUBE], true);
+							}
+							modelStack.PopMatrix();
+							//Bottom
 						}
 						modelStack.PopMatrix();
-						//Bottom
+						
+						
+						
+
+						
 						
 						//Lantern
 					}
@@ -591,7 +748,6 @@ void Assignment1::Render()
 		modelStack.PopMatrix();
 		//Head
 		
-		
 		//Arms
 		modelStack.PushMatrix();
 		{
@@ -599,7 +755,7 @@ void Assignment1::Render()
 			//Left
 			modelStack.PushMatrix();
 			{
-				modelStack.Rotate(30, 0, 0, 1);
+				modelStack.Rotate(lArmAngle, 0, 0, 1);
 				modelStack.Translate(2.8, -2.8, 0);
 				modelStack.Scale(0.2, 1, 0.2);
 				RenderMesh(meshList[GEO_YELLOW_SPHERE], true);
@@ -610,7 +766,7 @@ void Assignment1::Render()
 			//Right
 			modelStack.PushMatrix();
 			{
-				modelStack.Rotate(30, 0, 0, -1);
+				modelStack.Rotate(rArmAngle, 0, 0, -1);
 				modelStack.Translate(-2.8, -2.8, 0);
 				modelStack.Scale(0.2, 1, 0.2);
 				RenderMesh(meshList[GEO_YELLOW_SPHERE], true);
@@ -628,8 +784,8 @@ void Assignment1::Render()
 			//Right
 			modelStack.PushMatrix();
 			{
-				modelStack.Rotate(0, 1, 0, 0);
-				modelStack.Translate(-1, -5, 0);
+				modelStack.Rotate(rLegAngle, 1, 0, 0);
+				modelStack.Translate(-1, -4.5, 0);
 				modelStack.Scale(0.2, 1, 0.2);
 				RenderMesh(meshList[GEO_SPHERE], true);
 
@@ -637,12 +793,11 @@ void Assignment1::Render()
 				modelStack.PushMatrix();
 				{
 					modelStack.Scale(5, 1, 5);
-					modelStack.Translate(1, 5, 0);
-					modelStack.Rotate(90, 1, 0, 0);
-					
-					modelStack.Translate(-1, 0.15, 6);
+					modelStack.Translate(0, -1.2, -0.2);
+					modelStack.Rotate(35, 1, 0, 0);
+
 					modelStack.Scale(0.2, 1, 0.2);
-					modelStack.Scale(0.8, 0.3, 0.8);
+					modelStack.Scale(0.8, 0.5, 0.8);
 					RenderMesh(meshList[GEO_SPHERE], true);
 				}
 				modelStack.PopMatrix();
@@ -654,8 +809,8 @@ void Assignment1::Render()
 			//Left
 			modelStack.PushMatrix();
 			{
-				modelStack.Rotate(0, 1, 0, 0);
-				modelStack.Translate(1, -5, 0);
+				modelStack.Rotate(lLegAngle, 1, 0, 0);
+				modelStack.Translate(1, -4.5, 0);
 				modelStack.Scale(0.2, 1, 0.2);
 				RenderMesh(meshList[GEO_SPHERE], true);
 
@@ -663,12 +818,11 @@ void Assignment1::Render()
 				modelStack.PushMatrix();
 				{
 					modelStack.Scale(5, 1, 5);
-					modelStack.Translate(1, 5, 0);
-					modelStack.Rotate(90, 1, 0, 0);
+					modelStack.Translate(0, -1.2, -0.2);
+					modelStack.Rotate(35, 1, 0, 0);
 
-					modelStack.Translate(-1, 0.15, 6);
 					modelStack.Scale(0.2, 1, 0.2);
-					modelStack.Scale(0.8, 0.3, 0.8);
+					modelStack.Scale(0.8, 0.5, 0.8);
 					RenderMesh(meshList[GEO_SPHERE], true);
 				}
 				modelStack.PopMatrix();
@@ -680,7 +834,40 @@ void Assignment1::Render()
 		modelStack.PopMatrix();
 		//Legs
 		
+		//Smile
+		modelStack.PushMatrix();
+		{
+			
+			modelStack.Translate(0, 0.4, 0.83);
+			modelStack.Rotate(0, 1, 0, 0);
+			modelStack.Scale(0.5, 0.025, 0.04);
+			
+			RenderMesh(meshList[GEO_BLACK_CUBE], true);
+		}
+		modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		{
 
+			modelStack.Translate(0.33, 0.4, 0.75);
+			modelStack.Rotate(25, 0, 1, 0);
+			modelStack.Rotate(25, 1, 0, 0);
+			modelStack.Scale(0.25, 0.025, 0.05);
+
+			RenderMesh(meshList[GEO_BLACK_CUBE], true);
+		}
+		modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		{
+
+			modelStack.Translate(-0.33, 0.4, 0.75);
+			modelStack.Rotate(25, 0, -1, 0);
+			modelStack.Rotate(25, 1, 0, 0);
+			modelStack.Scale(0.25, 0.025, 0.05);
+
+			RenderMesh(meshList[GEO_BLACK_CUBE], true);
+		}
+		modelStack.PopMatrix();
+		//Smile
 	}
 	modelStack.PopMatrix();
 	//Body
@@ -696,6 +883,17 @@ void Assignment1::Render()
 	}
 	modelStack.PopMatrix();
 	//1
+	
+	//Background
+	modelStack.PushMatrix();
+	{
+		/*modelStack.Translate(0, 0, 0);
+		modelStack.Rotate(-90, 1, 0, 0);
+		modelStack.Scale(100, 100, 100);
+		RenderMesh(meshList[GEO_QUAD], true);*/
+	}
+	modelStack.PopMatrix();
+	//Background
 	
 }
 

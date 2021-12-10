@@ -15,6 +15,7 @@ class Assignment1 : public Scene
 		GEO_AXES,
 		GEO_QUAD,
 		GEO_RED_CUBE,
+		GEO_BLACK_CUBE,
 		GEO_YELLOW_CUBE,
 		GEO_RED_CYLINDER,
 		GEO_YELLOW_CONE,
@@ -90,13 +91,27 @@ private:
 
 	float rotateAngle;
 	float bodyX,bodyY,bodyZ;
-	float noseAngle;
-	float lLegAngle, rLegAngle, lFootAngle, rFootAngle;
+
+	float noseAngle, noseAngleX;
+
+	float lLegAngle, rLegAngle;
 	float lArmAngle, rArmAngle;
+
+	bool blinking;
 	float eyeLidAngle;
+	int blinkTemp;
+	int blinkTemp1;
+
+	bool walking;
+	int walkTemp;
+	std::string direction;
 
 	Light light[2];
-	float lanternX, lanternY, lanternZ;
+	float lanternX, lanternY, lanternZ, lanternAngle;
+	int swayTemp;
+
+	float timer;
+	int timerTemp;
 
 	Camera2 camera;
 };

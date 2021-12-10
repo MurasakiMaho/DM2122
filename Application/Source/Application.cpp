@@ -115,7 +115,6 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	//Scene *scene = new Scene1();
 	Scene *scene = new Assignment1();
 	scene->Init();
 
