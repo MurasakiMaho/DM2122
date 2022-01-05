@@ -48,13 +48,13 @@ Mesh* MeshBuilder::GenerateQuad(const std::string &meshName, Color color, float 
 	v.texCoord.Set(0, 0); //top left
 	vertex_buffer_data.push_back(v);
 	v.pos.Set(-0.5f * length, 0.5f * length, 0.f);	v.color = color; v.normal.Set(0, 0, 1);	 
-	v.texCoord.Set(10, 0); //bottom right
+	v.texCoord.Set(1, 0); //bottom right
 	vertex_buffer_data.push_back(v);
 	v.pos.Set(-0.5f * length, -0.5f * length, 0.f);	v.color = color; v.normal.Set(0, 0, 1);	
-	v.texCoord.Set(10, 10); //top right
+	v.texCoord.Set(1, 1); //top right
 	vertex_buffer_data.push_back(v);
 	v.pos.Set(0.5f * length, -0.5f * length, 0.f);	v.color = color; v.normal.Set(0, 0, 1);	 
-	v.texCoord.Set(0, 10); //bottom left 
+	v.texCoord.Set(0, 1); //bottom left 
 	
 	vertex_buffer_data.push_back(v);
 
