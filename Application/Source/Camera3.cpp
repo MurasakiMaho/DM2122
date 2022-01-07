@@ -26,50 +26,34 @@ void Camera3::Update(double dt)
 {
 	static const float CAMERA_SPEED = 45.f;
 	static const float ZOOM_SPEED = 20.f;
+
+	//position.y = 1;
+	/*if (position.x > 50)
+	{
+		position.x -= 1;
+	}*/
+
+	Vector3 view = (target - position).Normalized();
+	Vector3 right = view.Cross(up);
+
 	if(Application::IsKeyPressed('A'))
 	{
-		float yaw = -CAMERA_SPEED * static_cast<float>(dt);
-		Mtx44 rotation;
-		Vector3 view = (target - position).Normalized();
-		Vector3 right = view.Cross(up);
-		rotation.SetToRotation(yaw, 0, 1, 0);
-		position = position - right;
+		position -= right * ZOOM_SPEED * static_cast<float>(dt);
 		target = position + view;
 	}
 	if(Application::IsKeyPressed('D'))
 	{
-		float yaw = CAMERA_SPEED * static_cast<float>(dt);
-		Mtx44 rotation;
-		Vector3 view = (target - position).Normalized();
-		Vector3 right = view.Cross(up);
-		rotation.SetToRotation(yaw, 0, 1, 0);
-		position = position + right;
+		position += right * ZOOM_SPEED * static_cast<float>(dt);
 		target = position + view;
 	}
 	if(Application::IsKeyPressed('W'))
 	{
-		float pitch = -CAMERA_SPEED * static_cast<float>(dt);
-		Vector3 view = (target - position).Normalized();
-		Vector3 right = view.Cross(up);
-		right.y = 0;
-		right.Normalize();
-		up = right.Cross(view).Normalized();
-		Mtx44 rotation;
-		rotation.SetToRotation(pitch, right.x, right.y, right.z);
-		position = position + view;
+		position += view * ZOOM_SPEED * static_cast<float>(dt);
 		target = position + view;
 	}
 	if(Application::IsKeyPressed('S'))
 	{
-		float pitch = CAMERA_SPEED * static_cast<float>(dt);
-		Vector3 view = (target - position).Normalized();
-		Vector3 right = view.Cross(up);
-		right.y = 0;
-		right.Normalize();
-		up = right.Cross(view).Normalized();
-		Mtx44 rotation;
-		rotation.SetToRotation(pitch, right.x, right.y, right.z);
-		position = position - view;
+		position -= view * ZOOM_SPEED * static_cast<float>(dt);
 		target = position + view;
 	}
 	//if(Application::IsKeyPressed('N'))
@@ -89,21 +73,18 @@ void Camera3::Update(double dt)
 	//	//position -= view * ZOOM_SPEED * dt;
 	//	position = position - up * ZOOM_SPEED * dt;
 	//}
-	if (Application::IsKeyPressed(37))//left
+	if (Application::IsKeyPressed(VK_LEFT))
 	{
 		float yaw = -CAMERA_SPEED * static_cast<float>(dt);
 		Mtx44 rotation;
-		Vector3 view = (target - position).Normalized();
-		Vector3 right = view.Cross(up);
 		rotation.SetToRotation(yaw, 0, -1, 0);
 		view = rotation * view;
+		up = rotation * up;
 		target = position + view;
 	}
-	if (Application::IsKeyPressed(38))//up
+	if (Application::IsKeyPressed(VK_UP))
 	{
-		float pitch = -CAMERA_SPEED * static_cast<float>(dt);
-		Vector3 view = (target - position).Normalized();
-		Vector3 right = view.Cross(up);
+		float pitch = CAMERA_SPEED * static_cast<float>(dt);
 		right.y = 0;
 		right.Normalize();
 		up = right.Cross(view).Normalized();
@@ -112,21 +93,18 @@ void Camera3::Update(double dt)
 		view = rotation * view;
 		target = position + view;
 	}
-	if (Application::IsKeyPressed(39))//right
+	if (Application::IsKeyPressed(VK_RIGHT))
 	{
 		float yaw = -CAMERA_SPEED * static_cast<float>(dt);
 		Mtx44 rotation;
-		Vector3 view = (target - position).Normalized();
-		Vector3 right = view.Cross(up);
 		rotation.SetToRotation(yaw, 0, 1, 0);
 		view = rotation * view;
+		up = rotation * up;
 		target = position + view;
 	}
-	if (Application::IsKeyPressed(40))//down
+	if (Application::IsKeyPressed(VK_DOWN))
 	{
-		float pitch = CAMERA_SPEED * static_cast<float>(dt);
-		Vector3 view = (target - position).Normalized();
-		Vector3 right = view.Cross(up);
+		float pitch = -CAMERA_SPEED * static_cast<float>(dt);
 		right.y = 0;
 		right.Normalize();
 		up = right.Cross(view).Normalized();
