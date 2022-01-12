@@ -4,6 +4,7 @@
 #include "Mesh.h"
 #include "Vertex.h"
 #include <myMath.h>
+#include "LoadOBJ.h"
 
 class MeshBuilder
 {
@@ -19,6 +20,8 @@ public:
 	static Mesh* GenerateHemisphere(const std::string& meshName, Color color, unsigned numStacks, unsigned numSlices, float radius);
 	static Mesh* GenerateTorus2(const std::string& meshName, Color color, unsigned numStack, unsigned numSlice, float outerR, float innerR);
 	static Mesh* GenerateQuarterTorus2(const std::string& meshName, Color color, unsigned numStack, unsigned numSlice, float outerR, float innerR);
+	static Mesh* GenerateOBJ(const std::string& meshName, const std::string& file_path);
+	static Mesh* GenerateOBJMTL(const std::string& meshName, const std::string& file_path, const std::string& mtl_path);
 };
 
 #endif

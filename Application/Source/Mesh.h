@@ -3,6 +3,7 @@
 
 #include <string>
 #include "Material.h"
+#include <vector>
 
 /******************************************************************************/
 /*!
@@ -31,6 +32,14 @@ public:
 	unsigned indexSize;
 	Material material;
 	unsigned textureID;
+
+	static void SetMaterialLoc(unsigned kA, unsigned kD, unsigned kS,unsigned nS);
+	std::vector<Material> materials;
+	static unsigned locationKa;
+	static unsigned locationKd;
+	static unsigned locationKs;
+	static unsigned locationNs;
+
 };
 
 #endif

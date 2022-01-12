@@ -8,6 +8,7 @@
 #include "MeshBuilder.h"
 #include "Utility.h"
 #include "LoadTGA.h"
+#include "LoadOBJ.h"
 
 SceneSkybox::SceneSkybox()
 {
@@ -41,6 +42,8 @@ void SceneSkybox::Init()
 	
 	//Load vertex and fragment shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Blending.fragmentshader");
+
+	
 
 	m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled");
 	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture");
@@ -184,9 +187,30 @@ void SceneSkybox::Init()
 	meshList[GEO_IMAGE] = MeshBuilder::GenerateQuad("image", Color(1, 1, 1), 1.f);
 	meshList[GEO_IMAGE]->textureID = LoadTGA("Image//nyp.tga");
 
+	meshList[GEO_MODEL1] = MeshBuilder::GenerateOBJ("model1", "OBJ//chair.obj");
+	meshList[GEO_MODEL1]->textureID = LoadTGA("Image//chair.tga");
+
+	meshList[GEO_MODEL2] = MeshBuilder::GenerateOBJMTL("apple", "OBJ//apple.obj", "OBJ//apple.mtl");
+
+	//meshList[GEO_MODEL3] = MeshBuilder::GenerateOBJMTL("toko", "OBJ//Toko.obj", "OBJ//Toko.mtl");
+
+	meshList[GEO_MODEL7] = MeshBuilder::GenerateOBJMTL("model7", "OBJ//house_type01.obj", "OBJ//house_type01.mtl");
+
+	meshList[GEO_MODEL8] = MeshBuilder::GenerateOBJMTL("model8", "OBJ//cottage_obj.obj", "OBJ//cottage_obj.mtl"); //cottage_diffuse
+	meshList[GEO_MODEL8]->textureID = LoadTGA("Image//cottage_diffuse.tga");
+
+	meshList[GEO_MODEL8] = MeshBuilder::GenerateOBJMTL("model8", "OBJ//cottage_obj.obj", "OBJ//cottage_obj.mtl"); //cottage_diffuse
+	meshList[GEO_MODEL8]->textureID = LoadTGA("Image//cottage_diffuse.tga");
 
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 1), 10, 20);
+
+
+	Mesh::SetMaterialLoc(m_parameters[U_MATERIAL_AMBIENT],
+		m_parameters[U_MATERIAL_DIFFUSE],
+		m_parameters[U_MATERIAL_SPECULAR],
+		m_parameters[U_MATERIAL_SHININESS]);
+
 
 	bLightEnabled = true;
 }
@@ -276,12 +300,12 @@ void SceneSkybox::Render()
 	
 	RenderMesh(meshList[GEO_AXES], false);
 
-	/*modelStack.PushMatrix();
+	modelStack.PushMatrix();
 	{
 		modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
 		RenderMesh(meshList[GEO_LIGHTBALL], false);
 	}
-	modelStack.PopMatrix();*/
+	modelStack.PopMatrix();
 
 	////1
 	//modelStack.PushMatrix();
@@ -305,6 +329,50 @@ void SceneSkybox::Render()
 	}
 	modelStack.PopMatrix();
 	//QUAD
+
+	modelStack.PushMatrix();
+	{
+		//scale, translate, rotate
+		modelStack.Translate(5, 0, 0);
+		RenderMesh(meshList[GEO_MODEL1], bLightEnabled);
+	}
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	{
+		//scale, translate, rotate
+		modelStack.Translate(-10, 0, -10);
+		modelStack.Scale(10, 10, 10);
+		RenderMesh(meshList[GEO_MODEL7], bLightEnabled);
+	}
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	{
+		//scale, translate, rotate
+		modelStack.Translate(10, 0, -10);
+		modelStack.Scale(0.5, 0.5, 0.5);
+		RenderMesh(meshList[GEO_MODEL8], bLightEnabled);
+	}
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	{
+		//scale, translate, rotate
+		modelStack.Translate(10, 0, 10);
+		modelStack.Scale(10, 10, 10);
+		RenderMesh(meshList[GEO_MODEL2], bLightEnabled);
+	}
+	modelStack.PopMatrix();
+
+	//modelStack.PushMatrix();
+	//{
+	//	//scale, translate, rotate
+	//	modelStack.Translate(10, 0, 10);
+	//	modelStack.Scale(10, 10, 10);
+	//	RenderMesh(meshList[GEO_MODEL3], bLightEnabled);
+	//}
+	//modelStack.PopMatrix();
 
 	//QUAD
 	modelStack.PushMatrix();
