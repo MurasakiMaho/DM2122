@@ -6,6 +6,7 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "Camera3.h"
+#include <string>
 
 class SceneSkybox : public Scene
 {
@@ -43,6 +44,8 @@ class SceneSkybox : public Scene
 		GEO_MODEL8,
 
 		GEO_TEXT,
+		GEO_ONSCREENTEXT,
+		GEO_FRAMERATE,
 
 		NUM_GEOMETRY,
 	};
@@ -101,6 +104,7 @@ private:
 	void RenderMesh(Mesh* mesh, bool enableLight);
 
 	float rotateAngle;
+	std::string fps;
 
 	Light light[1];
 	bool bLightEnabled;

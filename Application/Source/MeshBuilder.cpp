@@ -627,29 +627,31 @@ Mesh* MeshBuilder::GenerateText(const std::string& meshName, unsigned numRow, un
 	{
 		for (unsigned col = 0; col < numCol; ++col)
 		{
+			//example (1.f/16,11.f/16)
 			//Task: Add 4 vertices into vertex_buffer_data
-			// v.pos.Set(0.5f, 0.5f, 0.f);	v.normal.Set(0, 0, 1);
-			v.texCoord.Set(0, 0); //top left
+			v.pos.Set(0.5f, 0.5f, 0.f);	v.normal.Set(0, 0, 1);
+			v.texCoord.Set((col + 1.0f) * width, (numRow - row) * height); //v0
 			vertex_buffer_data.push_back(v);
 			v.pos.Set(-0.5f, 0.5f, 0.f); v.normal.Set(0, 0, 1);
-			v.texCoord.Set(1, 0); //bottom right
+			v.texCoord.Set(col * width, (numRow - row) * height); //v1
 			vertex_buffer_data.push_back(v);
 			v.pos.Set(-0.5f, -0.5f, 0.f);	v.normal.Set(0, 0, 1);
-			v.texCoord.Set(1, 1); //top right
+			v.texCoord.Set(col * width, (numRow - 1.0f - row) * height); //v2
 			vertex_buffer_data.push_back(v);
 			v.pos.Set(0.5f, -0.5f, 0.f); v.normal.Set(0, 0, 1);
-			v.texCoord.Set(0, 1); //bottom left
+			v.texCoord.Set((col + 1.0f) * width, (numRow - 1.0f - row) * height); //v3
 			vertex_buffer_data.push_back(v);
 
 			//Task: Add 6 indices into index_buffer_data
 			//tri1
-			index_buffer_data.push_back(0);
-			index_buffer_data.push_back(1);
-			index_buffer_data.push_back(2);
+			index_buffer_data.push_back(offset + 0);
+			index_buffer_data.push_back(offset + 1);
+			index_buffer_data.push_back(offset + 2);
 			//tri2
-			index_buffer_data.push_back(0);
-			index_buffer_data.push_back(2);
-			index_buffer_data.push_back(3);
+			index_buffer_data.push_back(offset + 0);
+			index_buffer_data.push_back(offset + 2);
+			index_buffer_data.push_back(offset + 3);
+			offset += 4;
 		}
 	}
 

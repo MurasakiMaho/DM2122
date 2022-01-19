@@ -208,8 +208,14 @@ void SceneSkybox::Init()
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 1), 10, 20);
 
-	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text_calibri", 16, 16);
-	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
+	meshList[GEO_TEXT]->textureID = LoadTGA("Image//GBA_FE.tga");
+
+	meshList[GEO_ONSCREENTEXT] = MeshBuilder::GenerateText("textonscreen", 16, 16);
+	meshList[GEO_ONSCREENTEXT]->textureID = LoadTGA("Image//comic_sans.tga");
+
+	meshList[GEO_FRAMERATE] = MeshBuilder::GenerateText("fps", 16, 16);
+	meshList[GEO_FRAMERATE]->textureID = LoadTGA("Image//GBA_FE.tga");
 
 
 	Mesh::SetMaterialLoc(m_parameters[U_MATERIAL_AMBIENT],
@@ -267,6 +273,9 @@ void SceneSkybox::Update(double dt)
 
 	rotateAngle += (float)(10 * dt);
 
+	fps = std::to_string(1.0f / dt);
+
+	
 	camera.Update(dt);
 }
 
@@ -386,6 +395,18 @@ void SceneSkybox::Render()
 	RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	//scale, translate, rotate
+	modelStack.Translate(10, 0, 10);
+	RenderTextOnScreen(meshList[GEO_ONSCREENTEXT], "Hello World", Color(0, 1, 0), 4, 0, 0);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	//scale, translate, rotate
+	modelStack.Translate(10, 0, 10);
+	RenderTextOnScreen(meshList[GEO_FRAMERATE], "FPS: " + fps, Color(0, 1, 0), 4, 0, 4);
+	modelStack.PopMatrix();
+
 
 	//QUAD
 	modelStack.PushMatrix();
@@ -498,8 +519,7 @@ void SceneSkybox::RenderText(Mesh* mesh, std::string text, Color color)
 		characterSpacing.SetToTranslation(i * 1.0f, 0, 0); //1.0f is the spacing of each character, you may change this value
 			Mtx44 MVP = projectionStack.Top() * viewStack.Top() *
 			modelStack.Top() * characterSpacing;
-		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE,
-			&MVP.a[0]);
+		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 		mesh->Render((unsigned)text[i] * 6, 6);
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -513,6 +533,16 @@ void SceneSkybox::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, 
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
 	glDisable(GL_DEPTH_TEST); //uncomment for RenderTextOnScreen
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Translate(x, y, 0);
+	modelStack.Scale(size, size, size);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
 	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
 	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
@@ -523,7 +553,8 @@ void SceneSkybox::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, 
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
 		Mtx44 characterSpacing;
-		characterSpacing.SetToTranslation(i * 1.0f, 0, 0); //1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation(0.5f + i * 0.5f, 0.5f, 0); //1.0f is the spacing of each character, you may change this value
+		// original : 0.5f + i * 1.0f, 0.5f, 0
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() *
 			modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE,
@@ -532,6 +563,9 @@ void SceneSkybox::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, 
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
 	glEnable(GL_DEPTH_TEST); //uncomment for RenderTextOnScreen
 }
 
