@@ -20,6 +20,9 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	right.y = 0;
 	right.Normalize();
 	this->up = defaultUp = right.Cross(view).Normalized();
+	jumptimer = 0;
+	canJump = true;
+	temp = false;
 }
 
 void Camera3::Update(double dt)
@@ -27,34 +30,62 @@ void Camera3::Update(double dt)
 	static const float CAMERA_SPEED = 45.f;
 	static const float ZOOM_SPEED = 20.f;
 
-	//position.y = 1;
-	/*if (position.x > 50)
-	{
-		position.x -= 1;
-	}*/
+	
 
 	Vector3 view = (target - position).Normalized();
 	Vector3 right = view.Cross(up);
 
+	//position.y = 1;
+	
+
 	if(Application::IsKeyPressed('A'))
 	{
-		position -= right * ZOOM_SPEED * static_cast<float>(dt);
-		target = position + view;
+		if (position.x > 50 || position.x < -50 || position.z > 50 || position.z < -50)
+		{
+			position += right * ZOOM_SPEED * static_cast<float>(dt);
+		}
+		else
+		{
+			position -= right * ZOOM_SPEED * static_cast<float>(dt);
+			target = position + view;
+		}
 	}
 	if(Application::IsKeyPressed('D'))
 	{
-		position += right * ZOOM_SPEED * static_cast<float>(dt);
-		target = position + view;
+		if (position.x > 50 || position.x < -50 || position.z > 50 || position.z < -50)
+		{
+			position -= right * ZOOM_SPEED * static_cast<float>(dt);
+		}
+		else
+		{
+			position += right * ZOOM_SPEED * static_cast<float>(dt);
+			target = position + view;
+		}
 	}
 	if(Application::IsKeyPressed('W'))
 	{
-		position += view * ZOOM_SPEED * static_cast<float>(dt);
-		target = position + view;
+		if (position.x > 50 || position.x < -50 || position.z > 50 || position.z < -50)
+		{
+			position -= view * ZOOM_SPEED * static_cast<float>(dt);
+		}
+		else
+		{
+			position += view * ZOOM_SPEED * static_cast<float>(dt);
+			target = position + view;
+		}
+		
 	}
 	if(Application::IsKeyPressed('S'))
 	{
-		position -= view * ZOOM_SPEED * static_cast<float>(dt);
-		target = position + view;
+		if (position.x > 50 || position.x < -50 || position.z > 50 || position.z < -50)
+		{
+			position += view * ZOOM_SPEED * static_cast<float>(dt);
+		}
+		else
+		{
+			position -= view * ZOOM_SPEED * static_cast<float>(dt);
+			target = position + view;
+		}
 	}
 	//if(Application::IsKeyPressed('N'))
 	//{
@@ -113,6 +144,35 @@ void Camera3::Update(double dt)
 		view = rotation * view;
 		target = position + view;
 	}
+	//if (canJump || jumptimer > 0)
+	//{
+	//	if (Application::IsKeyPressed(VK_SPACE))
+	//	{
+	//		canJump = false;
+	//	}
+	//	if (temp)
+	//	{
+	//		position.y -= 1;
+	//		if (position.y <= 0)
+	//		{
+	//			position.y = 0;
+	//			jumptimer = 0;
+	//			canJump = true;
+	//		}
+	//	}
+	//	else if (position.y > 10 && canJump == false)
+	//	{
+	//		//canJump = true;
+	//		temp = true;
+	//	}
+	//	else if (canJump == false)
+	//	{
+	//		jumptimer += 0.016667;
+	//		position.y += 1;
+	//	}
+	//	
+	//	
+	//}
 	if(Application::IsKeyPressed('R'))
 	{
 		Reset();
