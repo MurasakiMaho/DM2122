@@ -6,7 +6,7 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "Camera3.h"
-#include <string>
+#include <sstream>
 
 class SceneSkybox : public Scene
 {
@@ -104,7 +104,7 @@ private:
 	void RenderMesh(Mesh* mesh, bool enableLight);
 
 	float rotateAngle;
-	std::string fps;
+	float fps;
 
 	Light light[1];
 	bool bLightEnabled;

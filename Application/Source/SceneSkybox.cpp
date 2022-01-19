@@ -273,7 +273,7 @@ void SceneSkybox::Update(double dt)
 
 	rotateAngle += (float)(10 * dt);
 
-	fps = std::to_string(1.0f / dt);
+	fps = 1.0f / dt;
 
 	
 	camera.Update(dt);
@@ -401,10 +401,14 @@ void SceneSkybox::Render()
 	RenderTextOnScreen(meshList[GEO_ONSCREENTEXT], "Hello World", Color(0, 1, 0), 4, 0, 0);
 	modelStack.PopMatrix();
 
+
+	std::ostringstream ss;
+	ss.str("");
+	ss << "FPS: " << fps;
 	modelStack.PushMatrix();
 	//scale, translate, rotate
 	modelStack.Translate(10, 0, 10);
-	RenderTextOnScreen(meshList[GEO_FRAMERATE], "FPS: " + fps, Color(0, 1, 0), 4, 0, 4);
+	RenderTextOnScreen(meshList[GEO_FRAMERATE], ss.str(), Color(0, 1, 0), 4, 0, 4);
 	modelStack.PopMatrix();
 
 
