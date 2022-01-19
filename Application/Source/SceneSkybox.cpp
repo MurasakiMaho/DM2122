@@ -401,12 +401,11 @@ void SceneSkybox::Render()
 	RenderTextOnScreen(meshList[GEO_ONSCREENTEXT], "Hello World", Color(0, 1, 0), 4, 0, 0);
 	modelStack.PopMatrix();
 
-
+	// Text on screen
 	std::ostringstream ss;
 	ss.str("");
 	ss << "FPS: " << fps;
 	modelStack.PushMatrix();
-	//scale, translate, rotate
 	modelStack.Translate(10, 0, 10);
 	RenderTextOnScreen(meshList[GEO_FRAMERATE], ss.str(), Color(0, 1, 0), 4, 0, 4);
 	modelStack.PopMatrix();
