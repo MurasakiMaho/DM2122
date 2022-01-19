@@ -42,6 +42,8 @@ class SceneSkybox : public Scene
 		GEO_MODEL7,
 		GEO_MODEL8,
 
+		GEO_TEXT,
+
 		NUM_GEOMETRY,
 	};
 	enum UNIFORM_TYPE
@@ -70,6 +72,8 @@ class SceneSkybox : public Scene
 		U_LIGHT0_COSINNER,
 		U_LIGHT0_EXPONENT,
 
+		U_TEXT_ENABLED,
+		U_TEXT_COLOR,
 		U_NUMLIGHTS,
 		U_TOTAL,
 	};
@@ -90,6 +94,9 @@ private:
 
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];
+
+	void RenderText(Mesh* mesh, std::string text, Color color);
+	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
 

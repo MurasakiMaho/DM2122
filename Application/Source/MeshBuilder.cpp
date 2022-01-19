@@ -614,6 +614,58 @@ Mesh* MeshBuilder::GenerateOBJ(const std::string& meshName, const std::string& f
 	return mesh;
 }
 
+Mesh* MeshBuilder::GenerateText(const std::string& meshName, unsigned numRow, unsigned numCol)
+{
+	Vertex v;
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+
+	float width = 1.f / numCol;
+	float height = 1.f / numRow;
+	unsigned offset = 0;
+	for (unsigned row = 0; row < numRow; ++row)
+	{
+		for (unsigned col = 0; col < numCol; ++col)
+		{
+			//Task: Add 4 vertices into vertex_buffer_data
+			// v.pos.Set(0.5f, 0.5f, 0.f);	v.normal.Set(0, 0, 1);
+			v.texCoord.Set(0, 0); //top left
+			vertex_buffer_data.push_back(v);
+			v.pos.Set(-0.5f, 0.5f, 0.f); v.normal.Set(0, 0, 1);
+			v.texCoord.Set(1, 0); //bottom right
+			vertex_buffer_data.push_back(v);
+			v.pos.Set(-0.5f, -0.5f, 0.f);	v.normal.Set(0, 0, 1);
+			v.texCoord.Set(1, 1); //top right
+			vertex_buffer_data.push_back(v);
+			v.pos.Set(0.5f, -0.5f, 0.f); v.normal.Set(0, 0, 1);
+			v.texCoord.Set(0, 1); //bottom left
+			vertex_buffer_data.push_back(v);
+
+			//Task: Add 6 indices into index_buffer_data
+			//tri1
+			index_buffer_data.push_back(0);
+			index_buffer_data.push_back(1);
+			index_buffer_data.push_back(2);
+			//tri2
+			index_buffer_data.push_back(0);
+			index_buffer_data.push_back(2);
+			index_buffer_data.push_back(3);
+		}
+	}
+
+	Mesh* mesh = new Mesh(meshName);
+
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
+
+	mesh->indexSize = index_buffer_data.size();
+	mesh->mode = Mesh::DRAW_TRIANGLES;
+
+	return mesh;
+}
+
 Mesh* MeshBuilder::GenerateOBJMTL(const std::string& meshName, const std::string& file_path, const std::string& mtl_path)
 {
 	//Read vertices, texcoords & normals from OBJ

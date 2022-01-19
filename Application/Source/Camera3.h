@@ -7,9 +7,7 @@
 class Camera3 : public Camera
 {
 private:
-	int jumptimer;
-	bool canJump;
-	bool temp;
+	
 public:
 	Vector3 position;
 	Vector3 target;

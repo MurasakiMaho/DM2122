@@ -20,9 +20,6 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	right.y = 0;
 	right.Normalize();
 	this->up = defaultUp = right.Cross(view).Normalized();
-	jumptimer = 0;
-	canJump = true;
-	temp = false;
 }
 
 void Camera3::Update(double dt)
@@ -73,6 +70,11 @@ void Camera3::Update(double dt)
 			position += view * ZOOM_SPEED * static_cast<float>(dt);
 			target = position + view;
 		}
+		if (position.y != 0)
+		{
+			position.y = defaultPosition.y;
+			target.y = defaultTarget.y;
+		}
 		
 	}
 	if(Application::IsKeyPressed('S'))
@@ -85,6 +87,11 @@ void Camera3::Update(double dt)
 		{
 			position -= view * ZOOM_SPEED * static_cast<float>(dt);
 			target = position + view;
+		}
+		if (position.y != 0)
+		{
+			position.y = defaultPosition.y;
+			target.y = defaultTarget.y;
 		}
 	}
 	//if(Application::IsKeyPressed('N'))
