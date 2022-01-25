@@ -45,13 +45,13 @@
     <ClCompile Include="Source\LoadTGA.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SceneSkybox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Camera3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\LoadOBJ.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Assignment2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -95,13 +95,13 @@
     <ClInclude Include="Source\LoadTGA.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SceneSkybox.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Camera3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\LoadOBJ.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Assignment2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
