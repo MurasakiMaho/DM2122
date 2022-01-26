@@ -71,13 +71,25 @@ void Assignment2::Init()
 	m_parameters[U_LIGHT0_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[0].cosCutoff");
 	m_parameters[U_LIGHT0_COSINNER] = glGetUniformLocation(m_programID, "lights[0].cosInner");
 	m_parameters[U_LIGHT0_EXPONENT] = glGetUniformLocation(m_programID, "lights[0].exponent");
+
+	m_parameters[U_LIGHT1_POSITION] = glGetUniformLocation(m_programID, "lights[1].position_cameraspace");
+	m_parameters[U_LIGHT1_COLOR] = glGetUniformLocation(m_programID, "lights[1].color");
+	m_parameters[U_LIGHT1_POWER] = glGetUniformLocation(m_programID, "lights[1].power");
+	m_parameters[U_LIGHT1_KC] = glGetUniformLocation(m_programID, "lights[1].kC");
+	m_parameters[U_LIGHT1_KL] = glGetUniformLocation(m_programID, "lights[1].kL");
+	m_parameters[U_LIGHT1_KQ] = glGetUniformLocation(m_programID, "lights[1].kQ");
+	m_parameters[U_LIGHT1_TYPE] = glGetUniformLocation(m_programID, "lights[1].type");
+	m_parameters[U_LIGHT1_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[1].spotDirection");
+	m_parameters[U_LIGHT1_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[1].cosCutoff");
+	m_parameters[U_LIGHT1_COSINNER] = glGetUniformLocation(m_programID, "lights[1].cosInner");
+	m_parameters[U_LIGHT1_EXPONENT] = glGetUniformLocation(m_programID, "lights[1].exponent");
 	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID, "numLights");
 	glUseProgram(m_programID);
 	
 	light[0].type = Light::LIGHT_POINT;
 	light[0].position.Set(0, 20, 0);
 	light[0].color.Set(1, 1, 1);
-	light[0].power = 1;
+	light[0].power = 2;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
@@ -85,6 +97,22 @@ void Assignment2::Init()
 	light[0].cosInner = cos(Math::DegreeToRadian(30));
 	light[0].exponent = 3.f;
 	light[0].spotDirection.Set(0.f, 1.f, 0.f);
+
+	lanternX = camera.position.x;
+	lanternY = camera.position.y;
+	lanternZ = camera.position.z;
+
+	light[1].type = Light::LIGHT_POINT;
+	light[1].position.Set(lanternX, lanternY, lanternZ);
+	light[1].color.Set(1, 0.77647, 0.36078);
+	light[1].power = 0.5;
+	light[1].kC = 1.f;
+	light[1].kL = 0.01f;
+	light[1].kQ = 0.001f;
+	light[1].cosCutoff = cos(Math::DegreeToRadian(30));
+	light[1].cosInner = cos(Math::DegreeToRadian(15));
+	light[1].exponent = 3.f;
+	light[1].spotDirection.Set(0.f, 1.f, 0.f);
 
 	glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
 	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &light[0].color.r);
@@ -95,10 +123,24 @@ void Assignment2::Init()
 	glUniform1f(m_parameters[U_LIGHT0_COSCUTOFF], light[0].cosCutoff);
 	glUniform1f(m_parameters[U_LIGHT0_COSINNER], light[0].cosInner);
 	glUniform1f(m_parameters[U_LIGHT0_EXPONENT], light[0].exponent);
-	glUniform1i(m_parameters[U_NUMLIGHTS], 1);
+	
+	glUniform1i(m_parameters[U_LIGHT1_TYPE], light[1].type);
+	glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1, &light[1].color.r);
+	glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
+	glUniform1f(m_parameters[U_LIGHT1_KC], light[1].kC);
+	glUniform1f(m_parameters[U_LIGHT1_KL], light[1].kL);
+	glUniform1f(m_parameters[U_LIGHT1_KQ], light[1].kQ);
+	glUniform1f(m_parameters[U_LIGHT1_COSCUTOFF], light[1].cosCutoff);
+	glUniform1f(m_parameters[U_LIGHT1_COSINNER], light[1].cosInner);
+	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
+	glUniform1i(m_parameters[U_NUMLIGHTS], 2);
 
 	//variable to rotate geometry
 	rotateAngle = 0;
+
+	inAnotherWorld = false;
+	timer = 0.f;
+	transportCD = false;
 
 	//Initialize camera settings
 	camera.Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -115,19 +157,26 @@ void Assignment2::Init()
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 
 	{
-		meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
-		meshList[GEO_QUAD]->textureID = LoadTGA("Image//color.tga");
+		meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("!anotherW", Color(1, 1, 1), 1.f);
+		meshList[GEO_QUAD]->textureID = LoadTGA("Image//!anotherW.tga");
 		meshList[GEO_QUAD]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
 		meshList[GEO_QUAD]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
 		meshList[GEO_QUAD]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
 		meshList[GEO_QUAD]->material.kShininess = 1.f;
 
-		meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 1, 1), 1.f);
+		meshList[GEO_QUAD1] = MeshBuilder::GenerateQuad("anotherW", Color(1, 1, 1), 1.f);
+		meshList[GEO_QUAD1]->textureID = LoadTGA("Image//anotherW.tga");
+		meshList[GEO_QUAD1]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
+		meshList[GEO_QUAD1]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+		meshList[GEO_QUAD1]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
+		meshList[GEO_QUAD1]->material.kShininess = 1.f;
+
+		/*meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 1, 1), 1.f);
 		meshList[GEO_QUAD]->textureID = LoadTGA("Image//color.tga");
 		meshList[GEO_QUAD]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
 		meshList[GEO_QUAD]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
 		meshList[GEO_QUAD]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_QUAD]->material.kShininess = 1.f;
+		meshList[GEO_QUAD]->material.kShininess = 1.f;*/
 
 		meshList[GEO_CIRCLE] = MeshBuilder::GenerateCircle("circle", Color(0, 1, 1), 20, 1.f);
 
@@ -268,7 +317,7 @@ void Assignment2::Init()
 
 		bodyX = 0;
 		bodyY = 1.25;
-		bodyZ = 0;
+		bodyZ = -40;
 
 		noseAngle = 100;
 		noseAngleX = 0;
@@ -281,6 +330,7 @@ void Assignment2::Init()
 		lArmAngle = 30;
 		rArmAngle = 30;
 	}
+
 
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1), 1.f);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
@@ -300,15 +350,34 @@ void Assignment2::Init()
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", Color(1, 1, 1), 1.f);
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
 
+	meshList[GEO_FRONT1] = MeshBuilder::GenerateQuad("front1", Color(1, 1, 1), 1.f);
+	meshList[GEO_FRONT1]->textureID = LoadTGA("Image//miramar_ft.tga");
+
+	meshList[GEO_BACK1] = MeshBuilder::GenerateQuad("back1", Color(1, 1, 1), 1.f);
+	meshList[GEO_BACK1]->textureID = LoadTGA("Image//miramar_bk.tga");
+
+	meshList[GEO_LEFT1] = MeshBuilder::GenerateQuad("left1", Color(1, 1, 1), 1.f);
+	meshList[GEO_LEFT1]->textureID = LoadTGA("Image//miramar_lf.tga");
+
+	meshList[GEO_RIGHT1] = MeshBuilder::GenerateQuad("right1", Color(1, 1, 1), 1.f);
+	meshList[GEO_RIGHT1]->textureID = LoadTGA("Image//miramar_rt.tga");
+
+	meshList[GEO_TOP1] = MeshBuilder::GenerateQuad("top1", Color(1, 1, 1), 1.f);
+	meshList[GEO_TOP1]->textureID = LoadTGA("Image//miramar_up.tga");
+
+	meshList[GEO_BOTTOM1] = MeshBuilder::GenerateQuad("bottom1", Color(1, 1, 1), 1.f);
+	meshList[GEO_BOTTOM1]->textureID = LoadTGA("Image//miramar_dn.tga");
+
 	meshList[GEO_IMAGE] = MeshBuilder::GenerateQuad("image", Color(1, 1, 1), 1.f);
 	meshList[GEO_IMAGE]->textureID = LoadTGA("Image//nyp.tga");
 
-	meshList[GEO_MODEL1] = MeshBuilder::GenerateOBJ("model1", "OBJ//chair.obj");
-	meshList[GEO_MODEL1]->textureID = LoadTGA("Image//chair.tga");
 
-	meshList[GEO_MODEL2] = MeshBuilder::GenerateOBJMTL("apple", "OBJ//apple.obj", "OBJ//apple.mtl");
 
-	//meshList[GEO_MODEL3] = MeshBuilder::GenerateOBJMTL("toko", "OBJ//Toko.obj", "OBJ//Toko.mtl");
+	meshList[GEO_CAR1] = MeshBuilder::GenerateOBJMTL("taxi", "OBJ//taxi.obj", "OBJ//taxi.mtl");
+	
+	meshList[GEO_CAR2] = MeshBuilder::GenerateOBJMTL("van", "OBJ//van.obj", "OBJ//van.mtl");
+
+	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJMTL("apple", "OBJ//road_straight.obj", "OBJ//road_straight.mtl");
 
 	meshList[GEO_MODEL7] = MeshBuilder::GenerateOBJMTL("model7", "OBJ//house_type01.obj", "OBJ//house_type01.mtl");
 
@@ -371,6 +440,16 @@ void Assignment2::Update(double dt)
 		bLightEnabled = false;
 	if (Application::IsKeyPressed('0'))
 		bLightEnabled = true;
+	/*static bool bButton9State = false;
+	if (!bButton9State && Application::IsKeyPressed('9'))
+	{
+		bButton9State = true;
+		bLightEnabled = !bLightEnabled;
+	}		
+	else if (bButton9State && Application::IsKeyPressed('9'))
+	{
+		bButton9State = false;
+	}*/
 	if (Application::IsKeyPressed('I'))
 		light[0].position.z -= (float)(LSPEED * dt);
 	if (Application::IsKeyPressed('K'))
@@ -383,6 +462,44 @@ void Assignment2::Update(double dt)
 		light[0].position.y -= (float)(LSPEED * dt);
 	if (Application::IsKeyPressed('P'))
 		light[0].position.y += (float)(LSPEED * dt);
+
+	if (timer < 10.f)
+		timer += 0.016667;
+	
+	//Transport 10sec cd
+	if (Application::IsKeyPressed('E') && camera.position.z < -30 && camera.position.x < 10 && camera.position.x > -10)
+	{
+		if (transportCD == false)
+		{
+			if (!inAnotherWorld)
+			{
+				inAnotherWorld = true;
+				timer = 0.f;
+				transportCD = true;
+			}
+			else
+			{
+				inAnotherWorld = false;
+				timer = 0.f;
+				transportCD = true;
+			}
+		}
+	}
+	
+	std::cout << timer << std::endl;
+	if (timer > 10.f && transportCD == true)
+		transportCD = false;
+
+	/*static bool bButtonEState = false;
+	if (!bButtonEState && Application::IsKeyPressed('E') && camera.position.z < -40)
+	{
+		bButtonEState = true;
+		inAnotherWorld = !inAnotherWorld;
+	}
+	else if (bButtonEState && Application::IsKeyPressed('E'))
+	{
+		bButtonEState = false;
+	}*/
 
 	rotateAngle += (float)(10 * dt);
 
@@ -423,26 +540,27 @@ void Assignment2::Update(double dt)
 		//Swaying
 		if (swayTemp == 0)
 		{
-			lanternAngle += 0.5;
-			lanternX -= 0.015;
+			lanternAngle += 0.25;
+			lanternX -= 0.0075;
 			noseAngleX -= 0.075;
-			if (lanternAngle >= 20)
+			if (lanternAngle >= 10)
 			{
 				swayTemp = 1;
 			}
 		}
 		else if (swayTemp == 1)
 		{
-			lanternAngle -= 0.5;
-			lanternX += 0.015;
+			lanternAngle -= 0.25;
+			lanternX += 0.0075;
 			noseAngleX += 0.075;
-			if (lanternAngle <= -20)
+			if (lanternAngle <= -10)
 			{
 				swayTemp = 0;
 			}
 		}
 	}
 
+	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	
 	camera.Update(dt);
 }
@@ -471,6 +589,9 @@ void Assignment2::Render()
 		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
+	Position lightPosition_cameraspace = viewStack.Top() * light[1].position;
+	glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
+
 	viewStack.LoadIdentity();
 	viewStack.LookAt(
 		camera.position.x, camera.position.y, camera.position.z,
@@ -490,13 +611,23 @@ void Assignment2::Render()
 	}
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	{
+		modelStack.Translate(light[1].position.x, light[1].position.y, light[1].position.z);
+		RenderMesh(meshList[GEO_LIGHTBALL], false);
+	}
+	modelStack.PopMatrix();
+
 	//QUAD
 	modelStack.PushMatrix();
 	{
 		modelStack.Translate(0, -5, 0);
 		modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Scale(100, 100, 100);
-		RenderMesh(meshList[GEO_QUAD], bLightEnabled);
+		modelStack.Scale(500, 500, 100);
+		if (!inAnotherWorld)
+			RenderMesh(meshList[GEO_QUAD], bLightEnabled);
+		else
+			RenderMesh(meshList[GEO_QUAD1], bLightEnabled);
 	}
 	modelStack.PopMatrix();
 	//QUAD
@@ -507,14 +638,12 @@ void Assignment2::Render()
 		modelStack.Translate(bodyX, bodyY, bodyZ);
 		modelStack.Rotate(0, 0, 0, 1);
 		modelStack.Scale(3.5, 3, 3.5);
-		modelStack.Scale(1, 1, 1);
 		RenderMesh(meshList[GEO_BLUE_HEMISPHERE], true);
 
 
-		modelStack.Scale(0.28571, 0.33333, 0.28571);
-		modelStack.Translate(0, 0, 0);
+	
 		modelStack.Rotate(180, 0, 0, 1);
-		modelStack.Scale(3.5, 5, 3.5);
+		
 		RenderMesh(meshList[GEO_BLUE_HEMISPHERE], true);
 
 		modelStack.Rotate(-180, 0, 0, 1);
@@ -902,55 +1031,41 @@ void Assignment2::Render()
 	modelStack.PopMatrix();
 	//Drippy
 
-
-	//chair
-	modelStack.PushMatrix();
+	if (!inAnotherWorld)
 	{
-		//scale, translate, rotate
-		modelStack.Translate(5, 0, 0);
-		RenderMesh(meshList[GEO_MODEL1], bLightEnabled);
+		//taxi
+		modelStack.PushMatrix();
+		{
+			//scale, translate, rotate
+			modelStack.Translate(35, -5, 8);
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Scale(10, 10, 10);
+			RenderMesh(meshList[GEO_CAR1], bLightEnabled);
+		}
+		modelStack.PopMatrix();
+
+		//van
+		modelStack.PushMatrix();
+		{
+			//scale, translate, rotate
+			modelStack.Translate(-12, -5, -8);
+			modelStack.Rotate(90, 0, -1, 0);
+			modelStack.Scale(10, 10, 10);
+			RenderMesh(meshList[GEO_CAR2], bLightEnabled);
+		}
+		modelStack.PopMatrix();
+
+		//road
+		modelStack.PushMatrix();
+		{
+			//scale, translate, rotate
+			modelStack.Translate(0, -5, 0);
+			modelStack.Scale(100, 10, 40);
+			RenderMesh(meshList[GEO_ROAD], bLightEnabled);
+		}
+		modelStack.PopMatrix();
 	}
-	modelStack.PopMatrix();
 
-	//house
-	modelStack.PushMatrix();
-	{
-		//scale, translate, rotate
-		modelStack.Translate(-10, 0, -10);
-		modelStack.Scale(10, 10, 10);
-		RenderMesh(meshList[GEO_MODEL7], bLightEnabled);
-	}
-	modelStack.PopMatrix();
-
-	//cottage
-	modelStack.PushMatrix();
-	{
-		//scale, translate, rotate
-		modelStack.Translate(10, 0, -10);
-		modelStack.Scale(0.5, 0.5, 0.5);
-		RenderMesh(meshList[GEO_MODEL8], bLightEnabled);
-	}
-	modelStack.PopMatrix();
-
-
-	//apple
-	modelStack.PushMatrix();
-	{
-		//scale, translate, rotate
-		modelStack.Translate(10, 0, 10);
-		modelStack.Scale(10, 10, 10);
-		RenderMesh(meshList[GEO_MODEL2], bLightEnabled);
-	}
-	modelStack.PopMatrix();
-
-	//modelStack.PushMatrix();
-	//{
-	//	//scale, translate, rotate
-	//	modelStack.Translate(10, 0, 10);
-	//	modelStack.Scale(10, 10, 10);
-	//	RenderMesh(meshList[GEO_MODEL3], bLightEnabled);
-	//}
-	//modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	//scale, translate, rotate
@@ -974,16 +1089,16 @@ void Assignment2::Render()
 	modelStack.PopMatrix();
 
 
-	//QUAD
-	modelStack.PushMatrix();
-	{
-		modelStack.Translate(0, 0, 0);
-		modelStack.Rotate(180, 0, 0, 1);
-		modelStack.Scale(10, 10, 10);
-		RenderMesh(meshList[GEO_IMAGE], bLightEnabled);
-	}
-	modelStack.PopMatrix();
-	//QUAD
+	////QUAD
+	//modelStack.PushMatrix();
+	//{
+	//	modelStack.Translate(0, 0, 0);
+	//	modelStack.Rotate(180, 0, 0, 1);
+	//	modelStack.Scale(10, 10, 10);
+	//	RenderMesh(meshList[GEO_IMAGE], bLightEnabled);
+	//}
+	//modelStack.PopMatrix();
+	////QUAD
 }
 
 void Assignment2::RenderSkybox() 
@@ -993,64 +1108,129 @@ void Assignment2::RenderSkybox()
 
 	modelStack.LoadIdentity();
 
-	modelStack.PushMatrix();
+	if (inAnotherWorld)
 	{
-		modelStack.Translate(camera.position.x, camera.position.y, -499 + camera.position.z);
-		modelStack.Rotate(180, 0, 0, 1);
-		modelStack.Scale(1000, 1000, 1000);
-		RenderMesh(meshList[GEO_FRONT], false);
-	}
-	modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(camera.position.x, camera.position.y, -499 + camera.position.z);
+			modelStack.Rotate(180, 0, 0, 1);
+			modelStack.Scale(1000, 1000, 1000);
+			RenderMesh(meshList[GEO_FRONT], false);
+		}
+		modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	{
-		modelStack.Translate(camera.position.x, camera.position.y, 499 + camera.position.z);
-		modelStack.Rotate(180, 0, 0, 1);
-		modelStack.Rotate(180, 0, 1, 0);
-		modelStack.Scale(1000, 1000, 1000);
-		RenderMesh(meshList[GEO_BACK], false);
-	}
-	modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(camera.position.x, camera.position.y, 499 + camera.position.z);
+			modelStack.Rotate(180, 0, 0, 1);
+			modelStack.Rotate(180, 0, 1, 0);
+			modelStack.Scale(1000, 1000, 1000);
+			RenderMesh(meshList[GEO_BACK], false);
+		}
+		modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	{
-		modelStack.Translate(-499 + camera.position.x, camera.position.y, camera.position.z);
-		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Rotate(180, 0, 0, 1);
-		modelStack.Scale(1000, 1000, 1000);
-		RenderMesh(meshList[GEO_LEFT], false);
-	}
-	modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(-499 + camera.position.x, camera.position.y, camera.position.z);
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Rotate(180, 0, 0, 1);
+			modelStack.Scale(1000, 1000, 1000);
+			RenderMesh(meshList[GEO_LEFT], false);
+		}
+		modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	{
-		modelStack.Translate(499 + camera.position.x, camera.position.y, camera.position.z);
-		modelStack.Rotate(-90, 0, 1, 0);
-		modelStack.Rotate(180, 0, 0, 1);
-		modelStack.Scale(1000, 1000, 1000);
-		RenderMesh(meshList[GEO_RIGHT], false);
-	}
-	modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(499 + camera.position.x, camera.position.y, camera.position.z);
+			modelStack.Rotate(-90, 0, 1, 0);
+			modelStack.Rotate(180, 0, 0, 1);
+			modelStack.Scale(1000, 1000, 1000);
+			RenderMesh(meshList[GEO_RIGHT], false);
+		}
+		modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	{
-		modelStack.Translate(camera.position.x, 499 + camera.position.y, camera.position.z);
-		modelStack.Rotate(90, 1, 0, 0);
-		modelStack.Rotate(270, 0, 0, 1);
-		modelStack.Scale(1000, 1000, 1000);
-		RenderMesh(meshList[GEO_TOP], false);
-	}
-	modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(camera.position.x, 499 + camera.position.y, camera.position.z);
+			modelStack.Rotate(90, 1, 0, 0);
+			modelStack.Rotate(270, 0, 0, 1);
+			modelStack.Scale(1000, 1000, 1000);
+			RenderMesh(meshList[GEO_TOP], false);
+		}
+		modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	{
-		modelStack.Translate(camera.position.x, -499 + camera.position.y, camera.position.z);
-		modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Rotate(90, 0, 0, 1);
-		modelStack.Scale(1000, 1000, 1000);
-		RenderMesh(meshList[GEO_BOTTOM], false);
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(camera.position.x, -499 + camera.position.y, camera.position.z);
+			modelStack.Rotate(-90, 1, 0, 0);
+			modelStack.Rotate(90, 0, 0, 1);
+			modelStack.Scale(1000, 1000, 1000);
+			RenderMesh(meshList[GEO_BOTTOM], false);
+		}
+		modelStack.PopMatrix();
 	}
-	modelStack.PopMatrix();
+	else
+	{
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(camera.position.x, camera.position.y, -499 + camera.position.z);
+			modelStack.Rotate(180, 0, 0, 1);
+			modelStack.Scale(1000, 1000, 1000);
+			RenderMesh(meshList[GEO_FRONT1], false);
+		}
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(camera.position.x, camera.position.y, 499 + camera.position.z);
+			modelStack.Rotate(180, 0, 0, 1);
+			modelStack.Rotate(180, 0, 1, 0);
+			modelStack.Scale(1000, 1000, 1000);
+			RenderMesh(meshList[GEO_BACK1], false);
+		}
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(-499 + camera.position.x, camera.position.y, camera.position.z);
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Rotate(180, 0, 0, 1);
+			modelStack.Scale(1000, 1000, 1000);
+			RenderMesh(meshList[GEO_LEFT1], false);
+		}
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(499 + camera.position.x, camera.position.y, camera.position.z);
+			modelStack.Rotate(-90, 0, 1, 0);
+			modelStack.Rotate(180, 0, 0, 1);
+			modelStack.Scale(1000, 1000, 1000);
+			RenderMesh(meshList[GEO_RIGHT1], false);
+		}
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(camera.position.x, 499 + camera.position.y, camera.position.z);
+			modelStack.Rotate(90, 1, 0, 0);
+			modelStack.Rotate(270, 0, 0, 1);
+			modelStack.Scale(1000, 1000, 1000);
+			RenderMesh(meshList[GEO_TOP1], false);
+		}
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(camera.position.x, -499 + camera.position.y, camera.position.z);
+			modelStack.Rotate(-90, 1, 0, 0);
+			modelStack.Rotate(90, 0, 0, 1);
+			modelStack.Scale(1000, 1000, 1000);
+			RenderMesh(meshList[GEO_BOTTOM1], false);
+		}
+		modelStack.PopMatrix();
+	}
+	
 }
 
 void Assignment2::Exit()

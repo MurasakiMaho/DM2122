@@ -18,11 +18,18 @@ class Assignment2 : public Scene
 		GEO_BOTTOM,
 		GEO_FRONT,
 		GEO_BACK,
+		GEO_LEFT1,
+		GEO_RIGHT1,
+		GEO_TOP1,
+		GEO_BOTTOM1,
+		GEO_FRONT1,
+		GEO_BACK1,
 		GEO_IMAGE,
 		GEO_BLEND,
 
 		GEO_AXES,
 		GEO_QUAD,
+		GEO_QUAD1,
 		GEO_CUBE,
 		GEO_CIRCLE,
 		GEO_RING,
@@ -51,9 +58,9 @@ class Assignment2 : public Scene
 
 		GEO_LIGHTBALL,
 
-		GEO_MODEL1,
-		GEO_MODEL2,
-		GEO_MODEL3,
+		GEO_CAR1,
+		GEO_CAR2,
+		GEO_ROAD,		
 		GEO_MODEL4,
 		GEO_MODEL5,
 		GEO_MODEL6,
@@ -92,6 +99,18 @@ class Assignment2 : public Scene
 		U_LIGHT0_COSINNER,
 		U_LIGHT0_EXPONENT,
 
+		U_LIGHT1_POSITION,
+		U_LIGHT1_COLOR,
+		U_LIGHT1_POWER,
+		U_LIGHT1_KC,
+		U_LIGHT1_KL,
+		U_LIGHT1_KQ,
+		U_LIGHT1_TYPE,
+		U_LIGHT1_SPOTDIRECTION,
+		U_LIGHT1_COSCUTOFF,
+		U_LIGHT1_COSINNER,
+		U_LIGHT1_EXPONENT,
+
 		U_TEXT_ENABLED,
 		U_TEXT_COLOR,
 		U_NUMLIGHTS,
@@ -123,7 +142,11 @@ private:
 	float rotateAngle;
 	float fps;
 
-	Light light[1];
+	bool inAnotherWorld;
+	float timer;
+	bool transportCD;
+
+	Light light[2];
 	bool bLightEnabled;
 
 	//Drippy

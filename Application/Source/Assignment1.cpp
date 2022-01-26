@@ -102,7 +102,7 @@ void Assignment1::Init()
 	light[1].type = Light::LIGHT_POINT;
 	light[1].position.Set(lanternX, lanternY, lanternZ);
 	light[1].color.Set(1, 0.77647, 0.36078);
-	light[1].power = 1;
+	light[1].power = 2;
 	light[1].kC = 1.f;
 	light[1].kL = 0.01f;
 	light[1].kQ = 0.001f;
@@ -344,7 +344,7 @@ void Assignment1::Update(double dt)
 	}
 
 	//Lantern light update
-	light[1].position.Set(lanternX, lanternY, lanternZ);
+	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
 
 	//Blinking
 	if (blinking)
