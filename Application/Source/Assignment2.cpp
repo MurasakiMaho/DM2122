@@ -641,9 +641,10 @@ void Assignment2::Render()
 		RenderMesh(meshList[GEO_BLUE_HEMISPHERE], true);
 
 
-	
+		modelStack.Scale(0.28571, 0.33333, 0.28571);
+		modelStack.Translate(0, 0, 0);
 		modelStack.Rotate(180, 0, 0, 1);
-		
+		modelStack.Scale(3.5, 5, 3.5);
 		RenderMesh(meshList[GEO_BLUE_HEMISPHERE], true);
 
 		modelStack.Rotate(-180, 0, 0, 1);
@@ -1060,7 +1061,7 @@ void Assignment2::Render()
 		{
 			//scale, translate, rotate
 			modelStack.Translate(0, -5, 0);
-			modelStack.Scale(100, 10, 40);
+			modelStack.Scale(500, 10, 40);
 			RenderMesh(meshList[GEO_ROAD], bLightEnabled);
 		}
 		modelStack.PopMatrix();
