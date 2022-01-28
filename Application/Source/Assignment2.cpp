@@ -379,15 +379,16 @@ void Assignment2::Init()
 
 	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJMTL("apple", "OBJ//road_straight.obj", "OBJ//road_straight.mtl");
 
-	meshList[GEO_MODEL7] = MeshBuilder::GenerateOBJMTL("model7", "OBJ//house_type01.obj", "OBJ//house_type01.mtl");
+	meshList[GEO_MODEL6] = MeshBuilder::GenerateOBJMTL("model6", "OBJ//medieval house demo.obj", "OBJ//medieval house demo.mtl");
+	//meshList[GEO_MODEL6]->textureID = LoadTGA("Image//house2.tga");
 
-	meshList[GEO_MODEL8] = MeshBuilder::GenerateOBJMTL("model8", "OBJ//cottage_obj.obj", "OBJ//cottage_obj.mtl"); //cottage_diffuse
-	meshList[GEO_MODEL8]->textureID = LoadTGA("Image//cottage_diffuse.tga");
-
-	meshList[GEO_MODEL8] = MeshBuilder::GenerateOBJMTL("model8", "OBJ//cottage_obj.obj", "OBJ//cottage_obj.mtl"); //cottage_diffuse
-	meshList[GEO_MODEL8]->textureID = LoadTGA("Image//cottage_diffuse.tga");
-
-
+	//meshList[GEO_MODEL7] = MeshBuilder::GenerateOBJ("model7", "OBJ//bin.obj");
+	meshList[GEO_MODEL7] = MeshBuilder::GenerateOBJMTL("model7", "OBJ//bin.obj", "OBJ//bin.mtl");
+	//meshList[GEO_MODEL7]->textureID = LoadTGA("Image//Trashbin_Albedo.tga");
+	
+	meshList[GEO_MODEL8] = MeshBuilder::GenerateOBJMTL("model8", "OBJ//WoodenCabinObj.obj", "OBJ//WoodenCabinObj.mtl");
+	meshList[GEO_MODEL8]->textureID = LoadTGA("Image//WoodCabinDif.tga");
+	
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 1), 10, 20);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
@@ -563,6 +564,7 @@ void Assignment2::Update(double dt)
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	
 	camera.Update(dt);
+	camera.updateInAnotherWorld(inAnotherWorld);
 }
 
 void Assignment2::Render()
@@ -1067,6 +1069,35 @@ void Assignment2::Render()
 		modelStack.PopMatrix();
 	}
 
+	//bin
+	modelStack.PushMatrix();
+	{
+		//scale, translate, rotate
+		modelStack.Translate(-0, -4.8, 51);
+		modelStack.Scale(1, 1, 1);
+		RenderMesh(meshList[GEO_MODEL7], bLightEnabled);
+	}
+	modelStack.PopMatrix();
+
+	//
+	modelStack.PushMatrix();
+	{
+		//scale, translate, rotate
+		modelStack.Translate(-0, -4.8, 51);
+		modelStack.Scale(1, 1, 1);
+		RenderMesh(meshList[GEO_MODEL6], bLightEnabled);
+	}
+	modelStack.PopMatrix();
+
+	//wood shack
+	//modelStack.PushMatrix();
+	//{
+	//	//scale, translate, rotate
+	//	modelStack.Translate(0, -0, 0);
+	//	modelStack.Scale(0.5, 0.5, 0.5);
+	//	RenderMesh(meshList[GEO_MODEL8], bLightEnabled);
+	//}
+	//modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	//scale, translate, rotate
@@ -1246,6 +1277,11 @@ void Assignment2::Exit()
 	}
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
+}
+
+bool Assignment2::getInAnotherWorld()
+{
+	return inAnotherWorld;
 }
 
 void Assignment2::RenderText(Mesh* mesh, std::string text, Color color)

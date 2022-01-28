@@ -1,7 +1,10 @@
 #include "Camera3.h"
 #include "Application.h"
 #include "Mtx44.h"
+#include "Assignment2.h"
 
+#define Boundaries 51
+#define newBoundaries 101
 
 Camera3::Camera3()
 {
@@ -20,6 +23,13 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	right.y = 0;
 	right.Normalize();
 	this->up = defaultUp = right.Cross(view).Normalized();
+
+	inAnotherWorld = false;
+}
+
+void Camera3::updateInAnotherWorld(bool newVal)
+{
+	inAnotherWorld = newVal;
 }
 
 void Camera3::Update(double dt)
@@ -34,83 +44,145 @@ void Camera3::Update(double dt)
 
 	//position.y = 1;
 	
+	// a and d lil buggy
+	if (!inAnotherWorld)
+	{
+		if (Application::IsKeyPressed('A'))
+		{
+			if ((position.x + 1) >= Boundaries || (position.x - 1) <= -Boundaries || (position.z + 1) >= Boundaries || (position.z - 1) <= -Boundaries)
+			{
+				//position += right * ZOOM_SPEED * static_cast<float>(dt);
+				position += right * ZOOM_SPEED * static_cast<float>(dt);
+				target = position + view;
+			}
+			else
+			{
+				position -= right * ZOOM_SPEED * static_cast<float>(dt);
+				target = position + view;
+			}
+		}
+		if (Application::IsKeyPressed('D'))
+		{
+			if ((position.x + 1) >= Boundaries || (position.x - 1) <= -Boundaries || (position.z + 1) >= Boundaries || (position.z - 1) <= -Boundaries)
+			{
+				//position -= right * ZOOM_SPEED * static_cast<float>(dt);
+				position -= right * ZOOM_SPEED * static_cast<float>(dt);
+				target = position + view;
+			}
+			else
+			{
+				position += right * ZOOM_SPEED * static_cast<float>(dt);
+				target = position + view;
+			}
+		}
+		if (Application::IsKeyPressed('W'))
+		{
+			if ((position.x + 1) >= Boundaries || (position.x - 1) <= -Boundaries || (position.z + 1) >= Boundaries || (position.z - 1) <= -Boundaries)
+			{
+				//position -= view * ZOOM_SPEED * static_cast<float>(dt);
+			}
+			else if ((position.x + 1) >= Boundaries || (position.x - 1) <= -Boundaries || (position.z + 1) >= Boundaries || (position.z - 1) <= -Boundaries)
+			{
+				//position -= view * ZOOM_SPEED * static_cast<float>(dt);
+			}
+			else
+			{
+				position += view * ZOOM_SPEED * static_cast<float>(dt);
+				target = position + view;
+			}
+			if (position.y != 0)
+			{
+				position.y = defaultPosition.y;
+				target.y = position.y + view.y;
+			}
 
-	if(Application::IsKeyPressed('A'))
-	{
-		if (position.x > 50 || position.x < -50 || position.z > 50 || position.z < -50)
-		{
-			position += right * ZOOM_SPEED * static_cast<float>(dt);
 		}
-		else
+		if (Application::IsKeyPressed('S'))
 		{
-			position -= right * ZOOM_SPEED * static_cast<float>(dt);
-			target = position + view;
-		}
-	}
-	if(Application::IsKeyPressed('D'))
-	{
-		if (position.x > 50 || position.x < -50 || position.z > 50 || position.z < -50)
-		{
-			position -= right * ZOOM_SPEED * static_cast<float>(dt);
-		}
-		else
-		{
-			position += right * ZOOM_SPEED * static_cast<float>(dt);
-			target = position + view;
+			if ((position.x + 0.1) >= Boundaries || (position.x - 0.1) <= -Boundaries || (position.z + 0.1) >= Boundaries || (position.z - 0.1) <= -Boundaries)
+			{
+				//position += view * ZOOM_SPEED * static_cast<float>(dt);
+			}
+			else
+			{
+				position -= view * ZOOM_SPEED * static_cast<float>(dt);
+				target = position + view;
+			}
+			if (position.y != 0)
+			{
+				position.y = defaultPosition.y;
+				target.y = position.y + view.y;
+			}
 		}
 	}
-	if(Application::IsKeyPressed('W'))
+	else
 	{
-		if (position.x > 50 || position.x < -50 || position.z > 50 || position.z < -50)
+		if (Application::IsKeyPressed('A'))
 		{
-			position -= view * ZOOM_SPEED * static_cast<float>(dt);
+			if ((position.x + 1) >= newBoundaries || (position.x - 1) <= -newBoundaries || (position.z + 1) >= newBoundaries || (position.z - 1) <= -newBoundaries)
+			{
+				//position += right * ZOOM_SPEED * static_cast<float>(dt);
+				position += right * ZOOM_SPEED * static_cast<float>(dt);
+				target = position + view;
+			}
+			else
+			{
+				position -= right * ZOOM_SPEED * static_cast<float>(dt);
+				target = position + view;
+			}
 		}
-		else
+		if (Application::IsKeyPressed('D'))
 		{
-			position += view * ZOOM_SPEED * static_cast<float>(dt);
-			target = position + view;
+			if ((position.x + 1) >= newBoundaries || (position.x - 1) <= -newBoundaries || (position.z + 1) >= newBoundaries || (position.z - 1) <= -newBoundaries)
+			{
+				//position -= right * ZOOM_SPEED * static_cast<float>(dt);
+				position -= right * ZOOM_SPEED * static_cast<float>(dt);
+				target = position + view;
+			}
+			else
+			{
+				position += right * ZOOM_SPEED * static_cast<float>(dt);
+				target = position + view;
+			}
 		}
-		if (position.y != 0)
+		if (Application::IsKeyPressed('W'))
 		{
-			position.y = defaultPosition.y;
-			target.y = defaultTarget.y;
+			if ((position.x + 1) >= newBoundaries || (position.x - 1) <= -newBoundaries || (position.z + 1) >= newBoundaries || (position.z - 1) <= -newBoundaries)
+			{
+				//position -= view * ZOOM_SPEED * static_cast<float>(dt);
+			}
+			else
+			{
+				position += view * ZOOM_SPEED * static_cast<float>(dt);
+				target = position + view;
+			}
+			if (position.y != 0)
+			{
+				position.y = defaultPosition.y;
+				target.y = position.y + view.y;
+			}
+
 		}
-		
+		if (Application::IsKeyPressed('S'))
+		{
+			if ((position.x + 0.1) >= newBoundaries || (position.x - 0.1) <= -newBoundaries || (position.z + 0.1) >= newBoundaries || (position.z - 0.1) <= -newBoundaries)
+			{
+				//position += view * ZOOM_SPEED * static_cast<float>(dt);
+			}
+			else
+			{
+				position -= view * ZOOM_SPEED * static_cast<float>(dt);
+				target = position + view;
+			}
+			if (position.y != 0)
+			{
+				position.y = defaultPosition.y;
+				target.y = position.y + view.y;
+			}
+		}
 	}
-	if(Application::IsKeyPressed('S'))
-	{
-		if (position.x > 50 || position.x < -50 || position.z > 50 || position.z < -50)
-		{
-			position += view * ZOOM_SPEED * static_cast<float>(dt);
-		}
-		else
-		{
-			position -= view * ZOOM_SPEED * static_cast<float>(dt);
-			target = position + view;
-		}
-		if (position.y != 0)
-		{
-			position.y = defaultPosition.y;
-			target.y = defaultTarget.y;
-		}
-	}
-	//if(Application::IsKeyPressed('N'))
-	//{
-	//	//Vector3 view = target - position;
-	//	//if(view.Length() > 5) //Prevent the camera from touching the origin
-	//	//{
-	//	//	view.Normalize();
-	//	//	position += view * ZOOM_SPEED * dt;
-	//	//}
-	//	position = position + up * ZOOM_SPEED * dt;
-	//	
-	//}
-	//if(Application::IsKeyPressed('M'))
-	//{
-	//	//Vector3 view = (target - position).Normalized();
-	//	//position -= view * ZOOM_SPEED * dt;
-	//	position = position - up * ZOOM_SPEED * dt;
-	//}
+	
+
 	if (Application::IsKeyPressed(VK_LEFT))
 	{
 		float yaw = -CAMERA_SPEED * static_cast<float>(dt);
@@ -151,6 +223,23 @@ void Camera3::Update(double dt)
 		view = rotation * view;
 		target = position + view;
 	}
+	//if(Application::IsKeyPressed('N'))
+//{
+//	//Vector3 view = target - position;
+//	//if(view.Length() > 5) //Prevent the camera from touching the origin
+//	//{
+//	//	view.Normalize();
+//	//	position += view * ZOOM_SPEED * dt;
+//	//}
+//	position = position + up * ZOOM_SPEED * dt;
+//	
+//}
+//if(Application::IsKeyPressed('M'))
+//{
+//	//Vector3 view = (target - position).Normalized();
+//	//position -= view * ZOOM_SPEED * dt;
+//	position = position - up * ZOOM_SPEED * dt;
+//}
 	//if (canJump || jumptimer > 0)
 	//{
 	//	if (Application::IsKeyPressed(VK_SPACE))

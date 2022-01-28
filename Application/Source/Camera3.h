@@ -7,7 +7,7 @@
 class Camera3 : public Camera
 {
 private:
-	
+	bool inAnotherWorld;
 public:
 	Vector3 position;
 	Vector3 target;
@@ -20,6 +20,7 @@ public:
 	Camera3();
 	~Camera3();
 	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up);
+	void updateInAnotherWorld(bool newVal);
 	virtual void Update(double dt);
 	virtual void Reset();
 };
