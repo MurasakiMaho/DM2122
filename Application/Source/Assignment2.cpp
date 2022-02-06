@@ -104,8 +104,9 @@ void Assignment2::Init()
 
 	light[1].type = Light::LIGHT_POINT;
 	light[1].position.Set(lanternX, lanternY, lanternZ);
-	light[1].color.Set(1, 0.77647, 0.36078);
-	light[1].power = 0.5;
+	//light[1].color.Set(1, 0.77647, 0.36078);
+	light[1].color.Set(1, 1, 1);
+	light[1].power = 1;
 	light[1].kC = 1.f;
 	light[1].kL = 0.01f;
 	light[1].kQ = 0.001f;
@@ -139,7 +140,7 @@ void Assignment2::Init()
 	rotateAngle = 0;
 
 	inAnotherWorld = false;
-	timer = 0.f;
+	transporttimer = 0.f;
 	transportCD = false;
 
 	//Initialize camera settings
@@ -156,6 +157,7 @@ void Assignment2::Init()
 	}
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 
+	//Ground + others
 	{
 		meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("!anotherW", Color(1, 1, 1), 1.f);
 		meshList[GEO_QUAD]->textureID = LoadTGA("Image//!anotherW.tga");
@@ -225,113 +227,113 @@ void Assignment2::Init()
 		meshList[GEO_RED_CUBE] = MeshBuilder::GenerateCube("redCube", Color(0.79215, 0.38823, 0.34510), 1.f);
 		meshList[GEO_RED_CUBE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
 		meshList[GEO_RED_CUBE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_RED_CUBE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
+		meshList[GEO_RED_CUBE]->material.kSpecular.Set(0.2f, 0.2f, 0.2f);
 		meshList[GEO_RED_CUBE]->material.kShininess = 1.f;
 
 		meshList[GEO_YELLOW_CUBE] = MeshBuilder::GenerateCube("yellowCube", Color(1, 0.77647, 0.36078), 1.f);
 		meshList[GEO_YELLOW_CUBE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
 		meshList[GEO_YELLOW_CUBE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_YELLOW_CUBE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_YELLOW_CUBE]->material.kShininess = 1.f;
+		meshList[GEO_YELLOW_CUBE]->material.kSpecular.Set(0.2f, 0.2f, 0.2f);
+meshList[GEO_YELLOW_CUBE]->material.kShininess = 1.f;
 
-		meshList[GEO_RED_CYLINDER] = MeshBuilder::GenerateCylinder("redCylinder", Color(0.79215, 0.38823, 0.34510), 36, 10, 10);
-		meshList[GEO_RED_CYLINDER]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_RED_CYLINDER]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_RED_CYLINDER]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_RED_CYLINDER]->material.kShininess = 1.f;
+meshList[GEO_RED_CYLINDER] = MeshBuilder::GenerateCylinder("redCylinder", Color(0.79215, 0.38823, 0.34510), 36, 10, 10);
+meshList[GEO_RED_CYLINDER]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
+meshList[GEO_RED_CYLINDER]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+meshList[GEO_RED_CYLINDER]->material.kSpecular.Set(0.2f, 0.2f, 0.2f);
+meshList[GEO_RED_CYLINDER]->material.kShininess = 1.f;
 
-		meshList[GEO_YELLOW_CONE] = MeshBuilder::GenerateCone("yellowCone", Color(0.92157, 0.80783, 0.52157), 36, 1, 1);
-		meshList[GEO_YELLOW_CONE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_YELLOW_CONE]->material.kDiffuse.Set(1.f, 1.f, 1.f);
-		meshList[GEO_YELLOW_CONE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_YELLOW_CONE]->material.kShininess = 1.f;
+meshList[GEO_YELLOW_CONE] = MeshBuilder::GenerateCone("yellowCone", Color(0.92157, 0.80783, 0.52157), 36, 1, 1);
+meshList[GEO_YELLOW_CONE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
+meshList[GEO_YELLOW_CONE]->material.kDiffuse.Set(1.f, 1.f, 1.f);
+meshList[GEO_YELLOW_CONE]->material.kSpecular.Set(0.2f, 0.2f, 0.2f);
+meshList[GEO_YELLOW_CONE]->material.kShininess = 1.f;
 
-		meshList[GEO_RED_PYRAMID] = MeshBuilder::GenerateCone("redPyramid", Color(0.79215, 0.38823, 0.34510), 4, 1, 1);
-		meshList[GEO_RED_PYRAMID]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_RED_PYRAMID]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_RED_PYRAMID]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_RED_PYRAMID]->material.kShininess = 1.f;
+meshList[GEO_RED_PYRAMID] = MeshBuilder::GenerateCone("redPyramid", Color(0.79215, 0.38823, 0.34510), 4, 1, 1);
+meshList[GEO_RED_PYRAMID]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
+meshList[GEO_RED_PYRAMID]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+meshList[GEO_RED_PYRAMID]->material.kSpecular.Set(0.2f, 0.2f, 0.2f);
+meshList[GEO_RED_PYRAMID]->material.kShininess = 1.f;
 
-		meshList[GEO_LEG_SPHERE] = MeshBuilder::GenerateSphere("LEGsphere", Color(0.35294, 0.54117, 0.48627), 10, 36, 1);
-		meshList[GEO_LEG_SPHERE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_LEG_SPHERE]->material.kDiffuse.Set(1.f, 1.f, 1.f);
-		meshList[GEO_LEG_SPHERE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_LEG_SPHERE]->material.kShininess = 1.f;
+meshList[GEO_LEG_SPHERE] = MeshBuilder::GenerateSphere("LEGsphere", Color(0.35294, 0.54117, 0.48627), 10, 36, 1);
+meshList[GEO_LEG_SPHERE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
+meshList[GEO_LEG_SPHERE]->material.kDiffuse.Set(1.f, 1.f, 1.f);
+meshList[GEO_LEG_SPHERE]->material.kSpecular.Set(0.2f, 0.2f, 0.2f);
+meshList[GEO_LEG_SPHERE]->material.kShininess = 1.f;
 
-		meshList[GEO_YELLOW_SPHERE] = MeshBuilder::GenerateSphere("yellowSphere", Color(0.92157, 0.80783, 0.52157), 10, 36, 1);
-		meshList[GEO_YELLOW_SPHERE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_YELLOW_SPHERE]->material.kDiffuse.Set(1.f, 1.f, 1.f);
-		meshList[GEO_YELLOW_SPHERE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_YELLOW_SPHERE]->material.kShininess = 1.f;
+meshList[GEO_YELLOW_SPHERE] = MeshBuilder::GenerateSphere("yellowSphere", Color(0.92157, 0.80783, 0.52157), 10, 36, 1);
+meshList[GEO_YELLOW_SPHERE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
+meshList[GEO_YELLOW_SPHERE]->material.kDiffuse.Set(1.f, 1.f, 1.f);
+meshList[GEO_YELLOW_SPHERE]->material.kSpecular.Set(0.2f, 0.2f, 0.2f);
+meshList[GEO_YELLOW_SPHERE]->material.kShininess = 1.f;
 
-		meshList[GEO_YELLOW_HEMISPHERE] = MeshBuilder::GenerateHemisphere("yellowHemisphere", Color(0.92157, 0.80783, 0.52157), 10, 20, 1);
-		meshList[GEO_YELLOW_HEMISPHERE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_YELLOW_HEMISPHERE]->material.kDiffuse.Set(1.f, 1.f, 1.f);
-		meshList[GEO_YELLOW_HEMISPHERE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_YELLOW_HEMISPHERE]->material.kShininess = 1.f;
+meshList[GEO_YELLOW_HEMISPHERE] = MeshBuilder::GenerateHemisphere("yellowHemisphere", Color(0.92157, 0.80783, 0.52157), 10, 20, 1);
+meshList[GEO_YELLOW_HEMISPHERE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
+meshList[GEO_YELLOW_HEMISPHERE]->material.kDiffuse.Set(1.f, 1.f, 1.f);
+meshList[GEO_YELLOW_HEMISPHERE]->material.kSpecular.Set(0.2f, 0.2f, 0.2f);
+meshList[GEO_YELLOW_HEMISPHERE]->material.kShininess = 1.f;
 
-		meshList[GEO_WHITE_HEMISPHERE] = MeshBuilder::GenerateHemisphere("whiteHemisphere", Color(1, 1, 1), 10, 20, 1);
-		meshList[GEO_WHITE_HEMISPHERE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_WHITE_HEMISPHERE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_WHITE_HEMISPHERE]->material.kSpecular.Set(1.f, 1.f, 1.f);
-		meshList[GEO_WHITE_HEMISPHERE]->material.kShininess = 1.f;
+meshList[GEO_WHITE_HEMISPHERE] = MeshBuilder::GenerateHemisphere("whiteHemisphere", Color(1, 1, 1), 10, 20, 1);
+meshList[GEO_WHITE_HEMISPHERE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
+meshList[GEO_WHITE_HEMISPHERE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+meshList[GEO_WHITE_HEMISPHERE]->material.kSpecular.Set(0.2f, 0.2f, 0.2f);
+meshList[GEO_WHITE_HEMISPHERE]->material.kShininess = 1.f;
 
-		meshList[GEO_BLUE_HEMISPHERE] = MeshBuilder::GenerateHemisphere("blueHemisphere", Color(0.44314, 0.74902, 0.67843), 10, 20, 1);
-		meshList[GEO_BLUE_HEMISPHERE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_BLUE_HEMISPHERE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_BLUE_HEMISPHERE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_BLUE_HEMISPHERE]->material.kShininess = 1.f;
+meshList[GEO_BLUE_HEMISPHERE] = MeshBuilder::GenerateHemisphere("blueHemisphere", Color(0.44314, 0.74902, 0.67843), 10, 20, 1);
+meshList[GEO_BLUE_HEMISPHERE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
+meshList[GEO_BLUE_HEMISPHERE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+meshList[GEO_BLUE_HEMISPHERE]->material.kSpecular.Set(0.2f, 0.2f, 0.2f);
+meshList[GEO_BLUE_HEMISPHERE]->material.kShininess = 1.f;
 
-		meshList[GEO_BLACK_HEMISPHERE] = MeshBuilder::GenerateHemisphere("blackHemisphere", Color(0, 0, 0), 10, 20, 1);
-		meshList[GEO_BLACK_HEMISPHERE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_BLACK_HEMISPHERE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_BLACK_HEMISPHERE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_BLACK_HEMISPHERE]->material.kShininess = 1.f;
+meshList[GEO_BLACK_HEMISPHERE] = MeshBuilder::GenerateHemisphere("blackHemisphere", Color(0, 0, 0), 10, 20, 1);
+meshList[GEO_BLACK_HEMISPHERE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
+meshList[GEO_BLACK_HEMISPHERE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+meshList[GEO_BLACK_HEMISPHERE]->material.kSpecular.Set(0.2f, 0.2f, 0.2f);
+meshList[GEO_BLACK_HEMISPHERE]->material.kShininess = 1.f;
 
-		meshList[GEO_RED_TORUS] = MeshBuilder::GenerateTorus2("redTorus", Color(0.79215, 0.38823, 0.34510), 20, 20, 2, 1);
-		meshList[GEO_RED_TORUS]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_RED_TORUS]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_RED_TORUS]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_RED_TORUS]->material.kShininess = 1.f;
+meshList[GEO_RED_TORUS] = MeshBuilder::GenerateTorus2("redTorus", Color(0.79215, 0.38823, 0.34510), 20, 20, 2, 1);
+meshList[GEO_RED_TORUS]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
+meshList[GEO_RED_TORUS]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+meshList[GEO_RED_TORUS]->material.kSpecular.Set(0.2f, 0.2f, 0.2f);
+meshList[GEO_RED_TORUS]->material.kShininess = 1.f;
 
-		meshList[GEO_BLACK_CUBE] = MeshBuilder::GenerateCube("BlackCube", Color(0, 0, 0), 1);
-		meshList[GEO_BLACK_CUBE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_BLACK_CUBE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_BLACK_CUBE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_BLACK_CUBE]->material.kShininess = 0.f;
+meshList[GEO_BLACK_CUBE] = MeshBuilder::GenerateCube("BlackCube", Color(0, 0, 0), 1);
+meshList[GEO_BLACK_CUBE]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
+meshList[GEO_BLACK_CUBE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+meshList[GEO_BLACK_CUBE]->material.kSpecular.Set(0.2f, 0.2f, 0.2f);
+meshList[GEO_BLACK_CUBE]->material.kShininess = 1.f;
 
-		meshList[GEO_L_CONNECTOR_TORUS] = MeshBuilder::GenerateTorus2("noseRing", Color(0.55686, 0.49019, 0.42353), 20, 20, 2, 1);
-		meshList[GEO_L_CONNECTOR_TORUS]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_L_CONNECTOR_TORUS]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_L_CONNECTOR_TORUS]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-		meshList[GEO_L_CONNECTOR_TORUS]->material.kShininess = 1.f;
+meshList[GEO_L_CONNECTOR_TORUS] = MeshBuilder::GenerateTorus2("noseRing", Color(0.55686, 0.49019, 0.42353), 20, 20, 2, 1);
+meshList[GEO_L_CONNECTOR_TORUS]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
+meshList[GEO_L_CONNECTOR_TORUS]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+meshList[GEO_L_CONNECTOR_TORUS]->material.kSpecular.Set(0.2f, 0.2f, 0.2f);
+meshList[GEO_L_CONNECTOR_TORUS]->material.kShininess = 1.f;
 
-		swayTemp = 0;
-		lanternAngle = 0;
+swayTemp = 0;
+lanternAngle = 0;
 
-		blinking = true;
-		eyeLidAngle = -120;
-		blinkTemp = 0;
-		blinkTemp1 = 0;
-		eyebrowY = 1.2;
+blinking = true;
+eyeLidAngle = -120;
+blinkTemp = 0;
+blinkTemp1 = 0;
+eyebrowY = 1.2;
 
-		bodyX = 0;
-		bodyY = 1.25;
-		bodyZ = -40;
+bodyX = 0;
+bodyY = 1.25;
+bodyZ = -40;
 
-		noseAngle = 100;
-		noseAngleX = 0;
+noseAngle = 100;
+noseAngleX = 0;
 
-		lLegAngle = 0;
+lLegAngle = 0;
 
-		rLegAngle = -5;
+rLegAngle = -5;
 
 
-		lArmAngle = 30;
-		rArmAngle = 30;
+lArmAngle = 30;
+rArmAngle = 30;
 	}
 
-
+	//Skybox + Image
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1), 1.f);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
 
@@ -373,22 +375,34 @@ void Assignment2::Init()
 
 
 
+
 	meshList[GEO_CAR1] = MeshBuilder::GenerateOBJMTL("taxi", "OBJ//taxi.obj", "OBJ//taxi.mtl");
 	
 	meshList[GEO_CAR2] = MeshBuilder::GenerateOBJMTL("van", "OBJ//van.obj", "OBJ//van.mtl");
 
 	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJMTL("apple", "OBJ//road_straight.obj", "OBJ//road_straight.mtl");
 
-	meshList[GEO_MODEL6] = MeshBuilder::GenerateOBJMTL("model6", "OBJ//medieval house demo.obj", "OBJ//medieval house demo.mtl");
+	meshList[GEO_BTREE] = MeshBuilder::GenerateOBJMTL("big tree", "OBJ//tree_large.obj", "OBJ//tree_large.mtl");
+
+	meshList[GEO_STREE] = MeshBuilder::GenerateOBJMTL("small tree", "OBJ//tree_small.obj", "OBJ//tree_small.mtl");
+
+	//meshList[GEO_MODEL6] = MeshBuilder::GenerateOBJMTL("model6", "OBJ//medieval house demo.obj", "OBJ//medieval house demo.mtl");
 	//meshList[GEO_MODEL6]->textureID = LoadTGA("Image//house2.tga");
 
-	//meshList[GEO_MODEL7] = MeshBuilder::GenerateOBJ("model7", "OBJ//bin.obj");
-	meshList[GEO_MODEL7] = MeshBuilder::GenerateOBJMTL("model7", "OBJ//bin.obj", "OBJ//bin.mtl");
-	//meshList[GEO_MODEL7]->textureID = LoadTGA("Image//Trashbin_Albedo.tga");
-	
-	meshList[GEO_MODEL8] = MeshBuilder::GenerateOBJMTL("model8", "OBJ//WoodenCabinObj.obj", "OBJ//WoodenCabinObj.mtl");
-	meshList[GEO_MODEL8]->textureID = LoadTGA("Image//WoodCabinDif.tga");
-	
+	meshList[GEO_BIN] = MeshBuilder::GenerateOBJ("bin", "OBJ//bin.obj");
+
+	meshList[GEO_LARGEBUILDINGB] = MeshBuilder::GenerateOBJMTL("large building b", "OBJ//large_buildingB.obj", "OBJ//large_buildingB.mtl");
+	meshList[GEO_LARGEBUILDINGC] = MeshBuilder::GenerateOBJMTL("large building c", "OBJ//large_buildingC.obj", "OBJ//large_buildingC.mtl");
+	meshList[GEO_LARGEBUILDINGD] = MeshBuilder::GenerateOBJMTL("large building d", "OBJ//large_buildingD.obj", "OBJ//large_buildingD.mtl");
+	meshList[GEO_LARGEBUILDINGE] = MeshBuilder::GenerateOBJMTL("large building e", "OBJ//large_buildingE.obj", "OBJ//large_buildingE.mtl");
+	meshList[GEO_LARGEBUILDINGF] = MeshBuilder::GenerateOBJMTL("large building f", "OBJ//large_buildingF.obj", "OBJ//large_buildingF.mtl");
+	meshList[GEO_LARGEBUILDINGG] = MeshBuilder::GenerateOBJMTL("large building g", "OBJ//large_buildingG.obj", "OBJ//large_buildingG.mtl");
+	meshList[GEO_SMALLBUILDINGE] = MeshBuilder::GenerateOBJMTL("small building e", "OBJ//small_buildingE.obj", "OBJ//small_buildingE.mtl");
+
+	meshList[GEO_UMBRELLA] = MeshBuilder::GenerateOBJMTL("umbrella", "OBJ//detail_umbrellaDetailed.obj", "OBJ//detail_umbrellaDetailed.mtl");
+	meshList[GEO_APPLE] = MeshBuilder::GenerateOBJMTL("apple", "OBJ//apple.obj", "OBJ//apple.mtl");
+
+
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 1), 10, 20);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
@@ -464,8 +478,8 @@ void Assignment2::Update(double dt)
 	if (Application::IsKeyPressed('P'))
 		light[0].position.y += (float)(LSPEED * dt);
 
-	if (timer < 10.f)
-		timer += 0.016667;
+	if (transporttimer < 10.f)
+		transporttimer += 0.016667;
 	
 	//Transport 10sec cd
 	if (Application::IsKeyPressed('E') && camera.position.z < -30 && camera.position.x < 10 && camera.position.x > -10)
@@ -475,20 +489,20 @@ void Assignment2::Update(double dt)
 			if (!inAnotherWorld)
 			{
 				inAnotherWorld = true;
-				timer = 0.f;
+				transporttimer = 0.f;
 				transportCD = true;
 			}
 			else
 			{
 				inAnotherWorld = false;
-				timer = 0.f;
+				transporttimer = 0.f;
 				transportCD = true;
 			}
 		}
 	}
 	
-	std::cout << timer << std::endl;
-	if (timer > 10.f && transportCD == true)
+	//std::cout << transporttimer << std::endl;
+	if (transporttimer > 10.f && transportCD == true)
 		transportCD = false;
 
 	/*static bool bButtonEState = false;
@@ -604,7 +618,7 @@ void Assignment2::Render()
 
 	modelStack.LoadIdentity();
 	
-	RenderMesh(meshList[GEO_AXES], false);
+	//RenderMesh(meshList[GEO_AXES], false);
 
 	modelStack.PushMatrix();
 	{
@@ -1036,68 +1050,227 @@ void Assignment2::Render()
 
 	if (!inAnotherWorld)
 	{
-		//taxi
-		modelStack.PushMatrix();
-		{
-			//scale, translate, rotate
-			modelStack.Translate(35, -5, 8);
-			modelStack.Rotate(90, 0, 1, 0);
-			modelStack.Scale(10, 10, 10);
-			RenderMesh(meshList[GEO_CAR1], bLightEnabled);
-		}
-		modelStack.PopMatrix();
-
-		//van
-		modelStack.PushMatrix();
-		{
-			//scale, translate, rotate
-			modelStack.Translate(-12, -5, -8);
-			modelStack.Rotate(90, 0, -1, 0);
-			modelStack.Scale(10, 10, 10);
-			RenderMesh(meshList[GEO_CAR2], bLightEnabled);
-		}
-		modelStack.PopMatrix();
-
 		//road
-		modelStack.PushMatrix();
 		{
-			//scale, translate, rotate
-			modelStack.Translate(0, -5, 0);
-			modelStack.Scale(500, 10, 40);
-			RenderMesh(meshList[GEO_ROAD], bLightEnabled);
+			//taxi
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(35, -5, -2);
+				modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Scale(10, 10, 10);
+				RenderMesh(meshList[GEO_CAR1], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+
+			//van
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(-12, -5, -18);
+				modelStack.Rotate(90, 0, -1, 0);
+				modelStack.Scale(10, 10, 10);
+				RenderMesh(meshList[GEO_CAR2], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+
+			//road
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(0, -5, -10);
+				modelStack.Scale(500, 10, 40);
+				RenderMesh(meshList[GEO_ROAD], bLightEnabled);
+			}
+			modelStack.PopMatrix();
 		}
-		modelStack.PopMatrix();
+		
+		//buildings
+		{
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(62, -5, 33);
+				modelStack.Rotate(90, 0, -1, 0);
+				modelStack.Scale(25, 25, 25);
+				RenderMesh(meshList[GEO_SMALLBUILDINGE], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(62, -5, 65);
+				modelStack.Rotate(90, 0, -1, 0);
+				modelStack.Scale(25, 25, 25);
+				RenderMesh(meshList[GEO_LARGEBUILDINGB], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(35, -5, 70);
+				modelStack.Rotate(180, 0, 1, 0);
+				modelStack.Scale(25, 25, 25);
+				RenderMesh(meshList[GEO_LARGEBUILDINGE], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(0, -5, 65);
+				modelStack.Rotate(180, 0, 1, 0);
+				modelStack.Scale(20, 20, 20);
+				RenderMesh(meshList[GEO_LARGEBUILDINGF], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(-35, -5, 70);
+				modelStack.Rotate(180, 0, 1, 0);
+				modelStack.Scale(25, 25, 25);
+				RenderMesh(meshList[GEO_LARGEBUILDINGE], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(-62, -5, 65);
+				modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Scale(25, 25, 25);
+				RenderMesh(meshList[GEO_LARGEBUILDINGB], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(-62, -5, 33);
+				modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Scale(25, 25, 25);
+				RenderMesh(meshList[GEO_SMALLBUILDINGE], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+		}
+
+		//Objects near buildings
+		{
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(45, -5, 45);
+				modelStack.Rotate(90, 0, -1, 0);
+				modelStack.Scale(25, 25, 25);
+				RenderMesh(meshList[GEO_UMBRELLA], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(43, -2, 43);
+				modelStack.Rotate(90, 0, -1, 0);
+				modelStack.Scale(5, 5, 5);
+				RenderMesh(meshList[GEO_APPLE], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+		}
+
+		//bins
+		{
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(-8, -4.8, 51);
+				modelStack.Scale(1, 1, 1);
+				RenderMesh(meshList[GEO_BIN], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(-12, -4.8, 51);
+				modelStack.Scale(1, 1, 1);
+				RenderMesh(meshList[GEO_BIN], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(-16, -4.8, 51);
+				modelStack.Scale(1, 1, 1);
+				RenderMesh(meshList[GEO_BIN], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(-4, -4.8, 51);
+				modelStack.Scale(1, 1, 1);
+				RenderMesh(meshList[GEO_BIN], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(-0, -4.8, 51);
+				modelStack.Scale(1, 1, 1);
+				RenderMesh(meshList[GEO_BIN], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(4, -4.8, 51);
+				modelStack.Scale(1, 1, 1);
+				RenderMesh(meshList[GEO_BIN], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(8, -4.8, 51);
+				modelStack.Scale(1, 1, 1);
+				RenderMesh(meshList[GEO_BIN], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(12, -4.8, 51);
+				modelStack.Scale(1, 1, 1);
+				RenderMesh(meshList[GEO_BIN], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(16, -4.8, 51);
+				modelStack.Scale(1, 1, 1);
+				RenderMesh(meshList[GEO_BIN], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+		}
+
+		//Park
+		{
+
+		}
 	}
 
-	//bin
-	modelStack.PushMatrix();
-	{
-		//scale, translate, rotate
-		modelStack.Translate(-0, -4.8, 51);
-		modelStack.Scale(1, 1, 1);
-		RenderMesh(meshList[GEO_MODEL7], bLightEnabled);
-	}
-	modelStack.PopMatrix();
-
-	//
-	modelStack.PushMatrix();
-	{
-		//scale, translate, rotate
-		modelStack.Translate(-0, -4.8, 51);
-		modelStack.Scale(1, 1, 1);
-		RenderMesh(meshList[GEO_MODEL6], bLightEnabled);
-	}
-	modelStack.PopMatrix();
-
-	//wood shack
-	//modelStack.PushMatrix();
-	//{
-	//	//scale, translate, rotate
-	//	modelStack.Translate(0, -0, 0);
-	//	modelStack.Scale(0.5, 0.5, 0.5);
-	//	RenderMesh(meshList[GEO_MODEL8], bLightEnabled);
-	//}
-	//modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	//scale, translate, rotate

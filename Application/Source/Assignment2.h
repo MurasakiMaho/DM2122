@@ -61,11 +61,23 @@ class Assignment2 : public Scene
 		GEO_CAR1,
 		GEO_CAR2,
 		GEO_ROAD,		
-		GEO_MODEL4,
-		GEO_MODEL5,
-		GEO_MODEL6,
-		GEO_MODEL7,
-		GEO_MODEL8,
+
+		GEO_BTREE,
+		GEO_STREE,
+		GEO_BIN,
+
+		GEO_LARGEBUILDINGB,
+		GEO_LARGEBUILDINGC,
+		GEO_LARGEBUILDINGD,
+		GEO_LARGEBUILDINGE,
+		GEO_LARGEBUILDINGF,
+		GEO_LARGEBUILDINGG,
+		GEO_SMALLBUILDINGE,
+
+		GEO_UMBRELLA,
+		GEO_APPLE,
+
+		GEO_WALL,
 
 		GEO_TEXT,
 		GEO_ONSCREENTEXT,
@@ -144,7 +156,7 @@ private:
 	float fps;
 
 	bool inAnotherWorld;
-	float timer;
+	float transporttimer;
 	bool transportCD;
 
 	Light light[2];

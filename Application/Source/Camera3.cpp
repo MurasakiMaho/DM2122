@@ -81,10 +81,6 @@ void Camera3::Update(double dt)
 			{
 				//position -= view * ZOOM_SPEED * static_cast<float>(dt);
 			}
-			else if ((position.x + 1) >= Boundaries || (position.x - 1) <= -Boundaries || (position.z + 1) >= Boundaries || (position.z - 1) <= -Boundaries)
-			{
-				//position -= view * ZOOM_SPEED * static_cast<float>(dt);
-			}
 			else
 			{
 				position += view * ZOOM_SPEED * static_cast<float>(dt);
