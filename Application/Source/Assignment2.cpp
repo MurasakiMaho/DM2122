@@ -86,10 +86,11 @@ void Assignment2::Init()
 	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID, "numLights");
 	glUseProgram(m_programID);
 	
-	light[0].type = Light::LIGHT_POINT;
+	//light[0].type = Light::LIGHT_POINT;
+	light[0].type = Light::LIGHT_DIRECTIONAL;
 	light[0].position.Set(0, 20, 0);
 	light[0].color.Set(1, 1, 1);
-	light[0].power = 2;
+	light[0].power = 0.5f;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
@@ -588,6 +589,11 @@ void Assignment2::Update(double dt)
 		hasWand = true;
 	else if (Application::IsKeyPressed('B'))
 		hasWand = false;
+
+	if (dinnerIsEaten)
+	{
+		camera.updateSpeed(30.f);
+	}
 
 	//Drippy
 	{
@@ -1110,6 +1116,7 @@ void Assignment2::Render()
 	modelStack.PopMatrix();
 	//Drippy
 
+	//Scene
 	if (!inAnotherWorld)
 	{
 		//road
@@ -1402,6 +1409,118 @@ void Assignment2::Render()
 			modelStack.Scale(250, 25, 1);
 			RenderMesh(meshList[GEO_FENCE], bLightEnabled);
 		}
+
+		//Dinner Text
+		if (camera.position.z < 42 && camera.position.z > 38 && camera.position.x < 50 && camera.position.x > 40 && onScreenTimer <= 5.f && onScreen)
+		{
+			modelStack.PushMatrix();
+			//scale, translate, rotate
+			modelStack.Translate(10, 0, 10);
+			RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "Someone is going hungry today...", Color(0.184, 0.184, 0.184), 4, 10, 20);
+			modelStack.PopMatrix();
+		}
+		//Wand Text
+		if (camera.position.z < 49 && camera.position.z > 45 && camera.position.x < -2 && camera.position.x > -6 && onScreen)
+		{
+			modelStack.PushMatrix();
+			//scale, translate, rotate
+			modelStack.Translate(10, 0, 10);
+			if (onScreenTimer <= 3.f)
+			{
+				RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "The bin is now empty...", Color(0.184, 0.184, 0.184), 4, 15, 20);
+			}
+			else if (onScreenTimer <= 8.f)
+			{
+				RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "Like your soul", Color(0.184, 0.184, 0.184), 4, 20, 20);
+			}
+			modelStack.PopMatrix();
+		}
+		//Drippy Text
+		if (camera.position.z < 20 && camera.position.z > 10 && camera.position.x < 10 && camera.position.x > -10 && onScreen)
+		{
+			if (hasWand)
+			{
+				if (onScreenTimer <= 5.f)
+				{
+					modelStack.PushMatrix();
+					//scale, translate, rotate
+					modelStack.Translate(10, 0, 10);
+					RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "Blimey! You got youer flippin wand!", Color(0.050, 0.353, 0.871), 4, 5, 20);
+					modelStack.PopMatrix();
+				}
+				else if (onScreenTimer <= 8.f)
+				{
+					modelStack.PushMatrix();
+					//scale, translate, rotate
+					modelStack.Translate(10, 0, 10);
+					RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "There's proper tidy, en't it?", Color(0.050, 0.353, 0.871), 4, 10, 20);
+					modelStack.PopMatrix();
+				}
+				else if (onScreenTimer <= 10.f)
+				{
+					modelStack.PushMatrix();
+					//scale, translate, rotate
+					modelStack.Translate(10, 0, 10);
+					RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "What are you waitin for?", Color(0.050, 0.353, 0.871), 4, 15, 20);
+					modelStack.PopMatrix();
+				}
+				else if (onScreenTimer <= 20.f)
+				{
+					modelStack.PushMatrix();
+					//scale, translate, rotate
+					modelStack.Translate(10, 0, 10);
+					RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "Press 'Q' to cast Gateway, ya bunting!", Color(0.050, 0.353, 0.871), 4, 5, 20);
+					modelStack.PopMatrix();
+				}
+
+			}
+			else
+			{
+				if (onScreenTimer <= 5.f)
+				{
+					modelStack.PushMatrix();
+					//scale, translate, rotate
+					modelStack.Translate(10, 0, 10);
+					RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "You forgot how use cast flippin Gateway?!", Color(0.050, 0.353, 0.871), 4, 0, 20);
+					modelStack.PopMatrix();
+				}
+				else if (onScreenTimer <= 10.f)
+				{
+					modelStack.PushMatrix();
+					//scale, translate, rotate
+					modelStack.Translate(10, 0, 10);
+					RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "You en't even have youer wand ya bunting!", Color(0.050, 0.353, 0.871), 4, 0, 20);
+					modelStack.PopMatrix();
+				}
+				else if (onScreenTimer <= 15.f)
+				{
+					modelStack.PushMatrix();
+					//scale, translate, rotate
+					modelStack.Translate(10, 0, 10);
+					RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "Find it then talk to me again, mun", Color(0.050, 0.353, 0.871), 4, 10, 20);
+					modelStack.PopMatrix();
+				}
+			}
+		}
+	}
+	else
+	{
+
+
+
+
+		//Drippy Text
+		if (camera.position.z < 20 && camera.position.z > 10 && camera.position.x < 10 && camera.position.x > -10 && onScreen)
+	{
+		if (onScreenTimer <= 5.f)
+		{
+			modelStack.PushMatrix();
+			//scale, translate, rotate
+			modelStack.Translate(10, 0, 10);
+			RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "This place is pretty tidy, en't it", Color(0.050, 0.353, 0.871), 4, 5, 20);
+			modelStack.PopMatrix();
+		}
+	}
 	}
 
 
@@ -1413,8 +1532,6 @@ void Assignment2::Render()
 	RenderText(meshList[GEO_TEXT], "DRIPPY", Color(0.050, 0.353, 0.871));
 	modelStack.PopMatrix();
 
-
-
 	if (interactable) 
 	{
 		modelStack.PushMatrix();
@@ -1424,109 +1541,6 @@ void Assignment2::Render()
 		modelStack.PopMatrix();
 	}
 
-	//Dinner Text
-	if (camera.position.z < 42 && camera.position.z > 38 && camera.position.x < 50 && camera.position.x > 40 && onScreenTimer <= 5.f && !inAnotherWorld && onScreen)
-	{
-		modelStack.PushMatrix();
-		//scale, translate, rotate
-		modelStack.Translate(10, 0, 10);
-		RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "Someone is going hungry today...", Color(0.184, 0.184, 0.184), 4, 10, 20);
-		modelStack.PopMatrix();
-	}
-	//Wand Text
-	if (camera.position.z < 49 && camera.position.z > 45 && camera.position.x < -2 && camera.position.x > -6 && !inAnotherWorld && onScreen)
-	{
-		modelStack.PushMatrix();
-		//scale, translate, rotate
-		modelStack.Translate(10, 0, 10);
-		if (onScreenTimer <= 3.f)
-		{
-			RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "The bin is now empty...", Color(0.184, 0.184, 0.184), 4, 15, 20);
-		}
-		else if (onScreenTimer <= 8.f)
-		{
-			RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "Like your soul", Color(0.184, 0.184, 0.184), 4, 20, 20);
-		}
-		modelStack.PopMatrix();
-	}
-	//Drippy Text
-	if (camera.position.z < 20 && camera.position.z > 10 && camera.position.x < 10 && camera.position.x > -10 && !inAnotherWorld && onScreen)
-	{
-		if (hasWand)
-		{
-			if (onScreenTimer <= 5.f)
-			{
-				modelStack.PushMatrix();
-				//scale, translate, rotate
-				modelStack.Translate(10, 0, 10);
-				RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "Blimey! You got youer flippin wand!", Color(0.050, 0.353, 0.871), 4, 5, 20);
-				modelStack.PopMatrix();
-			}
-			else if (onScreenTimer <= 8.f)
-			{
-				modelStack.PushMatrix();
-				//scale, translate, rotate
-				modelStack.Translate(10, 0, 10);
-				RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "There's proper tidy, en't it?", Color(0.050, 0.353, 0.871), 4, 10, 20);
-				modelStack.PopMatrix();
-			}
-			else if (onScreenTimer <= 10.f)
-			{
-				modelStack.PushMatrix();
-				//scale, translate, rotate
-				modelStack.Translate(10, 0, 10);
-				RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "What are you waitin for?", Color(0.050, 0.353, 0.871), 4, 15, 20);
-				modelStack.PopMatrix();
-			}
-			else if (onScreenTimer <= 20.f)
-			{
-				modelStack.PushMatrix();
-				//scale, translate, rotate
-				modelStack.Translate(10, 0, 10);
-				RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "Press 'Q' to cast Gateway, ya donkey!", Color(0.050, 0.353, 0.871), 4, 5, 20);
-				modelStack.PopMatrix();
-			}
-			
-		}
-		else
-		{
-			if (onScreenTimer <= 5.f)
-			{
-				modelStack.PushMatrix();
-				//scale, translate, rotate
-				modelStack.Translate(10, 0, 10);
-				RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "You forgot how use cast flippin Gateway?!", Color(0.050, 0.353, 0.871), 4, 0, 20);
-				modelStack.PopMatrix();
-			}
-			else if (onScreenTimer <= 10.f)
-			{
-				modelStack.PushMatrix();
-				//scale, translate, rotate
-				modelStack.Translate(10, 0, 10);
-				RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "You en't even have youer wand ya donkey!", Color(0.050, 0.353, 0.871), 4, 0, 20);
-				modelStack.PopMatrix();
-			}
-			else if (onScreenTimer <= 15.f)
-			{
-				modelStack.PushMatrix();
-				//scale, translate, rotate
-				modelStack.Translate(10, 0, 10);
-				RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "Find it then talk to me again, mun", Color(0.050, 0.353, 0.871), 4, 10, 20);
-				modelStack.PopMatrix();
-			}
-		}
-	}
-	else if (camera.position.z < 20 && camera.position.z > 10 && camera.position.x < 10 && camera.position.x > -10 && inAnotherWorld && onScreen)
-	{
-		if (onScreenTimer <= 5.f)
-		{
-			modelStack.PushMatrix();
-			//scale, translate, rotate
-			modelStack.Translate(10, 0, 10);
-			RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "This place is pretty tidy, en't it", Color(0.050, 0.353, 0.871), 4, 5, 20);
-			modelStack.PopMatrix();
-		}
-	}
 
 	
 

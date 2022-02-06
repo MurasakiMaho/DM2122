@@ -26,6 +26,7 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	this->up = defaultUp = right.Cross(view).Normalized();
 
 	inAnotherWorld = false;
+	speed = 20.f;
 }
 
 void Camera3::updateInAnotherWorld(bool newVal)
@@ -33,17 +34,20 @@ void Camera3::updateInAnotherWorld(bool newVal)
 	inAnotherWorld = newVal;
 }
 
+void Camera3::updateSpeed(float newVal)
+{
+	speed = newVal;
+}
+
 void Camera3::Update(double dt)
 {
-	static const float CAMERA_SPEED = 45.f;
-	static const float ZOOM_SPEED = 20.f;
+	static const float CAMERA_SPEED = 90.f;
+	float ZOOM_SPEED = speed;
 
 	
 
 	Vector3 view = (target - position).Normalized();
 	Vector3 right = view.Cross(up);
-
-	//position.y = 1;
 	
 	// a and d lil buggy
 	if (!inAnotherWorld)

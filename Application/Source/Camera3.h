@@ -8,6 +8,7 @@ class Camera3 : public Camera
 {
 private:
 	bool inAnotherWorld;
+	float speed;
 public:
 	Vector3 position;
 	Vector3 target;
@@ -21,6 +22,7 @@ public:
 	~Camera3();
 	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up);
 	void updateInAnotherWorld(bool newVal);
+	void updateSpeed(float newVal);
 	virtual void Update(double dt);
 	virtual void Reset();
 };
