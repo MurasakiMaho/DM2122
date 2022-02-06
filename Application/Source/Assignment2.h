@@ -83,6 +83,8 @@ class Assignment2 : public Scene
 		GEO_EMPTYDINNER,
 		GEO_PAPERBALL,
 
+		GEO_STICK,
+
 		GEO_WALL,
 
 		GEO_TEXT,
