@@ -144,7 +144,7 @@ void Assignment2::Init()
 	transportCD = false;
 
 	//Initialize camera settings
-	camera.Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 0, 25), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -319,7 +319,7 @@ eyebrowY = 1.2;
 
 bodyX = 0;
 bodyY = 1.25;
-bodyZ = -40;
+bodyZ = 10;
 
 noseAngle = 100;
 noseAngleX = 0;
@@ -398,10 +398,22 @@ rArmAngle = 30;
 	meshList[GEO_LARGEBUILDINGF] = MeshBuilder::GenerateOBJMTL("large building f", "OBJ//large_buildingF.obj", "OBJ//large_buildingF.mtl");
 	meshList[GEO_LARGEBUILDINGG] = MeshBuilder::GenerateOBJMTL("large building g", "OBJ//large_buildingG.obj", "OBJ//large_buildingG.mtl");
 	meshList[GEO_SMALLBUILDINGE] = MeshBuilder::GenerateOBJMTL("small building e", "OBJ//small_buildingE.obj", "OBJ//small_buildingE.mtl");
+	meshList[GEO_FENCE] = MeshBuilder::GenerateOBJMTL("fence", "OBJ//fence_wide.obj", "OBJ//fence_wide.mtl");
+
 
 	meshList[GEO_UMBRELLA] = MeshBuilder::GenerateOBJMTL("umbrella", "OBJ//detail_umbrellaDetailed.obj", "OBJ//detail_umbrellaDetailed.mtl");
 	meshList[GEO_APPLE] = MeshBuilder::GenerateOBJMTL("apple", "OBJ//apple.obj", "OBJ//apple.mtl");
+	meshList[GEO_REDWINE] = MeshBuilder::GenerateOBJMTL("red wine", "OBJ//wineRed.obj", "OBJ//wineRed.mtl");
+	meshList[GEO_WHITEWINE] = MeshBuilder::GenerateOBJMTL("white wine", "OBJ//wineWhite.obj", "OBJ//wineWhite.mtl");
+	meshList[GEO_DINNER] = MeshBuilder::GenerateOBJMTL("boxed dinner", "OBJ//styrofoamDinner.obj", "OBJ//styrofoamDinner.mtl");
+	meshList[GEO_EMPTYDINNER] = MeshBuilder::GenerateOBJMTL("empty dinner", "OBJ//styrofoam.obj", "OBJ//styrofoam.mtl");
+	meshList[GEO_PAPERBALL] = MeshBuilder::GenerateOBJ("paperball", "OBJ//paper_low.obj");
+	meshList[GEO_PAPERBALL]->textureID = LoadTGA("Image//paper_Base_Color.tga");
 
+	hasWand = true;
+	dinnerIsEaten = false;
+	interactable = false;
+	onScreenTimer = 0.f;
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 1), 10, 20);
 
@@ -410,6 +422,9 @@ rArmAngle = 30;
 
 	meshList[GEO_ONSCREENTEXT] = MeshBuilder::GenerateText("textonscreen", 16, 16);
 	meshList[GEO_ONSCREENTEXT]->textureID = LoadTGA("Image//comic_sans.tga");
+
+	meshList[GEO_INTERACTTEXT] = MeshBuilder::GenerateText("interact screen", 16, 16);
+	meshList[GEO_INTERACTTEXT]->textureID = LoadTGA("Image//comic_sans.tga");
 
 	meshList[GEO_FRAMERATE] = MeshBuilder::GenerateText("fps", 16, 16);
 	meshList[GEO_FRAMERATE]->textureID = LoadTGA("Image//GBA_FE.tga");
@@ -480,9 +495,50 @@ void Assignment2::Update(double dt)
 
 	if (transporttimer < 10.f)
 		transporttimer += 0.016667;
+
+	if (onScreenTimer < 20.f)
+		onScreenTimer += 0.016667;
+
+	if (!interactable)
+	{
+		onScreenTimer = 20.f;
+	}
+
+	if (camera.position.z < 20 && camera.position.z > 10 && camera.position.x < 10 && camera.position.x > -10) //Drippy
+	{
+		interactable = true;
+	}
+	else if (camera.position.z < 42 && camera.position.z > 38 && camera.position.x < 50 && camera.position.x > 40) //Dinner
+	{
+		interactable = true;
+	}
+	else
+	{
+		interactable = false;
+	}
+
+	//Drippy
+	if (Application::IsKeyPressed('E') && camera.position.z < 20 && camera.position.z > 10 && camera.position.x < 10 && camera.position.x > -10)
+	{
+		onScreen = true;
+		onScreenTimer = 0.f;
+	}
 	
-	//Transport 10sec cd
-	if (Application::IsKeyPressed('E') && camera.position.z < -30 && camera.position.x < 10 && camera.position.x > -10)
+	//Dinner
+	if (Application::IsKeyPressed('E') && camera.position.z < 42 && camera.position.z > 38 && camera.position.x < 50 && camera.position.x > 40)
+	{
+		onScreen = true;
+		onScreenTimer = 0.f;
+		dinnerIsEaten = true;
+	}
+
+	if (onScreen && onScreenTimer >= 20.0f)
+	{
+		onScreen = false;
+	}
+
+	//Transport 10sec cd --- Gateway
+	if (Application::IsKeyPressed('Q') && hasWand)
 	{
 		if (transportCD == false)
 		{
@@ -495,6 +551,7 @@ void Assignment2::Update(double dt)
 			else
 			{
 				inAnotherWorld = false;
+				camera.Init(Vector3(0, 0, 25), Vector3(0, 0, 0), Vector3(0, 1, 0));
 				transporttimer = 0.f;
 				transportCD = true;
 			}
@@ -505,20 +562,14 @@ void Assignment2::Update(double dt)
 	if (transporttimer > 10.f && transportCD == true)
 		transportCD = false;
 
-	/*static bool bButtonEState = false;
-	if (!bButtonEState && Application::IsKeyPressed('E') && camera.position.z < -40)
-	{
-		bButtonEState = true;
-		inAnotherWorld = !inAnotherWorld;
-	}
-	else if (bButtonEState && Application::IsKeyPressed('E'))
-	{
-		bButtonEState = false;
-	}*/
-
 	rotateAngle += (float)(10 * dt);
 
 	fps = 1.0f / dt;
+
+	if (Application::IsKeyPressed('V'))
+		hasWand = true;
+	else if (Application::IsKeyPressed('B'))
+		hasWand = false;
 
 	//Drippy
 	{
@@ -1173,15 +1224,48 @@ void Assignment2::Render()
 			modelStack.PushMatrix();
 			{
 				//scale, translate, rotate
+				modelStack.Translate(45, -2, 42);
+				modelStack.Rotate(90, 0, -1, 0);
+				modelStack.Scale(2, 2, 2);
+				if (!dinnerIsEaten)
+					RenderMesh(meshList[GEO_DINNER], bLightEnabled);
+				else
+					RenderMesh(meshList[GEO_EMPTYDINNER], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
 				modelStack.Translate(43, -2, 43);
 				modelStack.Rotate(90, 0, -1, 0);
-				modelStack.Scale(5, 5, 5);
+				modelStack.Scale(3, 3, 3);
 				RenderMesh(meshList[GEO_APPLE], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(-18, -4.8, 49);
+				modelStack.Rotate(90, 0, -1, 0);
+				modelStack.Scale(3, 3, 3);
+				RenderMesh(meshList[GEO_REDWINE], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(-20, -4.8, 51);
+				modelStack.Rotate(90, 1, 0, 1);
+				modelStack.Scale(3, 3, 3);
+				RenderMesh(meshList[GEO_WHITEWINE], bLightEnabled);
 			}
 			modelStack.PopMatrix();
 		}
 
-		//bins
+		//bins + add a stick in the commented bin
 		{
 			modelStack.PushMatrix();
 			{
@@ -1189,6 +1273,8 @@ void Assignment2::Render()
 				modelStack.Translate(-8, -4.8, 51);
 				modelStack.Scale(1, 1, 1);
 				RenderMesh(meshList[GEO_BIN], bLightEnabled);
+				modelStack.Translate(0, 1, 0);
+				RenderMesh(meshList[GEO_PAPERBALL], bLightEnabled);
 			}
 			modelStack.PopMatrix();
 
@@ -1198,6 +1284,8 @@ void Assignment2::Render()
 				modelStack.Translate(-12, -4.8, 51);
 				modelStack.Scale(1, 1, 1);
 				RenderMesh(meshList[GEO_BIN], bLightEnabled);
+				modelStack.Translate(0, 1, 0);
+				RenderMesh(meshList[GEO_PAPERBALL], bLightEnabled);
 			}
 			modelStack.PopMatrix();
 
@@ -1207,6 +1295,8 @@ void Assignment2::Render()
 				modelStack.Translate(-16, -4.8, 51);
 				modelStack.Scale(1, 1, 1);
 				RenderMesh(meshList[GEO_BIN], bLightEnabled);
+				modelStack.Translate(0, 1, 0);
+				RenderMesh(meshList[GEO_PAPERBALL], bLightEnabled);
 			}
 			modelStack.PopMatrix();
 
@@ -1216,6 +1306,8 @@ void Assignment2::Render()
 				modelStack.Translate(-4, -4.8, 51);
 				modelStack.Scale(1, 1, 1);
 				RenderMesh(meshList[GEO_BIN], bLightEnabled);
+				/*modelStack.Translate(0, 1, 0);
+				RenderMesh(meshList[GEO_PAPERBALL], bLightEnabled);*/
 			}
 			modelStack.PopMatrix();
 
@@ -1225,6 +1317,8 @@ void Assignment2::Render()
 				modelStack.Translate(-0, -4.8, 51);
 				modelStack.Scale(1, 1, 1);
 				RenderMesh(meshList[GEO_BIN], bLightEnabled);
+				modelStack.Translate(0, 1, 0);
+				RenderMesh(meshList[GEO_PAPERBALL], bLightEnabled);
 			}
 			modelStack.PopMatrix();
 
@@ -1234,6 +1328,8 @@ void Assignment2::Render()
 				modelStack.Translate(4, -4.8, 51);
 				modelStack.Scale(1, 1, 1);
 				RenderMesh(meshList[GEO_BIN], bLightEnabled);
+				modelStack.Translate(0, 1, 0);
+				RenderMesh(meshList[GEO_PAPERBALL], bLightEnabled);
 			}
 			modelStack.PopMatrix();
 
@@ -1243,6 +1339,8 @@ void Assignment2::Render()
 				modelStack.Translate(8, -4.8, 51);
 				modelStack.Scale(1, 1, 1);
 				RenderMesh(meshList[GEO_BIN], bLightEnabled);
+				modelStack.Translate(0, 1, 0);
+				RenderMesh(meshList[GEO_PAPERBALL], bLightEnabled);
 			}
 			modelStack.PopMatrix();
 
@@ -1252,6 +1350,8 @@ void Assignment2::Render()
 				modelStack.Translate(12, -4.8, 51);
 				modelStack.Scale(1, 1, 1);
 				RenderMesh(meshList[GEO_BIN], bLightEnabled);
+				modelStack.Translate(0, 1, 0);
+				RenderMesh(meshList[GEO_PAPERBALL], bLightEnabled);
 			}
 			modelStack.PopMatrix();
 
@@ -1261,28 +1361,128 @@ void Assignment2::Render()
 				modelStack.Translate(16, -4.8, 51);
 				modelStack.Scale(1, 1, 1);
 				RenderMesh(meshList[GEO_BIN], bLightEnabled);
+				modelStack.Translate(0, 1, 0);
+				RenderMesh(meshList[GEO_PAPERBALL], bLightEnabled);
 			}
 			modelStack.PopMatrix();
 		}
-
-		//Park
+	
+		//fence
+		modelStack.PushMatrix();
 		{
-
+			//scale, translate, rotate
+			modelStack.Translate(0, -5, -50);
+			modelStack.Rotate(0, 0, -1, 0);
+			modelStack.Scale(250, 25, 1);
+			RenderMesh(meshList[GEO_FENCE], bLightEnabled);
 		}
 	}
 
 
-	modelStack.PushMatrix();
-	//scale, translate, rotate
-	modelStack.Translate(10, 0, 10);
-	RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
-	modelStack.PopMatrix();
+	//modelStack.PushMatrix();
+	////scale, translate, rotate
+	//modelStack.Translate(10, 0, 10);
+	//RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
+	//modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	//scale, translate, rotate
-	modelStack.Translate(10, 0, 10);
-	RenderTextOnScreen(meshList[GEO_ONSCREENTEXT], "Hello World", Color(0, 1, 0), 4, 0, 0);
-	modelStack.PopMatrix();
+	if (interactable) 
+	{
+		modelStack.PushMatrix();
+		//scale, translate, rotate
+		modelStack.Translate(10, 0, 10);
+		RenderTextOnScreen(meshList[GEO_ONSCREENTEXT], "Press 'E' to Interact", Color(0, 1, 0), 4, 20, 10);
+		modelStack.PopMatrix();
+	}
+
+	//Dinner Text
+	if (camera.position.z < 42 && camera.position.z > 38 && camera.position.x < 50 && camera.position.x > 40 && onScreenTimer <= 5.f && !inAnotherWorld && onScreen)
+	{
+		modelStack.PushMatrix();
+		//scale, translate, rotate
+		modelStack.Translate(10, 0, 10);
+		RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "Someone is going hungry today...", Color(0, 1, 0), 4, 10, 20);
+		modelStack.PopMatrix();
+	}
+	//Drippy Text
+	if (camera.position.z < 20 && camera.position.z > 10 && camera.position.x < 10 && camera.position.x > -10 && !inAnotherWorld && onScreen)
+	{
+		if (hasWand)
+		{
+			if (onScreenTimer <= 5.f)
+			{
+				modelStack.PushMatrix();
+				//scale, translate, rotate
+				modelStack.Translate(10, 0, 10);
+				RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "Blimey! You got youer flippin wand!", Color(0, 1, 0), 4, 10, 20);
+				modelStack.PopMatrix();
+			}
+			else if (onScreenTimer <= 8.f)
+			{
+				modelStack.PushMatrix();
+				//scale, translate, rotate
+				modelStack.Translate(10, 0, 10);
+				RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "There's proper tidy, en't it?", Color(0, 1, 0), 4, 10, 20);
+				modelStack.PopMatrix();
+			}
+			else if (onScreenTimer <= 10.f)
+			{
+				modelStack.PushMatrix();
+				//scale, translate, rotate
+				modelStack.Translate(10, 0, 10);
+				RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "What are you waitin for?", Color(0, 1, 0), 4, 10, 20);
+				modelStack.PopMatrix();
+			}
+			else if (onScreenTimer <= 20.f)
+			{
+				modelStack.PushMatrix();
+				//scale, translate, rotate
+				modelStack.Translate(10, 0, 10);
+				RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "Press 'Q' to cast Gateway, ya donkey!", Color(0, 1, 0), 4, 5, 20);
+				modelStack.PopMatrix();
+			}
+			
+		}
+		else
+		{
+			if (onScreenTimer <= 5.f)
+			{
+				modelStack.PushMatrix();
+				//scale, translate, rotate
+				modelStack.Translate(10, 0, 10);
+				RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "You forgot how use cast flippin Gateway?!", Color(0, 1, 0), 4, 0, 20);
+				modelStack.PopMatrix();
+			}
+			else if (onScreenTimer <= 10.f)
+			{
+				modelStack.PushMatrix();
+				//scale, translate, rotate
+				modelStack.Translate(10, 0, 10);
+				RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "You en't even have youer wand ya donkey!", Color(0, 1, 0), 4, 0, 20);
+				modelStack.PopMatrix();
+			}
+			else if (onScreenTimer <= 15.f)
+			{
+				modelStack.PushMatrix();
+				//scale, translate, rotate
+				modelStack.Translate(10, 0, 10);
+				RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "Find it then talk to me again, mun", Color(0, 1, 0), 4, 10, 20);
+				modelStack.PopMatrix();
+			}
+		}
+	}
+	else if (camera.position.z < 20 && camera.position.z > 10 && camera.position.x < 10 && camera.position.x > -10 && inAnotherWorld && onScreen)
+	{
+		if (onScreenTimer <= 5.f)
+		{
+			modelStack.PushMatrix();
+			//scale, translate, rotate
+			modelStack.Translate(10, 0, 10);
+			RenderTextOnScreen(meshList[GEO_INTERACTTEXT], "This place is pretty tidy, en't it", Color(0, 1, 0), 4, 10, 20);
+			modelStack.PopMatrix();
+		}
+	}
+
+	
 
 	// Text on screen
 	std::ostringstream ss;
@@ -1290,7 +1490,7 @@ void Assignment2::Render()
 	ss << "FPS: " << fps;
 	modelStack.PushMatrix();
 	modelStack.Translate(10, 0, 10);
-	RenderTextOnScreen(meshList[GEO_FRAMERATE], ss.str(), Color(0, 1, 0), 4, 0, 4);
+	RenderTextOnScreen(meshList[GEO_FRAMERATE], ss.str(), Color(0, 0, 0), 3, 1, 56);
 	modelStack.PopMatrix();
 
 

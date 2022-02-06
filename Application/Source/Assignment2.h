@@ -73,14 +73,21 @@ class Assignment2 : public Scene
 		GEO_LARGEBUILDINGF,
 		GEO_LARGEBUILDINGG,
 		GEO_SMALLBUILDINGE,
+		GEO_FENCE,
 
 		GEO_UMBRELLA,
 		GEO_APPLE,
+		GEO_REDWINE,
+		GEO_WHITEWINE,
+		GEO_DINNER,
+		GEO_EMPTYDINNER,
+		GEO_PAPERBALL,
 
 		GEO_WALL,
 
 		GEO_TEXT,
 		GEO_ONSCREENTEXT,
+		GEO_INTERACTTEXT,
 		GEO_FRAMERATE,
 
 		NUM_GEOMETRY,
@@ -158,6 +165,13 @@ private:
 	bool inAnotherWorld;
 	float transporttimer;
 	bool transportCD;
+
+	float onScreenTimer;
+	bool onScreen;
+
+	bool hasWand;
+	bool dinnerIsEaten;
+	bool interactable;
 
 	Light light[2];
 	bool bLightEnabled;

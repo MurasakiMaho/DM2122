@@ -4,6 +4,7 @@
 #include "Assignment2.h"
 
 #define Boundaries 51
+#define RoadBoundaries 10
 #define newBoundaries 101
 
 Camera3::Camera3()
@@ -49,7 +50,7 @@ void Camera3::Update(double dt)
 	{
 		if (Application::IsKeyPressed('A'))
 		{
-			if ((position.x + 1) >= Boundaries || (position.x - 1) <= -Boundaries || (position.z + 1) >= Boundaries || (position.z - 1) <= -Boundaries)
+			if ((position.x + 1) >= Boundaries || (position.x - 1) <= -Boundaries || (position.z + 1) >= Boundaries || (position.z - 1) <= RoadBoundaries)
 			{
 				//position += right * ZOOM_SPEED * static_cast<float>(dt);
 				position += right * ZOOM_SPEED * static_cast<float>(dt);
@@ -63,7 +64,7 @@ void Camera3::Update(double dt)
 		}
 		if (Application::IsKeyPressed('D'))
 		{
-			if ((position.x + 1) >= Boundaries || (position.x - 1) <= -Boundaries || (position.z + 1) >= Boundaries || (position.z - 1) <= -Boundaries)
+			if ((position.x + 1) >= Boundaries || (position.x - 1) <= -Boundaries || (position.z + 1) >= Boundaries || (position.z - 1) <= RoadBoundaries)
 			{
 				//position -= right * ZOOM_SPEED * static_cast<float>(dt);
 				position -= right * ZOOM_SPEED * static_cast<float>(dt);
@@ -77,7 +78,7 @@ void Camera3::Update(double dt)
 		}
 		if (Application::IsKeyPressed('W'))
 		{
-			if ((position.x + 1) >= Boundaries || (position.x - 1) <= -Boundaries || (position.z + 1) >= Boundaries || (position.z - 1) <= -Boundaries)
+			if ((position.x + 1) >= Boundaries || (position.x - 1) <= -Boundaries || (position.z + 1) >= Boundaries || (position.z - 1) <= RoadBoundaries)
 			{
 				//position -= view * ZOOM_SPEED * static_cast<float>(dt);
 			}
@@ -95,7 +96,7 @@ void Camera3::Update(double dt)
 		}
 		if (Application::IsKeyPressed('S'))
 		{
-			if ((position.x + 0.1) >= Boundaries || (position.x - 0.1) <= -Boundaries || (position.z + 0.1) >= Boundaries || (position.z - 0.1) <= -Boundaries)
+			if ((position.x + 0.1) >= Boundaries || (position.x - 0.1) <= -Boundaries || (position.z + 0.1) >= Boundaries || (position.z - 0.1) <= RoadBoundaries)
 			{
 				//position += view * ZOOM_SPEED * static_cast<float>(dt);
 			}
