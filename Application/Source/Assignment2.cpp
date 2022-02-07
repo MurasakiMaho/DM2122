@@ -103,9 +103,9 @@ void Assignment2::Init()
 	lanternY = camera.position.y;
 	lanternZ = camera.position.z;
 
+	//Player Light
 	light[1].type = Light::LIGHT_POINT;
 	light[1].position.Set(lanternX, lanternY, lanternZ);
-	//light[1].color.Set(1, 0.77647, 0.36078);
 	light[1].color.Set(1, 1, 1);
 	light[1].power = 1;
 	light[1].kC = 1.f;
@@ -137,12 +137,6 @@ void Assignment2::Init()
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
 	glUniform1i(m_parameters[U_NUMLIGHTS], 2);
 
-	//variable to rotate geometry
-	rotateAngle = 0;
-
-	inAnotherWorld = false;
-	transporttimer = 0.f;
-	transportCD = false;
 
 	//Initialize camera settings
 	camera.Init(Vector3(0, 0, 25), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -371,24 +365,10 @@ rArmAngle = 30;
 	meshList[GEO_BOTTOM1] = MeshBuilder::GenerateQuad("bottom1", Color(1, 1, 1), 1.f);
 	meshList[GEO_BOTTOM1]->textureID = LoadTGA("Image//miramar_dn.tga");
 
-	meshList[GEO_IMAGE] = MeshBuilder::GenerateQuad("image", Color(1, 1, 1), 1.f);
-	meshList[GEO_IMAGE]->textureID = LoadTGA("Image//nyp.tga");
-
-
-
-
+	//Models in scene
 	meshList[GEO_CAR1] = MeshBuilder::GenerateOBJMTL("taxi", "OBJ//taxi.obj", "OBJ//taxi.mtl");
-	
 	meshList[GEO_CAR2] = MeshBuilder::GenerateOBJMTL("van", "OBJ//van.obj", "OBJ//van.mtl");
-
 	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJMTL("apple", "OBJ//road_straight.obj", "OBJ//road_straight.mtl");
-
-	meshList[GEO_BTREE] = MeshBuilder::GenerateOBJMTL("big tree", "OBJ//tree_large.obj", "OBJ//tree_large.mtl");
-
-	meshList[GEO_STREE] = MeshBuilder::GenerateOBJMTL("small tree", "OBJ//tree_small.obj", "OBJ//tree_small.mtl");
-
-	//meshList[GEO_MODEL6] = MeshBuilder::GenerateOBJMTL("model6", "OBJ//medieval house demo.obj", "OBJ//medieval house demo.mtl");
-	//meshList[GEO_MODEL6]->textureID = LoadTGA("Image//house2.tga");
 
 	meshList[GEO_BIN] = MeshBuilder::GenerateOBJ("bin", "OBJ//bin.obj");
 
@@ -430,12 +410,7 @@ rArmAngle = 30;
 	meshList[GEO_HALFTENT] = MeshBuilder::GenerateOBJMTL("half tent", "OBJ//tentHalf.obj", "OBJ//tentHalf.mtl");
 	meshList[GEO_WORKBENCH] = MeshBuilder::GenerateOBJMTL("workbench", "OBJ//workbench.obj", "OBJ//workbench.mtl");
 
-	hasWand = false;
-	dinnerIsEaten = false;
-	interactable = false;
-	onScreenTimer = 0.f;
-
-	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 1), 10, 20);
+	//meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 1), 10, 20);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//papyrus.tga");
@@ -446,6 +421,9 @@ rArmAngle = 30;
 	meshList[GEO_INTERACTTEXT] = MeshBuilder::GenerateText("interact screen", 16, 16);
 	meshList[GEO_INTERACTTEXT]->textureID = LoadTGA("Image//comic_sans.tga");
 
+	meshList[GEO_IMAGE] = MeshBuilder::GenerateText("image", 16, 16);
+	meshList[GEO_IMAGE]->textureID = LoadTGA("Image//transport.tga");
+
 	meshList[GEO_FRAMERATE] = MeshBuilder::GenerateText("fps", 16, 16);
 	meshList[GEO_FRAMERATE]->textureID = LoadTGA("Image//GBA_FE.tga");
 
@@ -455,6 +433,14 @@ rArmAngle = 30;
 		m_parameters[U_MATERIAL_SPECULAR],
 		m_parameters[U_MATERIAL_SHININESS]);
 
+	hasWand = false;
+	dinnerIsEaten = false;
+	interactable = false;
+	onScreenTimer = 0.f;
+
+	inAnotherWorld = false;
+	transporttimer = 0.f;
+	transportCD = false;
 
 	bLightEnabled = true;
 }
@@ -490,16 +476,6 @@ void Assignment2::Update(double dt)
 		bLightEnabled = false;
 	if (Application::IsKeyPressed('0'))
 		bLightEnabled = true;
-	/*static bool bButton9State = false;
-	if (!bButton9State && Application::IsKeyPressed('9'))
-	{
-		bButton9State = true;
-		bLightEnabled = !bLightEnabled;
-	}		
-	else if (bButton9State && Application::IsKeyPressed('9'))
-	{
-		bButton9State = false;
-	}*/
 	if (Application::IsKeyPressed('I'))
 		light[0].position.z -= (float)(LSPEED * dt);
 	if (Application::IsKeyPressed('K'))
@@ -513,17 +489,20 @@ void Assignment2::Update(double dt)
 	if (Application::IsKeyPressed('P'))
 		light[0].position.y += (float)(LSPEED * dt);
 
+	//Timers
 	if (transporttimer < 10.f)
 		transporttimer += 0.016667;
 
 	if (onScreenTimer < 20.f)
 		onScreenTimer += 0.016667;
 
+	//Reset onscreen text timer
 	if (!interactable)
 	{
 		onScreenTimer = 20.f;
 	}
 
+	//Interactable obj positions
 	if (camera.position.z < 20 && camera.position.z > 10 && camera.position.x < 10 && camera.position.x > -10) //Drippy
 	{
 		interactable = true;
@@ -564,9 +543,7 @@ void Assignment2::Update(double dt)
 		hasWand = true;
 	}
 
-	std::cout << onScreenTimer << std::endl;
-	//std::cout << camera.position.x << " " << camera.position.z << std::endl;
-
+	//Interactable Text enabler
 	if (onScreen && onScreenTimer >= 20.0f)
 	{
 		onScreen = false;
@@ -593,13 +570,12 @@ void Assignment2::Update(double dt)
 		}
 	}
 	
-	//std::cout << transporttimer << std::endl;
 	if (transporttimer > 10.f && transportCD == true)
 		transportCD = false;
 
-	rotateAngle += (float)(10 * dt);
-
 	fps = 1.0f / dt;
+
+
 
 	if (Application::IsKeyPressed('V'))
 		hasWand = true;
@@ -706,11 +682,12 @@ void Assignment2::Render()
 		camera.up.x, camera.up.y, camera.up.z);
 
 	RenderSkybox();
-
 	modelStack.LoadIdentity();
 	
+	//xyz axes
 	//RenderMesh(meshList[GEO_AXES], false);
 
+	//Directional Light ball
 	/*modelStack.PushMatrix();
 	{
 		modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
@@ -738,14 +715,14 @@ void Assignment2::Render()
 		modelStack.Translate(bodyX, bodyY, bodyZ);
 		modelStack.Rotate(0, 0, 0, 1);
 		modelStack.Scale(3.5, 3, 3.5);
-		RenderMesh(meshList[GEO_BLUE_HEMISPHERE], true);
+		RenderMesh(meshList[GEO_BLUE_HEMISPHERE], bLightEnabled);
 
 
 		modelStack.Scale(0.28571, 0.33333, 0.28571);
 		modelStack.Translate(0, 0, 0);
 		modelStack.Rotate(180, 0, 0, 1);
 		modelStack.Scale(3.5, 5, 3.5);
-		RenderMesh(meshList[GEO_BLUE_HEMISPHERE], true);
+		RenderMesh(meshList[GEO_BLUE_HEMISPHERE], bLightEnabled);
 
 		modelStack.Rotate(-180, 0, 0, 1);
 		//Head
@@ -755,7 +732,7 @@ void Assignment2::Render()
 			modelStack.Translate(0, 1, 0);
 			modelStack.Rotate(0, 0, 0, 1);
 			modelStack.Scale(3.5, 6, 3.5);
-			RenderMesh(meshList[GEO_YELLOW_HEMISPHERE], true);
+			RenderMesh(meshList[GEO_YELLOW_HEMISPHERE], bLightEnabled);
 
 			//Nose
 			modelStack.PushMatrix();
@@ -765,14 +742,14 @@ void Assignment2::Render()
 				modelStack.Rotate(noseAngle, 1, 0, 0);
 				modelStack.Rotate(noseAngleX, 0, 0, 1);
 				modelStack.Scale(1.5, 4, 1.5);
-				RenderMesh(meshList[GEO_YELLOW_SPHERE], true);
+				RenderMesh(meshList[GEO_YELLOW_SPHERE], bLightEnabled);
 
 				modelStack.PushMatrix();
 				{
 					modelStack.Rotate(0, 0, 0, 1);
 					modelStack.Translate(0, 1.1, 0);
 					modelStack.Scale(0.8, 1, 0.8);
-					RenderMesh(meshList[GEO_YELLOW_CONE], true);
+					RenderMesh(meshList[GEO_YELLOW_CONE], bLightEnabled);
 
 					//Lantern Connector
 					//Ring
@@ -783,7 +760,7 @@ void Assignment2::Render()
 						modelStack.Rotate(90, 1, 0, 0);
 						modelStack.Translate(0, 1.1, 0.5);
 						modelStack.Scale(0.15, 0.15, 0.15);
-						RenderMesh(meshList[GEO_L_CONNECTOR_TORUS], true);
+						RenderMesh(meshList[GEO_L_CONNECTOR_TORUS], bLightEnabled);
 
 						//Lantern
 						modelStack.PushMatrix();
@@ -793,7 +770,7 @@ void Assignment2::Render()
 							modelStack.Rotate(lanternAngle, 1, 0, 0);
 							modelStack.Translate(0, 0, 0.25);
 							modelStack.Scale(0.1, 0.1, 0.1);
-							RenderMesh(meshList[GEO_RED_TORUS], true);
+							RenderMesh(meshList[GEO_RED_TORUS], bLightEnabled);
 							modelStack.Translate(0, 0, -2.5);
 							modelStack.PushMatrix();
 							{
@@ -801,7 +778,7 @@ void Assignment2::Render()
 								modelStack.Rotate(90, 1, 0, 0);
 								modelStack.Translate(0, 0.5, 0);
 								modelStack.Scale(0.1, 0.1, 0.1);
-								RenderMesh(meshList[GEO_RED_TORUS], true);
+								RenderMesh(meshList[GEO_RED_TORUS], bLightEnabled);
 
 							}
 							modelStack.PopMatrix();
@@ -812,7 +789,7 @@ void Assignment2::Render()
 								modelStack.Rotate(45, 0, 1, 0);
 								modelStack.Translate(0, -1.25, 0);
 								modelStack.Scale(1.5, 1.5, 1.5);
-								RenderMesh(meshList[GEO_RED_PYRAMID], true);
+								RenderMesh(meshList[GEO_RED_PYRAMID], bLightEnabled);
 							}
 							modelStack.PopMatrix();
 							modelStack.PushMatrix();
@@ -833,7 +810,7 @@ void Assignment2::Render()
 								modelStack.Rotate(0, 0, 1, 0);
 								modelStack.Translate(0.8, -2.7, 0.8);
 								modelStack.Scale(0.025, 0.15, 0.025);
-								RenderMesh(meshList[GEO_RED_CYLINDER], true);
+								RenderMesh(meshList[GEO_RED_CYLINDER], bLightEnabled);
 							}
 							modelStack.PopMatrix();
 							modelStack.PushMatrix();
@@ -843,7 +820,7 @@ void Assignment2::Render()
 								modelStack.Rotate(0, 0, 1, 0);
 								modelStack.Translate(-0.8, -2.7, 0.8);
 								modelStack.Scale(0.025, 0.15, 0.025);
-								RenderMesh(meshList[GEO_RED_CYLINDER], true);
+								RenderMesh(meshList[GEO_RED_CYLINDER], bLightEnabled);
 							}
 							modelStack.PopMatrix();
 							modelStack.PushMatrix();
@@ -853,7 +830,7 @@ void Assignment2::Render()
 								modelStack.Rotate(0, 0, 1, 0);
 								modelStack.Translate(-0.8, -2.7, -0.8);
 								modelStack.Scale(0.025, 0.15, 0.025);
-								RenderMesh(meshList[GEO_RED_CYLINDER], true);
+								RenderMesh(meshList[GEO_RED_CYLINDER], bLightEnabled);
 							}
 							modelStack.PopMatrix();
 							modelStack.PushMatrix();
@@ -863,7 +840,7 @@ void Assignment2::Render()
 								modelStack.Rotate(0, 0, 1, 0);
 								modelStack.Translate(0.8, -2.7, -0.8);
 								modelStack.Scale(0.025, 0.15, 0.025);
-								RenderMesh(meshList[GEO_RED_CYLINDER], true);
+								RenderMesh(meshList[GEO_RED_CYLINDER], bLightEnabled);
 							}
 							modelStack.PopMatrix();
 							//Pillars
@@ -876,7 +853,7 @@ void Assignment2::Render()
 								modelStack.Rotate(0, 0, 1, 0);
 								modelStack.Translate(0, -3.5, 0);
 								modelStack.Scale(2, 0.35, 2);
-								RenderMesh(meshList[GEO_RED_CUBE], true);
+								RenderMesh(meshList[GEO_RED_CUBE], bLightEnabled);
 							}
 							modelStack.PopMatrix();
 							//Bottom
@@ -902,7 +879,7 @@ void Assignment2::Render()
 					modelStack.Rotate(45, 0, 0, 1);
 					modelStack.Translate(2, 4, 1);
 					modelStack.Scale(1, 1, 1);
-					RenderMesh(meshList[GEO_WHITE_HEMISPHERE], true);
+					RenderMesh(meshList[GEO_WHITE_HEMISPHERE], bLightEnabled);
 
 					//Pupil
 					modelStack.PushMatrix();
@@ -910,7 +887,7 @@ void Assignment2::Render()
 						modelStack.Rotate(45, 1, 0, 0);
 						modelStack.Translate(0, 0.6, 0);
 						modelStack.Scale(0.5, 0.5, 0.5);
-						RenderMesh(meshList[GEO_BLACK_HEMISPHERE], true);
+						RenderMesh(meshList[GEO_BLACK_HEMISPHERE], bLightEnabled);
 					}
 					modelStack.PopMatrix();
 					//Pupil
@@ -924,7 +901,7 @@ void Assignment2::Render()
 						modelStack.Rotate(eyeLidAngle, 1, 0, 0);
 						//modelStack.Translate(1, 4, 2);
 						modelStack.Scale(1.15, 1.15, 1.15);
-						RenderMesh(meshList[GEO_YELLOW_HEMISPHERE], true);
+						RenderMesh(meshList[GEO_YELLOW_HEMISPHERE], bLightEnabled);
 					}
 					modelStack.PopMatrix();
 					//Eyelid
@@ -940,7 +917,7 @@ void Assignment2::Render()
 					modelStack.Rotate(-45, 0, 0, 1);
 					modelStack.Translate(-2, 4, 1);
 					modelStack.Scale(1, 1, 1);
-					RenderMesh(meshList[GEO_WHITE_HEMISPHERE], true);
+					RenderMesh(meshList[GEO_WHITE_HEMISPHERE], bLightEnabled);
 
 					//Pupil
 					modelStack.PushMatrix();
@@ -949,7 +926,7 @@ void Assignment2::Render()
 						modelStack.Rotate(45, 45, 0, 1);
 						modelStack.Translate(0, 0.6, 0);
 						modelStack.Scale(0.5, 0.5, 0.5);
-						RenderMesh(meshList[GEO_BLACK_HEMISPHERE], true);
+						RenderMesh(meshList[GEO_BLACK_HEMISPHERE], bLightEnabled);
 					}
 					modelStack.PopMatrix();
 					//Pupil
@@ -963,7 +940,7 @@ void Assignment2::Render()
 						modelStack.Rotate(eyeLidAngle, 1, 0, 0);
 						//modelStack.Translate(1, 4, 2);
 						modelStack.Scale(1.15, 1.15, 1.15);
-						RenderMesh(meshList[GEO_YELLOW_HEMISPHERE], true);
+						RenderMesh(meshList[GEO_YELLOW_HEMISPHERE], bLightEnabled);
 					}
 					modelStack.PopMatrix();
 					//Eyelid
@@ -988,7 +965,7 @@ void Assignment2::Render()
 				modelStack.Rotate(lArmAngle, 0, 0, 1);
 				modelStack.Translate(2.8, -2.8, 0);
 				modelStack.Scale(0.2, 1, 0.2);
-				RenderMesh(meshList[GEO_YELLOW_SPHERE], true);
+				RenderMesh(meshList[GEO_YELLOW_SPHERE], bLightEnabled);
 			}
 			modelStack.PopMatrix();
 			//Left
@@ -999,7 +976,7 @@ void Assignment2::Render()
 				modelStack.Rotate(rArmAngle, 0, 0, -1);
 				modelStack.Translate(-2.8, -2.8, 0);
 				modelStack.Scale(0.2, 1, 0.2);
-				RenderMesh(meshList[GEO_YELLOW_SPHERE], true);
+				RenderMesh(meshList[GEO_YELLOW_SPHERE], bLightEnabled);
 			}
 			modelStack.PopMatrix();
 			//Right
@@ -1017,7 +994,7 @@ void Assignment2::Render()
 				modelStack.Rotate(rLegAngle, 1, 0, 0);
 				modelStack.Translate(-1, -4.5, 0);
 				modelStack.Scale(0.2, 1, 0.2);
-				RenderMesh(meshList[GEO_LEG_SPHERE], true);
+				RenderMesh(meshList[GEO_LEG_SPHERE], bLightEnabled);
 
 				//Foot
 				modelStack.PushMatrix();
@@ -1028,7 +1005,7 @@ void Assignment2::Render()
 
 					modelStack.Scale(0.2, 1, 0.2);
 					modelStack.Scale(0.8, 0.5, 0.8);
-					RenderMesh(meshList[GEO_LEG_SPHERE], true);
+					RenderMesh(meshList[GEO_LEG_SPHERE], bLightEnabled);
 				}
 				modelStack.PopMatrix();
 				//Foot
@@ -1042,7 +1019,7 @@ void Assignment2::Render()
 				modelStack.Rotate(lLegAngle, 1, 0, 0);
 				modelStack.Translate(1, -4.5, 0);
 				modelStack.Scale(0.2, 1, 0.2);
-				RenderMesh(meshList[GEO_LEG_SPHERE], true);
+				RenderMesh(meshList[GEO_LEG_SPHERE], bLightEnabled);
 
 				//Foot
 				modelStack.PushMatrix();
@@ -1053,7 +1030,7 @@ void Assignment2::Render()
 
 					modelStack.Scale(0.2, 1, 0.2);
 					modelStack.Scale(0.8, 0.5, 0.8);
-					RenderMesh(meshList[GEO_LEG_SPHERE], true);
+					RenderMesh(meshList[GEO_LEG_SPHERE], bLightEnabled);
 				}
 				modelStack.PopMatrix();
 				//Foot
@@ -1075,7 +1052,7 @@ void Assignment2::Render()
 				modelStack.Rotate(0, 1, 0, 0);
 				modelStack.Scale(0.5, 0.025, 0.04);
 
-				RenderMesh(meshList[GEO_BLACK_CUBE], true);
+				RenderMesh(meshList[GEO_BLACK_CUBE], bLightEnabled);
 			}
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
@@ -1086,7 +1063,7 @@ void Assignment2::Render()
 				modelStack.Rotate(25, 1, 0, 0);
 				modelStack.Scale(0.25, 0.025, 0.05);
 
-				RenderMesh(meshList[GEO_BLACK_CUBE], true);
+				RenderMesh(meshList[GEO_BLACK_CUBE], bLightEnabled);
 			}
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
@@ -1097,7 +1074,7 @@ void Assignment2::Render()
 				modelStack.Rotate(25, 1, 0, 0);
 				modelStack.Scale(0.25, 0.025, 0.05);
 
-				RenderMesh(meshList[GEO_BLACK_CUBE], true);
+				RenderMesh(meshList[GEO_BLACK_CUBE], bLightEnabled);
 			}
 			modelStack.PopMatrix();
 			//Mouth
@@ -1110,7 +1087,7 @@ void Assignment2::Render()
 				modelStack.Rotate(40, 0, 1, 0);
 				modelStack.Scale(0.25, 0.0125, 0.025);
 
-				RenderMesh(meshList[GEO_BLACK_CUBE], true);
+				RenderMesh(meshList[GEO_BLACK_CUBE], bLightEnabled);
 			}
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
@@ -1120,7 +1097,7 @@ void Assignment2::Render()
 				modelStack.Rotate(40, 0, -1, 0);
 				modelStack.Scale(0.25, 0.0125, 0.025);
 
-				RenderMesh(meshList[GEO_BLACK_CUBE], true);
+				RenderMesh(meshList[GEO_BLACK_CUBE], bLightEnabled);
 			}
 			modelStack.PopMatrix();
 			//EyeBrows
@@ -1243,14 +1220,6 @@ void Assignment2::Render()
 			modelStack.PopMatrix();
 		}
 
-		/*modelStack.PushMatrix();
-		{
-			modelStack.Translate(0, 1, 25);
-			modelStack.Rotate(180, 0, -1, 0);
-			modelStack.Scale(10, 10, 10);
-			RenderMesh(meshList[GEO_STICK], true);
-		}
-		modelStack.PopMatrix();*/
 		//Objects near buildings
 		{
 			modelStack.PushMatrix();
@@ -1355,7 +1324,7 @@ void Assignment2::Render()
 					modelStack.Rotate(180, 0, -1, 0);
 					modelStack.Rotate(40, 0, 0, -1);
 					modelStack.Scale(10, 10, 10);
-					RenderMesh(meshList[GEO_STICK], true);
+					RenderMesh(meshList[GEO_STICK], bLightEnabled);
 				}
 			}
 			modelStack.PopMatrix();
@@ -1518,6 +1487,15 @@ void Assignment2::Render()
 				}
 			}
 		}
+
+		if (transporttimer <= 2.f && transportCD == true)
+		{
+			modelStack.PushMatrix();
+			//scale, translate, rotate
+			modelStack.Translate(10, 0, 10);
+			RenderTextOnScreen(meshList[GEO_IMAGE], " ", Color(1, 1, 1), 100, 0, 0);
+			modelStack.PopMatrix();
+		}
 	}
 	else
 	{
@@ -1574,6 +1552,15 @@ void Assignment2::Render()
 			}
 			//South
 			{
+				modelStack.PushMatrix();
+				{
+					//scale, translate, rotate
+					modelStack.Translate(0, -5, 45);
+					modelStack.Rotate(114.f, 0, -1, 0);
+					modelStack.Scale(10, 10, 10);
+					RenderMesh(meshList[GEO_FFENCE], bLightEnabled);
+				}
+				modelStack.PopMatrix();
 				modelStack.PushMatrix();
 				{
 					//scale, translate, rotate
@@ -1845,6 +1832,15 @@ void Assignment2::Render()
 			modelStack.PopMatrix();
 		}
 	}
+
+		if (transporttimer <= 2.f)
+		{
+			modelStack.PushMatrix();
+			//scale, translate, rotate
+			modelStack.Translate(10, 0, 10);
+			RenderTextOnScreen(meshList[GEO_IMAGE], " ", Color(1, 1, 1), 100, 0, 0);
+			modelStack.PopMatrix();
+		}
 	}
 
 

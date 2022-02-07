@@ -61,9 +61,6 @@ class Assignment2 : public Scene
 		GEO_CAR1,
 		GEO_CAR2,
 		GEO_ROAD,		
-
-		GEO_BTREE,
-		GEO_STREE,
 		GEO_BIN,
 
 		GEO_LARGEBUILDINGB,
@@ -101,8 +98,6 @@ class Assignment2 : public Scene
 		GEO_TENT,
 		GEO_HALFTENT,
 		GEO_WORKBENCH,
-
-		GEO_WALL,
 
 		GEO_TEXT,
 		GEO_ONSCREENTEXT,
@@ -178,7 +173,6 @@ private:
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
 
-	float rotateAngle;
 	float fps;
 
 	bool inAnotherWorld;
