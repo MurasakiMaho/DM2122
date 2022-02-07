@@ -414,6 +414,22 @@ rArmAngle = 30;
 	meshList[GEO_STICK] = MeshBuilder::GenerateOBJMTL("stick", "OBJ//stick.obj", "OBJ//stick.mtl");
 	meshList[GEO_STICK]->textureID = LoadTGA("Image//stick.tga");
 
+	meshList[GEO_BED] = MeshBuilder::GenerateOBJMTL("bed", "OBJ//bedroll.obj", "OBJ//bedroll.mtl");
+	meshList[GEO_PACKEDBED] = MeshBuilder::GenerateOBJMTL("packed bed", "OBJ//bedrollPacked.obj", "OBJ//bedrollPacked.mtl");
+	meshList[GEO_FLOOR] = MeshBuilder::GenerateOBJMTL("floor", "OBJ//floor.obj", "OBJ//floor.mtl");
+	meshList[GEO_CAMPFIRE] = MeshBuilder::GenerateOBJMTL("campfire", "OBJ//campfire.obj", "OBJ//campfire.mtl");
+	meshList[GEO_CHEST] = MeshBuilder::GenerateOBJMTL("chest", "OBJ//chest.obj", "OBJ//chest.mtl");
+	meshList[GEO_FFENCE] = MeshBuilder::GenerateOBJMTL("better fence", "OBJ//fenceFortified.obj", "OBJ//fenceFortified.mtl");
+
+	meshList[GEO_ROCK1] = MeshBuilder::GenerateOBJMTL("rock1", "OBJ//rockA.obj", "OBJ//rockA.mtl");
+	meshList[GEO_ROCK2] = MeshBuilder::GenerateOBJMTL("rock2", "OBJ//rockB.obj", "OBJ//rockB.mtl");
+	meshList[GEO_ROCK3] = MeshBuilder::GenerateOBJMTL("rock3", "OBJ//rockC.obj", "OBJ//rockC.mtl");
+	meshList[GEO_ROCKFLAT] = MeshBuilder::GenerateOBJMTL("rock4", "OBJ//rockFlat.obj", "OBJ//rockFlat.mtl");
+
+	meshList[GEO_TENT] = MeshBuilder::GenerateOBJMTL("tent", "OBJ//tentClosed.obj", "OBJ//tentClosed.mtl");
+	meshList[GEO_HALFTENT] = MeshBuilder::GenerateOBJMTL("half tent", "OBJ//tentHalf.obj", "OBJ//tentHalf.mtl");
+	meshList[GEO_WORKBENCH] = MeshBuilder::GenerateOBJMTL("workbench", "OBJ//workbench.obj", "OBJ//workbench.mtl");
+
 	hasWand = false;
 	dinnerIsEaten = false;
 	interactable = false;
@@ -1505,9 +1521,301 @@ void Assignment2::Render()
 	}
 	else
 	{
+		//fence
+		{
+			modelStack.LoadIdentity();
+			//North
+			{
+				modelStack.PushMatrix();
+				{
+					//scale, translate, rotate
+					modelStack.Translate(0, -5, -45);
+					modelStack.Rotate(90, 0, 1, 0);
+					modelStack.Scale(10, 10, 10);
+					RenderMesh(meshList[GEO_FFENCE], bLightEnabled);
+				}
+				modelStack.PopMatrix();
+				modelStack.PushMatrix();
+				{
+					//scale, translate, rotate
+					modelStack.Translate(20, -5, -45);
+					modelStack.Rotate(90, 0, 1, 0);
+					modelStack.Scale(10, 10, 10);
+					RenderMesh(meshList[GEO_FFENCE], bLightEnabled);
+				}
+				modelStack.PopMatrix();
+				modelStack.PushMatrix();
+				{
+					//scale, translate, rotate
+					modelStack.Translate(-20, -5, -45);
+					modelStack.Rotate(90, 0, 1, 0);
+					modelStack.Scale(10, 10, 10);
+					RenderMesh(meshList[GEO_FFENCE], bLightEnabled);
+				}
+				modelStack.PopMatrix();
+				modelStack.PushMatrix();
+				{
+					//scale, translate, rotate
+					modelStack.Translate(40, -5, -45);
+					modelStack.Rotate(90, 0, 1, 0);
+					modelStack.Scale(10, 10, 10);
+					RenderMesh(meshList[GEO_FFENCE], bLightEnabled);
+				}
+				modelStack.PopMatrix();
+				modelStack.PushMatrix();
+				{
+					//scale, translate, rotate
+					modelStack.Translate(-40, -5, -45);
+					modelStack.Rotate(90, 0, 1, 0);
+					modelStack.Scale(10, 10, 10);
+					RenderMesh(meshList[GEO_FFENCE], bLightEnabled);
+				}
+				modelStack.PopMatrix();
+			}
+			//South
+			{
+				modelStack.PushMatrix();
+				{
+					//scale, translate, rotate
+					modelStack.Translate(20, -5, 45);
+					modelStack.Rotate(90, 0, -1, 0);
+					modelStack.Scale(10, 10, 10);
+					RenderMesh(meshList[GEO_FFENCE], bLightEnabled);
+				}
+				modelStack.PopMatrix();
+				modelStack.PushMatrix();
+				{
+					//scale, translate, rotate
+					modelStack.Translate(-20, -5, 45);
+					modelStack.Rotate(90, 0, -1, 0);
+					modelStack.Scale(10, 10, 10);
+					RenderMesh(meshList[GEO_FFENCE], bLightEnabled);
+				}
+				modelStack.PopMatrix();
+				modelStack.PushMatrix();
+				{
+					//scale, translate, rotate
+					modelStack.Translate(40, -5, 45);
+					modelStack.Rotate(90, 0, -1, 0);
+					modelStack.Scale(10, 10, 10);
+					RenderMesh(meshList[GEO_FFENCE], bLightEnabled);
+				}
+				modelStack.PopMatrix();
+				modelStack.PushMatrix();
+				{
+					//scale, translate, rotate
+					modelStack.Translate(-40, -5, 45);
+					modelStack.Rotate(90, 0, -1, 0);
+					modelStack.Scale(10, 10, 10);
+					RenderMesh(meshList[GEO_FFENCE], bLightEnabled);
+				}
+				modelStack.PopMatrix();
+			}
+			//East
+			{
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(45, -5, -43);
+				//modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Scale(10, 10, 12);
+				RenderMesh(meshList[GEO_FFENCE], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(45, -5, -20);
+				//modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Scale(10, 10, 10);
+				RenderMesh(meshList[GEO_FFENCE], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(45, -5, -0);
+				//modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Scale(10, 10, 12);
+				RenderMesh(meshList[GEO_FFENCE], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(45, -5, 20);
+				//modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Scale(10, 10, 12);
+				RenderMesh(meshList[GEO_FFENCE], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+			modelStack.PushMatrix();
+			{
+				//scale, translate, rotate
+				modelStack.Translate(45, -5, 40);
+				//modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Scale(10, 10, 12);
+				RenderMesh(meshList[GEO_FFENCE], bLightEnabled);
+			}
+			modelStack.PopMatrix();
+			}
+			//West
+			{
+				modelStack.PushMatrix();
+				{
+					//scale, translate, rotate
+					modelStack.Translate(-45, -5, -43);
+					modelStack.Rotate(180, 0, 1, 0);
+					modelStack.Scale(10, 10, 12);
+					RenderMesh(meshList[GEO_FFENCE], bLightEnabled);
+				}
+				modelStack.PopMatrix();
+				modelStack.PushMatrix();
+				{
+					//scale, translate, rotate
+					modelStack.Translate(-45, -5, -20);
+					modelStack.Rotate(180, 0, 1, 0);
+					modelStack.Scale(10, 10, 10);
+					RenderMesh(meshList[GEO_FFENCE], bLightEnabled);
+				}
+				modelStack.PopMatrix();
+				modelStack.PushMatrix();
+				{
+					//scale, translate, rotate
+					modelStack.Translate(-45, -5, -0);
+					modelStack.Rotate(180, 0, 1, 0);
+					modelStack.Scale(10, 10, 12);
+					RenderMesh(meshList[GEO_FFENCE], bLightEnabled);
+				}
+				modelStack.PopMatrix();
+				modelStack.PushMatrix();
+				{
+					//scale, translate, rotate
+					modelStack.Translate(-45, -5, 20);
+					modelStack.Rotate(180, 0, 1, 0);
+					modelStack.Scale(10, 10, 12);
+					RenderMesh(meshList[GEO_FFENCE], bLightEnabled);
+				}
+				modelStack.PopMatrix();
+				modelStack.PushMatrix();
+				{
+					//scale, translate, rotate
+					modelStack.Translate(-45, -5, 40);
+					modelStack.Rotate(180, 0, 1, 0);
+					modelStack.Scale(10, 10, 12);
+					RenderMesh(meshList[GEO_FFENCE], bLightEnabled);
+				}
+				modelStack.PopMatrix();
+			}
+		}
 
+		//Tents
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(10, -5, 0);
+			modelStack.Rotate(0, 1, 0, 0);
+			modelStack.Scale(5, 5, 5);
+			RenderMesh(meshList[GEO_TENT], bLightEnabled);
+			RenderMesh(meshList[GEO_FLOOR], bLightEnabled);
+			modelStack.Scale(0.7, 0.7, 0.7);
+			modelStack.Translate(0, 0.25, 0);
+			RenderMesh(meshList[GEO_BED], bLightEnabled);
+		}
+		modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(-20, -5, 0);
+			modelStack.Rotate(45, 0, -1, 0);
+			modelStack.Scale(5, 5, 5);
+			RenderMesh(meshList[GEO_TENT], bLightEnabled);
+			RenderMesh(meshList[GEO_FLOOR], bLightEnabled);
+			modelStack.Scale(0.7, 0.7, 0.7);
+			modelStack.Rotate(180, 0, -1, 0);
+			modelStack.Translate(0, 0.25, 0);
+			RenderMesh(meshList[GEO_BED], bLightEnabled);
+		}
+		modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(-0, -5, -15);
+			modelStack.Rotate(0, 1, 0, 0);
+			modelStack.Scale(5, 5, 5);
+			RenderMesh(meshList[GEO_HALFTENT], bLightEnabled);
+			RenderMesh(meshList[GEO_FLOOR], bLightEnabled);
+			modelStack.Scale(0.7, 0.7, 0.7);
+			modelStack.Rotate(90, 0, -1, 0);
+			modelStack.Translate(0, 0.25, 0);
+			RenderMesh(meshList[GEO_PACKEDBED], bLightEnabled);
+		}
+		modelStack.PopMatrix();
 
+		//Campfire
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(-5, -5, -5);
+			modelStack.Rotate(0, 1, 0, 0);
+			modelStack.Scale(5, 5, 5);
+			RenderMesh(meshList[GEO_CAMPFIRE], bLightEnabled);
+		}
+		modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(15, -5, 10);
+			modelStack.Rotate(0, 0, 1, 0);
+			modelStack.Scale(5, 5, 5);
+			RenderMesh(meshList[GEO_CHEST], bLightEnabled);
+		}
+		modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(15, -5, 20);
+			modelStack.Rotate(0, 0, 1, 0);
+			modelStack.Scale(4, 4, 4);
+			RenderMesh(meshList[GEO_WORKBENCH], bLightEnabled);
+		}
+		modelStack.PopMatrix();
 
+		//Rocks
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(35, -5, 30);
+			modelStack.Rotate(0, 0, 1, 0);
+			modelStack.Scale(5, 5, 5);
+			RenderMesh(meshList[GEO_ROCK1], bLightEnabled);
+		}
+		modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(35, -5, -20);
+			modelStack.Rotate(0, 0, 1, 0);
+			modelStack.Scale(5, 5, 5);
+			RenderMesh(meshList[GEO_ROCK2], bLightEnabled);
+		}
+		modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(-35, -5, 25);
+			modelStack.Rotate(0, 0, 1, 0);
+			modelStack.Scale(5, 5, 5);
+			RenderMesh(meshList[GEO_ROCK3], bLightEnabled);
+		}
+		modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(75, -5, 30);
+			modelStack.Rotate(0, 0, 1, 0);
+			modelStack.Scale(5, 5, 5);
+			RenderMesh(meshList[GEO_ROCKFLAT], bLightEnabled);
+		}
+		modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(35, -5, 90);
+			modelStack.Rotate(0, 0, 1, 0);
+			modelStack.Scale(7, 7, 7);
+			RenderMesh(meshList[GEO_ROCKFLAT], bLightEnabled);
+		}
+		modelStack.PopMatrix();
 
 		//Drippy Text
 		if (camera.position.z < 20 && camera.position.z > 10 && camera.position.x < 10 && camera.position.x > -10 && onScreen)

@@ -5,7 +5,7 @@
 
 #define Boundaries 51
 #define RoadBoundaries 10
-#define newBoundaries 101
+#define newBoundaries 51
 
 Camera3::Camera3()
 {

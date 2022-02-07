@@ -85,6 +85,23 @@ class Assignment2 : public Scene
 
 		GEO_STICK,
 
+		GEO_BED,
+		GEO_PACKEDBED,
+		GEO_FLOOR,
+
+		GEO_CAMPFIRE,
+		GEO_CHEST,
+		GEO_FFENCE,
+
+		GEO_ROCK1,
+		GEO_ROCK2,
+		GEO_ROCK3,
+		GEO_ROCKFLAT,
+
+		GEO_TENT,
+		GEO_HALFTENT,
+		GEO_WORKBENCH,
+
 		GEO_WALL,
 
 		GEO_TEXT,
