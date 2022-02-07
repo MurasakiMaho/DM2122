@@ -1816,6 +1816,22 @@ void Assignment2::Render()
 			RenderMesh(meshList[GEO_ROCKFLAT], bLightEnabled);
 		}
 		modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(-35, -5, 90);
+			modelStack.Rotate(0, 0, 1, 0);
+			modelStack.Scale(7, 7, 7);
+			RenderMesh(meshList[GEO_ROCK2], bLightEnabled);
+		}
+		modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(0, -5, -100);
+			modelStack.Rotate(0, 0, 1, 0);
+			modelStack.Scale(10, 30, 10);
+			RenderMesh(meshList[GEO_ROCKFLAT], bLightEnabled);
+		}
+		modelStack.PopMatrix();
 
 		//Drippy Text
 		if (camera.position.z < 20 && camera.position.z > 10 && camera.position.x < 10 && camera.position.x > -10 && onScreen)
