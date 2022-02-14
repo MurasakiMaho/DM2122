@@ -2,6 +2,8 @@
 #include <GL\glew.h>
 #include <vector>
 
+//Texturing for sphere not fixed
+
 Mesh* MeshBuilder::GenerateAxes(const std::string &meshName, float lengthX, float lengthY, float lengthZ)
 {
 	Vertex v;

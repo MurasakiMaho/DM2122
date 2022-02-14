@@ -1,5 +1,5 @@
-#ifndef SCENE_SKYBOX_H
-#define SCENE_SKYBOX_H
+#ifndef EMPTY_SCENE_H
+#define EMPTY_SCENE_H
 #include "Scene.h"
 #include "Camera.h"
 #include "Mesh.h"
@@ -8,7 +8,7 @@
 #include "Camera3.h"
 #include <sstream>
 
-class SceneSkybox : public Scene
+class EmptyScene : public Scene
 {
 	enum GEOMETRY_TYPE
 	{
@@ -23,6 +23,7 @@ class SceneSkybox : public Scene
 
 		GEO_AXES,
 		GEO_QUAD,
+		GEO_QUAD1,
 		GEO_CUBE,
 		GEO_CIRCLE,
 		GEO_RING,
@@ -32,19 +33,12 @@ class SceneSkybox : public Scene
 		GEO_HEMISPHERE,
 		GEO_TORUS,
 		GEO_QUARTERTORUS,
-		GEO_LIGHTBALL,
 
-		/*GEO_MODEL1,
-		GEO_MODEL2,
-		GEO_MODEL3,
-		GEO_MODEL4,
-		GEO_MODEL5,
-		GEO_MODEL6,
-		GEO_MODEL7,
-		GEO_MODEL8,*/
+		GEO_LIGHTBALL,
 
 		GEO_TEXT,
 		GEO_ONSCREENTEXT,
+		GEO_INTERACTTEXT,
 		GEO_FRAMERATE,
 
 		NUM_GEOMETRY,
@@ -75,6 +69,18 @@ class SceneSkybox : public Scene
 		U_LIGHT0_COSINNER,
 		U_LIGHT0_EXPONENT,
 
+		U_LIGHT1_POSITION,
+		U_LIGHT1_COLOR,
+		U_LIGHT1_POWER,
+		U_LIGHT1_KC,
+		U_LIGHT1_KL,
+		U_LIGHT1_KQ,
+		U_LIGHT1_TYPE,
+		U_LIGHT1_SPOTDIRECTION,
+		U_LIGHT1_COSCUTOFF,
+		U_LIGHT1_COSINNER,
+		U_LIGHT1_EXPONENT,
+
 		U_TEXT_ENABLED,
 		U_TEXT_COLOR,
 		U_NUMLIGHTS,
@@ -84,8 +90,8 @@ class SceneSkybox : public Scene
 	MS modelStack, viewStack, projectionStack;
 
 public:
-	SceneSkybox();
-	~SceneSkybox();
+	EmptyScene();
+	~EmptyScene();
 
 	virtual void Init();
 	virtual void Update(double dt);
@@ -102,11 +108,11 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
+	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
 
-	float rotateAngle;
 	float fps;
 
-	Light light[1];
+	Light light[2];
 	bool bLightEnabled;
 
 	void RenderSkybox();
